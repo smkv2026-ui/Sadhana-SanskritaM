@@ -6,6 +6,21 @@ import { cn } from '@/lib/utils';
 import { usePreferences } from '@/features/experience/preferences';
 import { Reveal } from './Motion';
 
+/** Small gold lotus between two tapering lines, above every section heading. */
+function HeadingOrnament() {
+  return (
+    <svg aria-hidden viewBox="0 0 140 18" className="h-4 w-32 text-primary" fill="none" stroke="currentColor" strokeLinecap="round">
+      <path d="M4 12 H52" strokeWidth="0.8" className="ornament-line-l" />
+      <path d="M136 12 H88" strokeWidth="0.8" className="ornament-line-r" />
+      <circle cx="56" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="84" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M70 15 C65 11 65 5 70 1 C75 5 75 11 70 15Z" strokeWidth="0.9" fill="hsl(var(--primary) / 0.18)" />
+      <path d="M69 15.5 C63 14.5 59 11 58 6.5 C64 7.5 67.5 11 69 15.5Z" strokeWidth="0.8" />
+      <path d="M71 15.5 C77 14.5 81 11 82 6.5 C76 7.5 72.5 11 71 15.5Z" strokeWidth="0.8" />
+    </svg>
+  );
+}
+
 export function SectionHeading({
   eyebrow,
   title,
@@ -23,6 +38,7 @@ export function SectionHeading({
 }) {
   return (
     <Reveal className={cn('mb-12 flex flex-col gap-3', align === 'center' ? 'items-center text-center' : 'items-start', className)}>
+      <HeadingOrnament />
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h2 id={id} className="max-w-3xl text-balance text-3xl font-semibold sm:text-4xl md:text-5xl">
         {title}

@@ -23,11 +23,13 @@ interface PetalRing {
 }
 
 // Inner rings stay upright (the cup); outer rings open wide.
+// Fully bloomed: the outermost ring lies almost flat, inner rings form an open cup.
 export const PETAL_RINGS: PetalRing[] = [
-  { layer: 3, count: 9, len: 44, w: 16, radius: 12, tilt: 76, offset: 20 },
-  { layer: 2, count: 9, len: 56, w: 18, radius: 9, tilt: 54, offset: 0 },
-  { layer: 1, count: 7, len: 62, w: 17, radius: 6, tilt: 31, offset: 25 },
-  { layer: 0, count: 5, len: 64, w: 14, radius: 3, tilt: 12, offset: 0 },
+  { layer: 3, count: 12, len: 40, w: 14, radius: 15, tilt: 86, offset: 8 },
+  { layer: 3, count: 10, len: 46, w: 16, radius: 12, tilt: 72, offset: 26 },
+  { layer: 2, count: 9, len: 54, w: 18, radius: 9, tilt: 52, offset: 0 },
+  { layer: 1, count: 7, len: 58, w: 17, radius: 6, tilt: 33, offset: 25 },
+  { layer: 0, count: 5, len: 56, w: 14, radius: 3, tilt: 14, offset: 0 },
 ];
 
 const GEM = { R: 17, r: 9.5, crownH: 8, pavH: 21, sides: 8 } as const;
@@ -48,7 +50,7 @@ function Petal({ ring, index, gradId }: { ring: PetalRing; index: number; gradId
   const shade = 0.94 + 0.06 * Math.cos(((angle - 20) * Math.PI) / 180);
   return (
     <div className="l3-petal" style={style}>
-      <svg viewBox={`${-ring.w} ${-ring.len} ${ring.w * 2} ${ring.len}`} width={ring.w * 2} height={ring.len} aria-hidden>
+      <svg className="l3-petal-svg" viewBox={`${-ring.w} ${-ring.len} ${ring.w * 2} ${ring.len}`} width={ring.w * 2} height={ring.len} aria-hidden>
         <path
           d={petalPath(ring.len, ring.w)}
           fill={`url(#${gradId})`}
@@ -56,7 +58,9 @@ function Petal({ ring, index, gradId }: { ring: PetalRing; index: number; gradId
         />
         {/* cheap shading overlay instead of a CSS filter (filters are costly on 3D layers) */}
         <path d={petalPath(ring.len, ring.w)} fill="#b98a5a" fillOpacity={(1 - shade) * 1.6} stroke="none" />
-        <path d={`M0 -2 L0 ${-ring.len * 0.8}`} className="l3-petal-vein" />
+        <path d={`M0 -2 L0 ${-ring.len * 0.82}`} className="l3-petal-vein" />
+        <path d={`M0 -3 C${ring.w * 0.35} ${-ring.len * 0.3} ${ring.w * 0.4} ${-ring.len * 0.55} ${ring.w * 0.18} ${-ring.len * 0.78}`} className="l3-petal-vein" />
+        <path d={`M0 -3 C${-ring.w * 0.35} ${-ring.len * 0.3} ${-ring.w * 0.4} ${-ring.len * 0.55} ${-ring.w * 0.18} ${-ring.len * 0.78}`} className="l3-petal-vein" />
       </svg>
     </div>
   );
@@ -120,6 +124,42 @@ function Gem() {
   );
 }
 
+/**
+ * Page text: fine, justified lines broken into "words" (dash patterns), a short centred
+ * heading with a verse mark, a ragged paragraph end and a gentle lift towards the gutter —
+ * reads as printed text at logo size instead of three ruled lines.
+ */
+const WORDS = ['7 1.6 4 1.6 9 1.6 5 1.6 6 1.6 3 1.6', '4 1.6 8 1.6 3 1.6 6 1.6 7 1.6 5 1.6', '9 1.6 5 1.6 6 1.6 4 1.6 3 1.6 8 1.6', '5 1.6 3 1.6 7 1.6 8 1.6 4 1.6 6 1.6'];
+
+function PageText({ side }: { side: 'left' | 'right' }) {
+  // x runs from the fore-edge to the gutter; the gutter is on the right of the left page.
+  const outer = 11;
+  const inner = 80;
+  const lines: { y: number; x0: number; x1: number; dash: string; strong?: boolean }[] = [];
+  lines.push({ y: 11, x0: 34, x1: 57, dash: '3 1.4 5 1.4 4 1.4 6', strong: true });
+  let i = 0;
+  for (let y = 18; y <= 60; y += 4.2, i++) {
+    const paragraphEnd = i === 4 || i === 10;
+    lines.push({ y, x0: outer + (i === 5 ? 5 : 0), x1: paragraphEnd ? outer + 32 + (i % 3) * 6 : inner, dash: WORDS[i % WORDS.length] as string });
+  }
+  const mirror = (x: number) => (side === 'left' ? x : 90 - x);
+  return (
+    <svg viewBox="0 0 90 70" width="90" height="70" aria-hidden>
+      {/* verse marks either side of the heading */}
+      <path d={`M${mirror(30)} 9.4 v3.2 M${mirror(31.2)} 9.4 v3.2 M${mirror(59.8)} 9.4 v3.2 M${mirror(61)} 9.4 v3.2`} className="l3-text l3-text-strong" />
+      {lines.map((l, k) => {
+        const x0 = mirror(l.x0);
+        const x1 = mirror(l.x1);
+        // Full lines rise slightly into the curved gutter.
+        const toGutter = l.x1 === inner;
+        const bend = side === 'left' ? -5 : 5;
+        const d = toGutter ? `M${x0} ${l.y} L${x1 + bend} ${l.y} Q${x1} ${l.y} ${x1} ${l.y - 1.3}` : `M${x0} ${l.y} L${x1} ${l.y}`;
+        return <path key={k} d={d} className={cn('l3-text', l.strong && 'l3-text-strong')} strokeDasharray={l.dash} />;
+      })}
+    </svg>
+  );
+}
+
 function BookHalf({ side }: { side: 'left' | 'right' }) {
   return (
     <div className={cn('l3-half', side === 'left' ? 'l3-half-l' : 'l3-half-r')}>
@@ -128,12 +168,10 @@ function BookHalf({ side }: { side: 'left' | 'right' }) {
         <div key={i} className="l3-sheet" style={{ transform: `translateZ(${1 + i * 1.1}px)` } as CSSProperties} />
       ))}
       <div className="l3-sheet l3-sheet-top" style={{ transform: 'translateZ(7.8px)' }}>
-        <svg viewBox="0 0 90 70" width="90" height="70" aria-hidden>
-          {[22, 32, 42, 52].map((y) => (
-            <path key={y} d={side === 'left' ? `M14 ${y} Q46 ${y - 5} 80 ${y}` : `M10 ${y} Q44 ${y - 5} 76 ${y}`} className="l3-line" />
-          ))}
-        </svg>
+        <PageText side={side} />
+        <div className="l3-gutter" />
       </div>
+      {side === 'right' && <div className="l3-ribbon" />}
     </div>
   );
 }
@@ -266,9 +304,10 @@ export function Logo3D({
       <svg width="0" height="0" className="absolute" aria-hidden focusable="false">
         <defs>
           <linearGradient id={gradId} x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0" stopColor="#F2D9C4" />
-            <stop offset=".35" stopColor="#FFF6EC" />
-            <stop offset="1" stopColor="#FFFFFF" />
+            <stop offset="0" stopColor="#F4CDBE" />
+            <stop offset=".3" stopColor="#FFF1E6" />
+            <stop offset=".75" stopColor="#FFFFFF" />
+            <stop offset="1" stopColor="#FFF4F4" />
           </linearGradient>
         </defs>
       </svg>
@@ -290,8 +329,11 @@ export function Logo3D({
             <div className="l3-flower">
               <div className="l3-halo" />
               <div className="l3-pod" />
-              {PETAL_RINGS.map((ring) =>
-                Array.from({ length: ring.count }, (_, i) => <Petal key={`${ring.layer}-${i}`} ring={ring} index={i} gradId={gradId} />),
+              {Array.from({ length: 18 }, (_, i) => (
+                <div key={`s${i}`} className="l3-stamen" style={{ '--a': `${i * 20}deg` } as CSSProperties} />
+              ))}
+              {PETAL_RINGS.map((ring, ri) =>
+                Array.from({ length: ring.count }, (_, i) => <Petal key={`${ri}-${i}`} ring={ring} index={i} gradId={gradId} />),
               )}
             </div>
             <div className="l3-gem">

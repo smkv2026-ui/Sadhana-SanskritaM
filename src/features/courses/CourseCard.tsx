@@ -1,3 +1,4 @@
+import { LotusMandala } from '@/features/experience/Sacred';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, CalendarDays, Clock, MapPin, PlayCircle, Radio, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -31,11 +32,11 @@ export function CourseCover({ course, className }: { course: Course; className?:
     >
       {!course.coverImage && (
         <>
-          <svg aria-hidden viewBox="0 0 200 120" className="absolute -right-6 -top-4 h-36 w-56 opacity-20" fill="none" stroke={course.accent} strokeWidth="0.8">
-            {Array.from({ length: 7 }, (_, i) => (
-              <circle key={i} cx="150" cy="30" r={12 + i * 11} />
-            ))}
-          </svg>
+          <LotusMandala
+            animated={false}
+            className="pointer-events-none absolute -right-10 -top-12 h-52 w-52 opacity-70 transition-transform duration-[1.6s] ease-out group-hover:rotate-45"
+            style={{ '--lotus-stroke': `${course.accent}99`, '--lotus-base': `${course.accent}40`, '--lotus-tip': 'transparent', '--lotus-halo': `${course.accent}26` } as React.CSSProperties}
+          />
           <p lang="sa" className="deva absolute bottom-3 left-4 right-4 truncate text-3xl text-pearl/95 drop-shadow">
             {course.titleSa || course.title}
           </p>
@@ -61,7 +62,7 @@ export function CourseCard({ course, stats, index = 0 }: { course: Course; stats
       className="h-full"
     >
       <TiltCard className="h-full rounded-3xl">
-        <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border bg-card p-4 shadow-sm transition-shadow duration-300 hover:shadow-glow">
+        <div className="shimmer-border relative flex h-full flex-col overflow-hidden rounded-3xl border bg-card p-4 shadow-sm transition-shadow duration-300 hover:shadow-glow">
           <CourseCover course={course} className="h-36" />
           {cat && (
             <p className="mt-4 flex min-w-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">

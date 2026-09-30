@@ -1,3 +1,4 @@
+import { LotusMandala } from '@/features/experience/Sacred';
 import { Mail, MessageCircle, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/brand/Logo';
@@ -41,7 +42,8 @@ export function Footer() {
   const { data: settings } = useSettings();
   const channel = settings?.whatsappChannelUrl || env.contact.whatsappChannelUrl;
   return (
-    <footer className="relative z-10 mt-24 border-t bg-card/40">
+    <footer className="gold-hairline relative z-10 mt-24 overflow-hidden border-t bg-card/40">
+      <LotusMandala className="pointer-events-none absolute -bottom-40 -right-32 h-[26rem] w-[26rem] opacity-40 sm:-right-20" />
       <div className="container grid grid-cols-2 gap-x-6 gap-y-10 py-12 sm:py-16 md:grid-cols-[1.4fr_repeat(3,1fr)] md:gap-12">
         <div className="col-span-2 space-y-5 md:col-span-1">
           <Logo lockup="horizontal" size={44} />

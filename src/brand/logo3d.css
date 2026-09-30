@@ -8,10 +8,12 @@
   --l3-cover-2: #2a3270;
   --l3-sheet: #fffbf2;
   --l3-sheet-edge: #eadfca;
-  --l3-line: #d9a441;
+  --l3-line: #b8862f;
+  --l3-ink: #5a4028;
+  --l3-gilt: #e2c27a;
   --l3-stem: #b7832a;
   --l3-leaf: #c99a3e;
-  --l3-petal-edge: rgba(183, 131, 42, 0.55);
+  --l3-petal-edge: rgba(168, 116, 34, 0.9);
   --l3-glow: rgba(241, 198, 110, 0.45);
   position: relative;
   display: inline-block;
@@ -113,8 +115,13 @@
   position: absolute;
   inset: -3px -4px -3px -4px;
   border-radius: 3px;
-  background: linear-gradient(135deg, var(--l3-cover-2), var(--l3-cover));
-  box-shadow: 0 6px 18px rgba(11, 16, 38, 0.35);
+  background:
+    radial-gradient(120% 90% at 30% 20%, rgba(255, 255, 255, 0.12), transparent 60%),
+    linear-gradient(135deg, var(--l3-cover-2), var(--l3-cover));
+  box-shadow:
+    inset 0 0 0 1px rgba(241, 198, 110, 0.55),
+    inset 0 0 0 2.5px rgba(0, 0, 0, 0.12),
+    0 8px 22px rgba(11, 16, 38, 0.4);
 }
 .l3-half-l .l3-cover {
   right: 0;
@@ -128,7 +135,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, var(--l3-sheet-edge), var(--l3-sheet) 18%, var(--l3-sheet) 82%, var(--l3-sheet-edge));
-  border: 0.5px solid var(--l3-sheet-edge);
+  border: 0.5px solid var(--l3-gilt);
 }
 .l3-half-l .l3-sheet {
   border-radius: 6px 1px 1px 6px;
@@ -137,21 +144,60 @@
   border-radius: 1px 6px 6px 1px;
 }
 .l3-sheet-top {
-  background: linear-gradient(90deg, #f6ecd9, var(--l3-sheet) 22%, #ffffff 60%, var(--l3-sheet));
+  overflow: hidden;
+  background:
+    radial-gradient(140% 100% at 55% 45%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(90deg, #efe0c4, var(--l3-sheet) 14%, #fffdf7 55%, var(--l3-sheet));
 }
 .l3-half-r .l3-sheet-top {
-  background: linear-gradient(90deg, var(--l3-sheet), #ffffff 40%, var(--l3-sheet) 78%, #f6ecd9);
+  background:
+    radial-gradient(140% 100% at 45% 45%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(90deg, var(--l3-sheet), #fffdf7 45%, var(--l3-sheet) 86%, #efe0c4);
 }
 .l3-sheet-top svg {
   position: absolute;
   inset: 0;
 }
-.l3-line {
+/* Printed text: hair-thin, ink-brown, broken into words by dash patterns. */
+.l3-text {
   fill: none;
+  stroke: var(--l3-ink);
+  stroke-width: 0.85;
+  stroke-linecap: butt;
+  opacity: 0.42;
+}
+.l3-text-strong {
   stroke: var(--l3-line);
-  stroke-width: 1.3;
-  stroke-linecap: round;
-  opacity: 0.75;
+  stroke-width: 1.1;
+  opacity: 0.8;
+}
+/* Gutter: pages curve down into the spine, so the paper darkens there. */
+.l3-gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  pointer-events: none;
+}
+.l3-half-l .l3-gutter {
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(120, 84, 40, 0.1) 55%, rgba(90, 60, 25, 0.34));
+}
+.l3-half-r .l3-gutter {
+  left: 0;
+  background: linear-gradient(270deg, transparent, rgba(120, 84, 40, 0.1) 55%, rgba(90, 60, 25, 0.34));
+}
+/* Silk ribbon bookmark hanging over the bottom edge. */
+.l3-ribbon {
+  position: absolute;
+  left: 14px;
+  top: 30px;
+  width: 4px;
+  height: 56px;
+  background: linear-gradient(90deg, #7a1422, #c0283c 45%, #8e1a2a);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%);
+  transform: translateZ(8.4px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .l3-spine {
   position: absolute;
@@ -245,6 +291,55 @@
   transform: rotateY(var(--a)) translateZ(calc(var(--r) * var(--bl)))
     rotateX(calc(-1 * var(--tilt) * var(--bl))) scale(calc(0.45 + 0.55 * var(--bl)));
   opacity: calc(0.35 + 0.65 * var(--bl));
+}
+
+.l3-stamen {
+  position: absolute;
+  left: -0.6px;
+  top: -7px;
+  width: 1.1px;
+  height: 6px;
+  border-radius: 1px;
+  background: linear-gradient(0deg, #e0a93e, #ffe08a);
+  transform-origin: 50% 100%;
+  transform: translateY(-3px) rotateY(var(--a)) translateZ(4.5px) rotateX(-30deg);
+}
+.l3-stamen::before {
+  content: '';
+  position: absolute;
+  left: -0.7px;
+  top: -1.2px;
+  width: 2.4px;
+  height: 2.4px;
+  border-radius: 9999px;
+  background: #ffd45c;
+}
+/* Petals breathe: each opens and closes a few degrees, outer rings the most. */
+.l3-petal {
+  transform-style: preserve-3d;
+}
+.l3-petal-svg {
+  transform-origin: 50% 100%;
+  animation: l3-breathe 6.5s ease-in-out infinite;
+  animation-delay: calc(var(--layer) * -0.9s);
+}
+@keyframes l3-breathe {
+  0%,
+  100% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(calc(-3deg - var(--layer) * 2.2deg));
+  }
+}
+/* The whole bloom turns slowly on its stem. */
+.l3-flower {
+  animation: l3-turn 48s linear infinite;
+}
+@keyframes l3-turn {
+  to {
+    transform: rotateY(360deg);
+  }
 }
 
 /* ---------- diamond ---------- */
@@ -477,6 +572,10 @@
   .l3-stage {
     animation: none;
     transform: rotateX(-10deg) rotateY(-14deg);
+  }
+  .l3-petal-svg,
+  .l3-flower {
+    animation: none;
   }
   .l3-gem-spin {
     animation: none;

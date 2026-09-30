@@ -33,61 +33,94 @@ const petalPath = ({ r0, r1, w }: PetalLayer) => {
   return `M0,${-r0} C${w},${-r0 - len * 0.28} ${w * 0.85},${-r0 - len * 0.72} 0,${-r1} C${-w * 0.85},${-r0 - len * 0.72} ${-w},${-r0 - len * 0.28} 0,${-r0}Z`;
 };
 
-export function LotusMandala({ className, animated = true }: { className?: string; animated?: boolean }) {
+const polar = (r: number, deg: number) => [Math.sin((deg * Math.PI) / 180) * r, -Math.cos((deg * Math.PI) / 180) * r] as const;
+
+/** A ring drawn in its own layer so it can turn on the compositor (cheap, and it never drifts). */
+function Ring({ className, children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <div className={cn('absolute inset-0', className)}>
+      <svg viewBox="-100 -100 200 200" className="h-full w-full overflow-visible">
+        {children}
+      </svg>
+    </div>
+  );
+}
+
+export function LotusMandala({ className, animated = true, style }: { className?: string; animated?: boolean; style?: React.CSSProperties }) {
   const { reducedMotion } = usePreferences();
   const live = animated && !reducedMotion;
   const uid = useId().replace(/:/g, '');
   return (
-    <svg aria-hidden viewBox="-100 -100 200 200" className={cn('lotus-mandala overflow-visible', className)}>
-      <defs>
-        <linearGradient id={`lp-${uid}`} x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" style={{ stopColor: 'var(--lotus-base)' }} />
-          <stop offset="100%" style={{ stopColor: 'var(--lotus-tip)' }} />
-        </linearGradient>
-        <radialGradient id={`lh-${uid}`}>
-          <stop offset="0%" style={{ stopColor: 'var(--lotus-halo)' }} />
-          <stop offset="100%" style={{ stopColor: 'var(--lotus-halo)', stopOpacity: 0 }} />
-        </radialGradient>
-      </defs>
-      <circle r={99} fill={`url(#lh-${uid})`} />
-      {/* Outer rings: a string of pearls and a fine gold line. */}
-      <g className={cn(live && 'lotus-pearls')}>
+    <div aria-hidden className={cn('lotus-mandala relative', className)} style={style}>
+      {/* Soft rays of light radiating from the bloom. */}
+      {animated && <div className={cn('lotus-rays absolute inset-[-8%] rounded-full', live && 'lotus-spin-slow')} />}
+
+      {/* Outer pearl string: turns clockwise. */}
+      <Ring className={cn(live && 'lotus-spin-cw')}>
         {Array.from({ length: 72 }, (_, i) => {
-          const a = (i / 72) * Math.PI * 2;
-          return <circle key={i} cx={Math.sin(a) * 95} cy={-Math.cos(a) * 95} r={i % 3 === 0 ? 1.1 : 0.55} className="lotus-dot" />;
+          const [x, y] = polar(95, i * 5);
+          return <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 1.15 : 0.55} className="lotus-dot" />;
         })}
-      </g>
-      <circle r={91} fill="none" className="lotus-line" strokeWidth={0.35} />
-      {LAYERS.map((layer, li) => (
-        <g key={li} className={cn(live && 'lotus-open')} style={{ animationDelay: `${0.15 + (LAYERS.length - li) * 0.18}s` }}>
-          <g className={cn(live && 'lotus-breathe')} style={{ animationDelay: `${li * 0.6}s` }}>
-            {Array.from({ length: layer.count }, (_, i) => {
-              const rot = layer.offset + (360 / layer.count) * i;
-              return (
-                <g key={i} transform={`rotate(${rot})`}>
-                  <path d={petalPath(layer)} fill={`url(#lp-${uid})`} className="lotus-petal" strokeWidth={li < 2 ? 0.55 : 0.65} />
-                  {layer.vein && <path d={`M0,${-layer.r0 - 3} L0,${-layer.r1 + 8}`} className="lotus-line" strokeWidth={0.3} />}
-                </g>
-              );
-            })}
+        {Array.from({ length: 8 }, (_, i) => {
+          const [x, y] = polar(95, i * 45);
+          return <path key={`d${i}`} d={`M${x} ${y - 2.6} L${x + 1.6} ${y} L${x} ${y + 2.6} L${x - 1.6} ${y}Z`} transform={`rotate(${i * 45} ${x} ${y})`} className="lotus-dot" />;
+        })}
+      </Ring>
+
+      {/* Inner ring of tiny stars on a dashed orbit: turns counter-clockwise. */}
+      <Ring className={cn(live && 'lotus-spin-ccw')}>
+        <circle r={91} fill="none" className="lotus-line" strokeWidth={0.35} />
+        <circle r={86.5} fill="none" className="lotus-line" strokeWidth={0.3} strokeDasharray="1 3.2" />
+        {Array.from({ length: 16 }, (_, i) => {
+          const [x, y] = polar(86.5, i * 22.5 + 11.25);
+          return <circle key={i} cx={x} cy={y} r={0.9} className="lotus-dot" />;
+        })}
+      </Ring>
+
+      {/* The bloom itself: unfolds once, then breathes in place. */}
+      <svg viewBox="-100 -100 200 200" className="absolute inset-0 h-full w-full overflow-visible">
+        <defs>
+          <linearGradient id={`lp-${uid}`} x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" style={{ stopColor: 'var(--lotus-base)' }} />
+            <stop offset="100%" style={{ stopColor: 'var(--lotus-tip)' }} />
+          </linearGradient>
+          <radialGradient id={`lh-${uid}`}>
+            <stop offset="0%" style={{ stopColor: 'var(--lotus-halo)' }} />
+            <stop offset="100%" style={{ stopColor: 'var(--lotus-halo)', stopOpacity: 0 }} />
+          </radialGradient>
+        </defs>
+        <circle r={84} fill={`url(#lh-${uid})`} />
+        {LAYERS.map((layer, li) => (
+          <g key={li} className={cn(live && 'lotus-open')} style={{ animationDelay: `${0.15 + (LAYERS.length - li) * 0.18}s` }}>
+            <g className={cn(live && 'lotus-breathe')} style={{ animationDelay: `${li * 0.6}s` }}>
+              {Array.from({ length: layer.count }, (_, i) => {
+                const rot = layer.offset + (360 / layer.count) * i;
+                return (
+                  <g key={i} transform={`rotate(${rot})`}>
+                    <path d={petalPath(layer)} fill={`url(#lp-${uid})`} className="lotus-petal" strokeWidth={li < 2 ? 0.55 : 0.65} />
+                    {layer.vein && <path d={`M0,${-layer.r0 - 3} L0,${-layer.r1 + 8}`} className="lotus-line" strokeWidth={0.3} />}
+                  </g>
+                );
+              })}
+            </g>
           </g>
+        ))}
+        <g className={cn(live && 'lotus-open')} style={{ animationDelay: '0.1s' }}>
+          {Array.from({ length: 28 }, (_, i) => (
+            <g key={i} transform={`rotate(${(360 / 28) * i})`}>
+              <line y1={-9} y2={-14.5} className="lotus-line" strokeWidth={0.45} />
+              <circle cy={-15.2} r={0.9} className="lotus-dot" />
+            </g>
+          ))}
+          <circle r={8.5} className="lotus-pod" strokeWidth={0.6} />
+          {[0, 60, 120, 180, 240, 300].map((a) => {
+            const [x, y] = polar(4.6, a);
+            return <circle key={a} cx={x} cy={y} r={1.1} className="lotus-dot" />;
+          })}
+          <circle r={1.3} className="lotus-dot" />
         </g>
-      ))}
-      {/* Stamens around the seed pod. */}
-      <g className={cn(live && 'lotus-open')} style={{ animationDelay: '0.1s' }}>
-        {Array.from({ length: 28 }, (_, i) => (
-          <g key={i} transform={`rotate(${(360 / 28) * i})`}>
-            <line y1={-9} y2={-14.5} className="lotus-line" strokeWidth={0.45} />
-            <circle cy={-15.2} r={0.9} className="lotus-dot" />
-          </g>
-        ))}
-        <circle r={8.5} className="lotus-pod" strokeWidth={0.6} />
-        {[0, 60, 120, 180, 240, 300].map((a) => (
-          <circle key={a} cx={Math.sin((a * Math.PI) / 180) * 4.6} cy={-Math.cos((a * Math.PI) / 180) * 4.6} r={1.1} className="lotus-dot" />
-        ))}
-        <circle r={1.3} className="lotus-dot" />
-      </g>
-    </svg>
+      </svg>
+    </div>
   );
 }
 

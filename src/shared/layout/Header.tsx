@@ -41,7 +41,7 @@ export function Header({ introActive }: { introActive: boolean }) {
     <header
       className={cn(
         'sticky top-0 z-40 w-full transition-[background-color,box-shadow,border-color] duration-300',
-        scrolled ? 'border-b border-border/60 bg-background/80 shadow-sm backdrop-blur-xl' : 'border-b border-transparent bg-transparent',
+        scrolled ? 'gold-hairline border-b border-transparent bg-background/80 shadow-sm backdrop-blur-xl' : 'border-b border-transparent bg-transparent',
       )}
     >
       <div className="container flex h-16 items-center gap-3">

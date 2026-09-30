@@ -107,6 +107,25 @@
       linear-gradient(180deg, hsl(221 60% 13%), hsl(224 64% 8%));
     background-attachment: fixed;
   }
+  /* Faint star dust over the night-blue sky (static; one fixed layer). */
+  .dark body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, hsl(45 100% 90% / 0.8), transparent 60%),
+      radial-gradient(1px 1px at 72% 12%, hsl(45 100% 92% / 0.7), transparent 60%),
+      radial-gradient(1.5px 1.5px at 38% 62%, hsl(45 100% 88% / 0.6), transparent 60%),
+      radial-gradient(1px 1px at 86% 48%, hsl(210 100% 92% / 0.6), transparent 60%),
+      radial-gradient(1px 1px at 22% 84%, hsl(45 100% 90% / 0.5), transparent 60%),
+      radial-gradient(1.2px 1.2px at 58% 34%, hsl(45 100% 92% / 0.55), transparent 60%),
+      radial-gradient(1px 1px at 94% 88%, hsl(210 100% 92% / 0.5), transparent 60%);
+    background-size: 420px 420px;
+    animation: star-twinkle 9s ease-in-out infinite;
+  }
 
   .dark h1 {
     background-image: linear-gradient(180deg, hsl(42 70% 95%), hsl(40 70% 78%));
@@ -148,7 +167,10 @@
 
 @layer components {
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-saffron-deep via-saffron to-saffron-light bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #b7832a 0%, #d9a441 30%, #fff1c7 45%, #f1c66e 55%, #d9a441 70%, #b7832a 100%);
+    background-size: 250% 100%;
+    animation: gold-sheen 7s ease-in-out infinite;
   }
   .glass {
     @apply border border-border/60 bg-card/70 backdrop-blur-md;
@@ -182,14 +204,16 @@
   .lotus-mandala {
     --lotus-base: hsl(38 85% 55% / 0.34);
     --lotus-tip: hsl(40 100% 97% / 0.06);
-    --lotus-halo: hsl(42 90% 70% / 0.22);
+    --lotus-halo: hsl(42 90% 70% / 0.12);
     --lotus-stroke: hsl(36 70% 45% / 0.55);
+    --lotus-ray: hsl(40 90% 60% / 0.14);
   }
   .dark .lotus-mandala {
     --lotus-base: hsl(42 85% 62% / 0.3);
     --lotus-tip: hsl(220 60% 30% / 0.05);
     --lotus-halo: hsl(42 90% 62% / 0.16);
     --lotus-stroke: hsl(42 80% 66% / 0.6);
+    --lotus-ray: hsl(42 95% 70% / 0.12);
   }
   .lotus-petal {
     stroke: var(--lotus-stroke);
@@ -217,10 +241,24 @@
     transform-origin: 50% 50%;
     animation: lotus-breathe 9s ease-in-out infinite;
   }
-  .lotus-pearls {
-    transform-box: view-box;
-    transform-origin: 50% 50%;
-    animation: lotus-twinkle 6s ease-in-out infinite;
+  /* Rings turn in place: the rotating element is an inset-0 layer with no other transform. */
+  .lotus-spin-cw {
+    animation: mandala-turn 90s linear infinite;
+    will-change: transform;
+  }
+  .lotus-spin-ccw {
+    animation: mandala-turn 120s linear infinite reverse;
+    will-change: transform;
+  }
+  .lotus-spin-slow {
+    animation: mandala-turn 200s linear infinite;
+    will-change: transform;
+  }
+  .lotus-rays {
+    background: repeating-conic-gradient(from 0deg, var(--lotus-ray) 0deg 1.2deg, transparent 1.2deg 7.5deg);
+    -webkit-mask: radial-gradient(circle, #000 18%, transparent 68%);
+    mask: radial-gradient(circle, #000 18%, transparent 68%);
+    opacity: 0.55;
   }
   /* Gold hairline that sweeps around the border on hover. */
   .shimmer-border {
@@ -302,6 +340,19 @@
     transform-box: fill-box;
     animation: halo 3s ease-in-out infinite;
   }
+  .gold-hairline {
+    position: relative;
+  }
+  .gold-hairline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(42 85% 60% / 0.7) 30%, hsl(45 100% 80%) 50%, hsl(42 85% 60% / 0.7) 70%, transparent);
+    opacity: 0.8;
+  }
   .route-enter {
     animation: route-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
@@ -336,13 +387,27 @@
     transform: scale(1.025);
   }
 }
-@keyframes lotus-twinkle {
+@keyframes star-twinkle {
   0%,
   100% {
-    opacity: 0.55;
+    opacity: 0.4;
   }
   50% {
-    opacity: 1;
+    opacity: 0.7;
+  }
+}
+@keyframes gold-sheen {
+  0%,
+  100% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+}
+@keyframes mandala-turn {
+  to {
+    transform: rotate(360deg);
   }
 }
 @keyframes diya-breathe {
