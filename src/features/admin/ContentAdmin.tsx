@@ -6,9 +6,11 @@ import { backend } from '@/data';
 import type { Coupon, SiteSettings, SiteStats, Subhashita, Teacher, Testimonial } from '@/data/types';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { autoId } from '@/lib/ids';
+import { isValidVpa } from '@/lib/upi';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/overlays';
 import { Badge, Checkbox, Field, Input, Textarea } from '@/shared/ui/primitives';
+import { applyRuntimeSettings } from '@/config/runtime';
 import { AdminHeader } from './AdminApp';
 import { fromLocalInput, toLocalInput } from './courseForm';
 import { TaxonomyEditor } from './TaxonomyEditor';
@@ -155,12 +157,41 @@ function SiteSettingsForm() {
       onSubmit={async (e) => {
         e.preventDefault();
         if (st.whatsappChannelUrl && !/^https:\/\/\S+$/.test(st.whatsappChannelUrl)) return toast.error('Channel link must be https://');
+        if (st.upiVpa && !isValidVpa(st.upiVpa)) return toast.error('That UPI ID doesn’t look right — it should be like name@bank.');
+        const ej = [st.emailjsPublicKey, st.emailjsServiceId, st.emailjsTemplateId].filter(Boolean).length;
+        if (ej > 0 && ej < 3) return toast.error('Fill all three EmailJS fields, or leave all three blank.');
         const b = await backend();
         await Promise.all([b.saveSiteStats(s), b.saveSettings(st)]);
-        toast.success('Site settings saved');
+        applyRuntimeSettings(st);
+        toast.success('Site settings saved — live immediately');
         void qc.invalidateQueries();
       }}
     >
+      <fieldset className="grid gap-4 rounded-3xl border p-4 sm:col-span-2 sm:grid-cols-2">
+        <legend className="px-2 font-display text-lg font-semibold">💳 Payments (UPI)</legend>
+        <Field id="st-upi" label="Your UPI ID" hint="Learners pay to this ID via the QR code, e.g. yourname@okaxis">
+          <Input id="st-upi" value={st.upiVpa ?? ''} onChange={(e) => setSt({ ...st, upiVpa: e.target.value.trim() })} placeholder="name@bank" />
+        </Field>
+        <Field id="st-upiname" label="Name registered on that UPI ID">
+          <Input id="st-upiname" value={st.upiPayeeName ?? ''} onChange={(e) => setSt({ ...st, upiPayeeName: e.target.value })} placeholder="Sadhana Sanskritam" />
+        </Field>
+      </fieldset>
+      <fieldset className="grid gap-4 rounded-3xl border p-4 sm:col-span-2 sm:grid-cols-3">
+        <legend className="px-2 font-display text-lg font-semibold">✉️ Email (optional, free EmailJS)</legend>
+        <p className="text-xs text-muted-foreground sm:col-span-3">
+          Leave blank to skip — the site works without it (WhatsApp messages still work). To send confirmation emails, create a free account at
+          emailjs.com and paste the three values here.
+        </p>
+        <Field id="st-ejpk" label="Public key">
+          <Input id="st-ejpk" value={st.emailjsPublicKey ?? ''} onChange={(e) => setSt({ ...st, emailjsPublicKey: e.target.value.trim() })} />
+        </Field>
+        <Field id="st-ejsid" label="Service ID">
+          <Input id="st-ejsid" value={st.emailjsServiceId ?? ''} onChange={(e) => setSt({ ...st, emailjsServiceId: e.target.value.trim() })} placeholder="service_…" />
+        </Field>
+        <Field id="st-ejtid" label="Template ID">
+          <Input id="st-ejtid" value={st.emailjsTemplateId ?? ''} onChange={(e) => setSt({ ...st, emailjsTemplateId: e.target.value.trim() })} placeholder="template_…" />
+        </Field>
+      </fieldset>
       {(['learners', 'courses', 'countries', 'hoursTaught'] as const).map((k) => (
         <Field key={k} id={`st-${k}`} label={`Counter: ${k}`}>
           <Input id={`st-${k}`} type="number" min={0} value={s[k]} onChange={(e) => setS({ ...s, [k]: Number(e.target.value) })} />
@@ -184,14 +215,14 @@ export default function ContentAdmin() {
   return (
     <div>
       <AdminHeader title="Categories & content" description="Course categories, teachers, testimonials, the Subhāṣita of the day, coupons and site settings." />
-      <Tabs defaultValue="categories">
+      <Tabs defaultValue={new URLSearchParams(window.location.search).get('tab') ?? 'categories'}>
         <TabsList className="flex-wrap">
           <TabsTrigger value="categories">Categories</TabsTrigger>
           <TabsTrigger value="subhashitas">Subhāṣitas</TabsTrigger>
           <TabsTrigger value="teachers">Teachers</TabsTrigger>
           <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
           <TabsTrigger value="coupons">Coupons</TabsTrigger>
-          <TabsTrigger value="site">Site</TabsTrigger>
+          <TabsTrigger value="site">Site · Payments · Email</TabsTrigger>
         </TabsList>
         <TabsContent value="categories">
           <TaxonomyEditor />

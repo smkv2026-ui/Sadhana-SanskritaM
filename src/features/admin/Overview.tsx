@@ -74,8 +74,8 @@ export default function Overview() {
 
   const warnings = [
     env.backend === 'demo' && 'Demo mode: Firebase is not configured — data lives only in this browser. See README → “Connect Firebase”.',
-    env.upi.isPlaceholder && 'UPI ID is a placeholder. Set the VITE_UPI_VPA and VITE_UPI_PAYEE_NAME repository variables before taking payments.',
-    getEmailProvider().id === 'console' && 'Emails are mocked (Console provider). Add the EmailJS variables to send real email.',
+    env.upi.isPlaceholder && 'UPI ID not set yet — add it in Categories & content → “Site · Payments · Email” before taking payments.',
+    getEmailProvider().id === 'console' && 'Emails are not being sent yet (optional) — add your free EmailJS keys in Categories & content → “Site · Payments · Email”.',
   ].filter(Boolean) as string[];
 
   return (
@@ -115,7 +115,13 @@ export default function Overview() {
         <ul className="space-y-2">
           {warnings.map((w) => (
             <li key={w} className="flex items-start gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" /> {w}
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+              <span className="flex-1">{w}</span>
+              {w.includes('Site · Payments') && (
+                <Link to="/admin/content?tab=site" className="shrink-0 font-semibold text-accent underline-offset-4 hover:underline">
+                  Set it now →
+                </Link>
+              )}
             </li>
           ))}
         </ul>

@@ -74,3 +74,8 @@ export function getPaymentProvider(): PaymentProvider {
       : new ManualUpiProvider(env.upi.vpa, env.upi.payeeName);
   return instance;
 }
+
+/** Rebuild on next use (after admin-edited UPI settings load). */
+export function resetPaymentProvider(): void {
+  instance = null;
+}

@@ -141,6 +141,12 @@ export interface SiteStats {
 export interface SiteSettings {
   whatsappChannelUrl: string;
   announcement: string;
+  /** Payments & email — editable by admins, applied without a redeploy (see config/runtime.ts). */
+  upiVpa?: string;
+  upiPayeeName?: string;
+  emailjsPublicKey?: string;
+  emailjsServiceId?: string;
+  emailjsTemplateId?: string;
 }
 
 export type RegistrationStatus = 'PENDING_PAYMENT' | 'PENDING_VERIFICATION' | 'APPROVED' | 'REJECTED' | 'EXPIRED';

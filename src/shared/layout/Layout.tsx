@@ -4,6 +4,8 @@ import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { IntroAnimation } from '@/brand/IntroAnimation';
 import { env } from '@/config/env';
+import { applyRuntimeSettings } from '@/config/runtime';
+import { useSettings } from '@/data/queries';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { CursorGlow } from '@/features/experience/Ambient';
 import { usePreferences } from '@/features/experience/preferences';
@@ -33,6 +35,8 @@ export function Layout() {
   const [introActive, setIntroActive] = useState(false);
   const { signInRequest } = useAuth();
   const { pathname } = useLocation();
+  // Admin-editable UPI / EmailJS settings apply before any page renders with them.
+  applyRuntimeSettings(useSettings().data);
   // Soft fade/blur between pages; admin sub-tabs keep their own transitions.
   const routeKey = pathname.startsWith('/admin') ? '/admin' : pathname;
   return (
