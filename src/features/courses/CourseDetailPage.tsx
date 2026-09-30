@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, CalendarPlus, CheckCircle2, Clock, Globe, Languages, Share2, Users } from 'lucide-react';
+import { ArrowLeft, CalendarPlus, CheckCircle2, Clock, Globe, Hourglass, Languages, Share2, ShieldCheck, Users } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { BRAND } from '@/brand/logoGeometry';
-import { useCourse, useLiveSeats, useMyRegistrations, useTeachers } from '@/data/queries';
+import { useCourse, useLiveSeats, useMyRegistrations, useTaxonomy, useTeachers } from '@/data/queries';
+import { findCategory, findSub } from '@/data/taxonomy';
 import { effectiveStatus, seatsLeft } from '@/data/registrationLogic';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { buildIcs, downloadText, googleCalendarUrl } from '@/lib/ics';
@@ -25,6 +26,7 @@ export default function CourseDetailPage() {
   const { data: course, isLoading, error, refetch } = useCourse(slug);
   const live = useLiveSeats(course?.id);
   const { data: teachers } = useTeachers();
+  const taxonomy = useTaxonomy();
   const { user } = useAuth();
   const { data: myRegs } = useMyRegistrations(user?.uid);
 
@@ -42,7 +44,9 @@ export default function CourseDetailPage() {
   const soldOut = left === 0;
   const mine = myRegs?.find((r) => r.courseId === course.id);
   const myStatus = mine ? effectiveStatus(mine) : null;
-  const Type = TYPE_META[course.type];
+  const Type = TYPE_META[course.type] ?? TYPE_META.live;
+  const cat = findCategory(taxonomy, course.category);
+  const sub = findSub(taxonomy, course.category, course.subcategory);
   const courseTeachers = (teachers ?? []).filter((t) => course.teacherIds.includes(t.id));
   const totalMinutes = course.syllabus.reduce((s, m) => s + (m.durationMinutes ?? 0), 0);
 
@@ -92,6 +96,22 @@ export default function CourseDetailPage() {
       <div className="container mt-6 grid gap-10 lg:grid-cols-[1fr_380px]">
         <div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            {cat && (
+              <nav aria-label="Category" className="mb-3 flex flex-wrap items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                <Link to={`${routes.courses}?cat=${cat.id}`} className="hover:underline">
+                  {cat.emoji} {cat.label}
+                </Link>
+                {sub && (
+                  <>
+                    <span aria-hidden>›</span>
+                    <Link to={`${routes.courses}?cat=${cat.id}&sub=${sub.id}`} className="hover:underline">
+                      {sub.label}
+                    </Link>
+                  </>
+                )}
+                {course.variant && <span className="rounded-full bg-accent/10 px-2 py-0.5 normal-case tracking-normal">{course.variant}</span>}
+              </nav>
+            )}
             <div className="flex flex-wrap gap-2">
               <Badge variant={course.type === 'recorded' ? 'diamond' : 'gold'}>
                 <Type.icon className="h-3 w-3" /> {Type.label}
@@ -213,6 +233,20 @@ export default function CourseDetailPage() {
                   {course.sessionsCount} {course.sessionsCount === 1 ? 'session' : 'sessions'} · ~{course.weeklyHours} h/week
                 </dd>
               </div>
+              {course.type !== 'in-person' && course.type !== 'live' && (
+                <div className="flex gap-3">
+                  <Hourglass className="h-4 w-4 text-muted-foreground" aria-hidden />
+                  <dt className="sr-only">Recording access</dt>
+                  <dd>{course.accessDays ? `${course.accessDays} days of recording access` : 'Unlimited recording access'}</dd>
+                </div>
+              )}
+              {course.type !== 'in-person' && (
+                <div className="flex gap-3">
+                  <ShieldCheck className="h-4 w-4 text-muted-foreground" aria-hidden />
+                  <dt className="sr-only">Playback</dt>
+                  <dd>Streams securely inside the app</dd>
+                </div>
+              )}
             </dl>
             <div className="mt-5">
               <SeatMeter limit={course.seatLimit} taken={live?.seatsTaken ?? 0} />

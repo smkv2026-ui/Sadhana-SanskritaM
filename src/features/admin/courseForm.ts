@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { Course, CourseSecrets, Recording, SyllabusModule } from '@/data/types';
 import { slugify } from '@/lib/ids';
+import { parseVideoUrl } from '@/lib/video';
 
 /** Text <-> structure helpers for the admin course editor (kept pure for testing). */
 
@@ -65,6 +66,7 @@ export const courseSchema = z
     seatLimit: z.number().int().min(0).max(100_000),
     coverImage: httpsUrl,
     summary: z.string().trim().min(10).max(300),
+    accessDays: z.number().int().min(0).max(3650),
   })
   .refine((c) => c.earlyBirdPriceInr === null || c.earlyBirdPriceInr < c.priceInr, { message: 'Early-bird price must be lower than the price', path: ['earlyBirdPriceInr'] });
 
@@ -82,5 +84,7 @@ export function validateSecrets(s: CourseSecrets): string | null {
   if (s.meetingLink && !/^https:\/\/\S+$/.test(s.meetingLink)) return 'Meeting link must start with https://';
   const bad = s.recordings.find((r) => !r.title || !/^https:\/\/\S+$/.test(r.url));
   if (bad) return `Recording “${bad.title || '(untitled)'}” needs a title and an https:// URL.`;
+  const unsupported = s.recordings.find((r) => !parseVideoUrl(r.url));
+  if (unsupported) return `Recording “${unsupported.title}” isn’t a YouTube, Vimeo, Google Drive, Bunny or .mp4 link.`;
   return null;
 }

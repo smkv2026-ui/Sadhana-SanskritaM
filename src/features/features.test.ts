@@ -5,6 +5,7 @@ import { matchStatement, parseStatement } from './admin/csvMatch';
 import { recordingsToText, syllabusToText, textToRecordings, textToSyllabus, validateCourse } from './admin/courseForm';
 import { dedupeSubscribers } from './admin/NotifyComposer';
 import { DEFAULT_FILTER, filterCourses, filterFromSearch, filterToSearch } from './courses/courseFilters';
+import { DEFAULT_TAXONOMY, findSub } from '@/data/taxonomy';
 import { estimateWeeks, suggestFeatures } from './custom-requests/ideaHelper';
 import { answer } from './experience/assistantBrain';
 import { pickOfTheDay } from './experience/SubhashitaCard';
@@ -67,6 +68,24 @@ describe('course explorer filters', () => {
     const f = { ...DEFAULT_FILTER, q: 'kids', level: 'beginner' as const, sort: 'soonest' as const };
     expect(filterFromSearch(filterToSearch(f))).toEqual(f);
     expect(filterFromSearch('?type=bogus').type).toBe('all');
+    const t = { ...DEFAULT_FILTER, cat: 'yoga' as const, sub: 'ashtanga', variant: 'Theory + Practical' };
+    expect(filterFromSearch(filterToSearch(t))).toEqual(t);
+    expect(filterFromSearch('?cat=nope').cat).toBe('all');
+  });
+  it('drills down category → sub-category → variant', () => {
+    const yoga = filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga' });
+    expect(yoga.length).toBeGreaterThan(3);
+    expect(yoga.every((c) => c.category === 'yoga')).toBe(true);
+    const ashtanga = filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga', sub: 'ashtanga' });
+    expect(ashtanga.length).toBeGreaterThanOrEqual(2);
+    expect(filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga', sub: 'ashtanga', variant: 'Theory' }).map((c) => c.variant)).toEqual(['Theory']);
+  });
+  it('every seeded course points at a real taxonomy node', () => {
+    for (const c of courses) {
+      const sub = findSub(DEFAULT_TAXONOMY, c.category, c.subcategory);
+      expect(sub, `${c.id} → ${c.category}/${c.subcategory}`).toBeDefined();
+      if (c.variant) expect(sub?.variants).toContain(c.variant);
+    }
   });
 });
 

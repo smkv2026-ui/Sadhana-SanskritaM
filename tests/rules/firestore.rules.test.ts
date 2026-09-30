@@ -85,6 +85,7 @@ function regData(uid: string, courseId: string, overrides: Record<string, unknow
     confirmationSentAt: null,
     reminder24SentAt: null,
     reminder1SentAt: null,
+    accessUntil: null,
     ...overrides,
   };
 }
@@ -182,6 +183,18 @@ describe('course secrets (recordings / live links)', () => {
     await seedApprovedRegistration(ALICE, COURSE);
     await assertSucceeds(getDoc(doc(db(ALICE), 'courseSecrets', COURSE)));
     await assertFails(getDoc(doc(db(BOB), 'courseSecrets', COURSE)));
+  });
+
+  it('close again once the access window (accessUntil) has passed', async () => {
+    const approved = { ...regData(ALICE, COURSE), status: 'APPROVED', createdAt: Timestamp.now(), updatedAt: Timestamp.now() };
+    await seed(`registrations/${ALICE}_${COURSE}`, { ...approved, accessUntil: Timestamp.fromMillis(Date.now() + 5 * HOUR) });
+    await assertSucceeds(getDoc(doc(db(ALICE), 'courseSecrets', COURSE)));
+    await seed(`registrations/${ALICE}_${COURSE}`, { ...approved, accessUntil: Timestamp.fromMillis(Date.now() - HOUR) });
+    await assertFails(getDoc(doc(db(ALICE), 'courseSecrets', COURSE)));
+  });
+
+  it('learners cannot grant themselves an access window on create', async () => {
+    await assertFails(register(ALICE, COURSE, { accessUntil: Timestamp.fromMillis(Date.now() + 999 * HOUR) }));
   });
 
   it('cannot be listed or written by learners; admins can read', async () => {

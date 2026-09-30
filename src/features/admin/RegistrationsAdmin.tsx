@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { BellRing, Download, Mail } from 'lucide-react';
+import { BellRing, Clock, Download, Mail } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { backend } from '@/data';
 import { useCourses } from '@/data/queries';
-import { effectiveStatus } from '@/data/registrationLogic';
+import { effectiveStatus, isAccessExpired } from '@/data/registrationLogic';
 import type { Registration, RegistrationStatus } from '@/data/types';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { toCsv } from '@/lib/csv';
@@ -161,6 +161,12 @@ export default function RegistrationsAdmin() {
                     <td className="px-4 py-3 text-right tabular-nums">{formatInr(r.amountInr)}</td>
                     <td className="px-4 py-3">
                       <Badge variant={VARIANT[s]}>{s.replace('_', ' ').toLowerCase()}</Badge>
+                      {r.status === 'APPROVED' && r.accessUntil && (
+                        <p className={`mt-1 text-[11px] ${isAccessExpired(r) ? 'text-destructive' : 'text-muted-foreground'}`}>
+                          {isAccessExpired(r) ? 'Access ended ' : 'Access until '}
+                          {formatDateTime(r.accessUntil)}
+                        </p>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{formatDateTime(r.createdAt)}</td>
                     <td className="px-4 py-3 text-right">
@@ -176,6 +182,26 @@ export default function RegistrationsAdmin() {
                           }}
                         >
                           <Mail /> {r.confirmationSentAt ? 'Resend' : 'Confirm'}
+                        </Button>
+                      )}
+                      {r.status === 'APPROVED' && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          title="Extend the learner's access window by 30 days"
+                          onClick={async () => {
+                            const base = r.accessUntil && !isAccessExpired(r) ? new Date(r.accessUntil).getTime() : Date.now();
+                            const until = new Date(base + 30 * 86_400_000).toISOString();
+                            try {
+                              await (await backend()).setAccessUntil(r.id, until, user!.uid);
+                              toast.success(`Access extended to ${formatDateTime(until)}`);
+                              void q.refetch();
+                            } catch (e) {
+                              toast.error(e instanceof Error ? e.message : 'Could not extend access');
+                            }
+                          }}
+                        >
+                          <Clock /> +30 days
                         </Button>
                       )}
                     </td>

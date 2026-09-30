@@ -29,6 +29,16 @@ export function canRestart(status: RegistrationStatus): boolean {
   return status === 'EXPIRED' || status === 'REJECTED';
 }
 
+/** End of the access window granted on approval (null = no limit). */
+export function accessUntilFor(accessDays: number | undefined, approvedAt: Date = new Date()): string | null {
+  if (!accessDays || accessDays <= 0) return null;
+  return new Date(approvedAt.getTime() + accessDays * 86_400_000).toISOString();
+}
+
+export function isAccessExpired(reg: Pick<Registration, 'status' | 'accessUntil'>, now: Date = new Date()): boolean {
+  return reg.status === 'APPROVED' && Boolean(reg.accessUntil) && new Date(reg.accessUntil as string).getTime() <= now.getTime();
+}
+
 export function buildRegistration(
   input: NewRegistrationInput,
   coupon: Coupon | null,
@@ -70,5 +80,6 @@ export function buildRegistration(
     confirmationSentAt: null,
     reminder24SentAt: null,
     reminder1SentAt: null,
+    accessUntil: null,
   };
 }

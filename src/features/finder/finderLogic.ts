@@ -49,6 +49,9 @@ export const QUESTIONS: FinderQuestion[] = [
       { value: 'chanting', label: 'Chant correctly', hint: 'Svara, rhythm, pronunciation', emoji: '🎶' },
       { value: 'grammar', label: 'Master grammar', hint: 'Pāṇini’s system', emoji: '🧩' },
       { value: 'philosophy', label: 'Explore philosophy', hint: 'Meaning and commentary', emoji: '💎' },
+      { value: 'yoga', label: 'Yoga & breath', hint: 'Āsana, prāṇāyāma', emoji: '🧘' },
+      { value: 'meditation', label: 'Meditation', hint: 'Focus, calm, pregnancy', emoji: '🪷' },
+      { value: 'languages', label: 'Another language', hint: 'e.g. German', emoji: '🌐' },
     ],
   },
   {
@@ -104,6 +107,9 @@ export function scoreCourse(course: Course, a: FinderAnswers): Recommendation {
         grammar: 'Goes deep into the grammar you want to master',
         philosophy: 'Opens the meaning and philosophy behind the verses',
         kids: 'Playful stories and ślokas',
+        yoga: 'Yoga practice guided by experienced teachers',
+        meditation: 'Calming, focused meditation practice',
+        languages: 'A structured path into a new language',
       }[a.goal],
     );
   }

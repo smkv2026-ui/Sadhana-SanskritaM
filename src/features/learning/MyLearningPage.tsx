@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { CalendarPlus, CheckCircle2, Circle, Flame, Lock, PlayCircle, Receipt, Video } from 'lucide-react';
-import { useEffect, useMemo, useRef } from 'react';
+import { CalendarPlus, CheckCircle2, Circle, Clock, Flame, Lock, PlayCircle, Receipt, Video } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BRAND } from '@/brand/logoGeometry';
 import { backend } from '@/data';
 import { useCourseMap, useMyRegistrations } from '@/data/queries';
-import { effectiveStatus } from '@/data/registrationLogic';
-import type { LearningProgress, Registration } from '@/data/types';
+import { effectiveStatus, isAccessExpired } from '@/data/registrationLogic';
+import type { LearningProgress, Recording, Registration } from '@/data/types';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { RequireAuth } from '@/features/auth/SignIn';
 import { buildIcs, downloadText } from '@/lib/ics';
@@ -15,12 +15,15 @@ import { countdown, formatDateTime } from '@/lib/format';
 import { absUrl, routes } from '@/lib/links';
 import { formatInr } from '@/lib/pricing';
 import { cn } from '@/lib/utils';
+import { isRecordingAvailable, timeLeftLabel } from '@/lib/video';
 import { getAccessProvider } from '@/providers/access';
 import { PageMeta } from '@/shared/components/PageMeta';
 import { CardSkeletons, EmptyState, ErrorState } from '@/shared/components/States';
 import { useNow } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/overlays';
 import { Badge, ProgressRing, Skeleton } from '@/shared/ui/primitives';
+import { VideoPlayer } from './VideoPlayer';
 
 const STATUS_BADGE = {
   PENDING_PAYMENT: { label: 'Awaiting payment', variant: 'warning' },
@@ -97,6 +100,22 @@ function CourseAccess({ reg }: { reg: Registration }) {
     onSettled: () => void qc.invalidateQueries({ queryKey: progressKey }),
   });
 
+  const [watching, setWatching] = useState<Recording | null>(null);
+  const markDone = (id: string) => {
+    if (!progress.data?.completed?.[id]) toggle.mutate({ id, done: true });
+  };
+
+  if (isAccessExpired(reg))
+    return (
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-dashed bg-muted/40 p-4 text-sm">
+        <p className="flex items-center gap-2 text-muted-foreground">
+          <Clock className="h-4 w-4" /> Your access window ended on {formatDateTime(reg.accessUntil)}.
+        </p>
+        <Button asChild variant="outline" size="sm">
+          <Link to={routes.contact}>Request an extension</Link>
+        </Button>
+      </div>
+    );
   if (access.isLoading) return <Skeleton className="h-32 w-full rounded-2xl" />;
   if (!access.data?.granted)
     return (
@@ -107,7 +126,11 @@ function CourseAccess({ reg }: { reg: Registration }) {
 
   const { secrets } = access.data;
   const completed = progress.data?.completed ?? {};
-  const recs = secrets.recordings;
+  const recs = secrets.recordings.filter((r) => isRecordingAvailable(r));
+  const open = (r: Recording) => {
+    setWatching(r);
+    if (user) void backend().then((b) => b.recordActivity(user));
+  };
   const doneCount = recs.filter((r) => completed[r.id]).length;
   const resume = recs.find((r) => !completed[r.id]) ?? recs[0];
 
@@ -138,15 +161,8 @@ function CourseAccess({ reg }: { reg: Registration }) {
               </p>
             </div>
             {resume && (
-              <Button asChild size="sm">
-                <a
-                  href={resume.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => user && void backend().then((b) => b.recordActivity(user))}
-                >
-                  <PlayCircle /> {doneCount ? 'Resume' : 'Start'}
-                </a>
+              <Button size="sm" onClick={() => open(resume)}>
+                <PlayCircle /> {doneCount ? 'Resume' : 'Start'}
               </Button>
             )}
           </div>
@@ -169,9 +185,17 @@ function CourseAccess({ reg }: { reg: Registration }) {
                       {done ? <CheckCircle2 className="h-6 w-6 text-success" /> : <Circle className="h-6 w-6 text-muted-foreground" />}
                     </motion.span>
                   </button>
-                  <a href={r.url} target="_blank" rel="noopener noreferrer" className={cn('flex-1 text-sm hover:text-accent', done && 'text-muted-foreground line-through decoration-success/60')}>
-                    {r.title}
-                  </a>
+                  <button
+                    type="button"
+                    onClick={() => open(r)}
+                    className={cn('group/rec flex flex-1 items-center gap-2 text-left text-sm transition hover:text-accent', done && 'text-muted-foreground line-through decoration-success/60')}
+                  >
+                    <PlayCircle className="h-4 w-4 shrink-0 text-accent opacity-60 transition group-hover/rec:scale-110 group-hover/rec:opacity-100" />
+                    <span className="min-w-0 flex-1">{r.title}</span>
+                  </button>
+                  {r.availableUntil && (
+                    <span className="hidden rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:text-amber-300 sm:inline">{timeLeftLabel(r.availableUntil)}</span>
+                  )}
                   <span className="text-xs text-muted-foreground">{r.durationMinutes} min</span>
                 </li>
               );
@@ -190,6 +214,28 @@ function CourseAccess({ reg }: { reg: Registration }) {
           ))}
         </ul>
       )}
+      <Dialog open={Boolean(watching)} onOpenChange={(o) => !o && setWatching(null)}>
+        <DialogContent className="max-w-4xl p-3 sm:p-5">
+          <DialogHeader className="px-1">
+            <DialogTitle className="text-lg sm:text-xl">{watching?.title}</DialogTitle>
+            <DialogDescription>
+              {reg.courseTitle}
+              {reg.accessUntil ? ` · Access until ${formatDateTime(reg.accessUntil)}` : ''}
+            </DialogDescription>
+          </DialogHeader>
+          {watching && (
+            <VideoPlayer url={watching.url} title={watching.title} watermark={user?.email ?? reg.participant.email} onEnded={() => markDone(watching.id)} />
+          )}
+          {watching && (
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
+              <p className="text-xs text-muted-foreground">Streaming inside Sadhana Sanskritam · downloads are disabled</p>
+              <Button size="sm" variant={completed[watching.id] ? 'outline' : 'success'} onClick={() => toggle.mutate({ id: watching.id, done: !completed[watching.id] })}>
+                <CheckCircle2 /> {completed[watching.id] ? 'Completed' : 'Mark complete'}
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -262,7 +308,14 @@ function Dashboard() {
               <section key={r.id} id={`c-${r.courseId}`} className="rounded-3xl border bg-card p-6" aria-labelledby={`h-${r.id}`}>
                 <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <Badge variant="success">Active</Badge>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant={isAccessExpired(r) ? 'muted' : 'success'}>{isAccessExpired(r) ? 'Access ended' : 'Active'}</Badge>
+                      {r.accessUntil && !isAccessExpired(r) && (
+                        <Badge variant="gold" title={`Access until ${formatDateTime(r.accessUntil)}`}>
+                          <Clock className="mr-1 h-3 w-3" /> {timeLeftLabel(r.accessUntil)}
+                        </Badge>
+                      )}
+                    </div>
                     <h2 id={`h-${r.id}`} className="mt-2 font-display text-2xl font-semibold">
                       {r.courseTitle}
                     </h2>

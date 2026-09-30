@@ -85,6 +85,8 @@ export interface Backend {
   listSubhashitas(): Promise<Subhashita[]>;
   getSiteStats(): Promise<SiteStats>;
   getSettings(): Promise<SiteSettings>;
+  /** Stored overrides for categories/sub-categories (merged over DEFAULT_TAXONOMY by the caller). */
+  getTaxonomy(): Promise<import('./taxonomy').Taxonomy | null>;
   getCoupon(code: string): Promise<Coupon | null>;
 
   // ---- signed-in learner ----
@@ -123,10 +125,13 @@ export interface Backend {
   deleteCoupon(code: string): Promise<void>;
   saveSiteStats(s: SiteStats): Promise<void>;
   saveSettings(s: SiteSettings): Promise<void>;
+  saveTaxonomy(t: import('./taxonomy').Taxonomy): Promise<void>;
 
   listRegistrations(q: RegistrationQuery): Promise<Page<Registration>>;
   watchVerificationQueue(cb: (items: Registration[]) => void): Unsubscribe;
   decideRegistration(id: string, decision: 'APPROVED' | 'REJECTED', adminUid: string, reason?: string): Promise<void>;
+  /** Sets the end of the learner's access window (null = unlimited). */
+  setAccessUntil(id: string, accessUntil: string | null, adminUid: string): Promise<void>;
   releaseExpiredHolds(adminUid: string): Promise<number>;
   markRegistrationNotified(id: string, field: 'confirmationSentAt' | 'reminder24SentAt' | 'reminder1SentAt'): Promise<void>;
   countRegistrations(status?: RegistrationStatus): Promise<number>;

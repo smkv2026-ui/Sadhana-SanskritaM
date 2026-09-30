@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { backend } from '@/data';
-import { useTeachers } from '@/data/queries';
-import type { Course, CourseSecrets, Level } from '@/data/types';
+import { useTaxonomy, useTeachers } from '@/data/queries';
+import { findCategory, findSub } from '@/data/taxonomy';
+import type { Course, CourseSecrets, Level, Recording } from '@/data/types';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { formatDate } from '@/lib/format';
 import { autoId, slugify } from '@/lib/ids';
@@ -16,7 +17,8 @@ import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/overlays';
 import { Badge, Checkbox, Field, Input, Label, NativeSelect, Textarea } from '@/shared/ui/primitives';
 import { AdminHeader } from './AdminApp';
-import { fromLocalInput, recordingsToText, syllabusToText, textToRecordings, textToSyllabus, toLocalInput, validateCourse, validateSecrets } from './courseForm';
+import { fromLocalInput, syllabusToText, textToSyllabus, toLocalInput, validateCourse, validateSecrets } from './courseForm';
+import { RecordingsEditor } from './RecordingsEditor';
 
 function blankCourse(): Course {
   const now = new Date().toISOString();
@@ -47,6 +49,10 @@ function blankCourse(): Course {
     earlyBirdPriceInr: null,
     earlyBirdEndsAt: null,
     seatLimit: 0,
+    category: 'language',
+    subcategory: 'sanskrit',
+    variant: '',
+    accessDays: 0,
     coverImage: '',
     accent: '#D9A441',
     status: 'draft',
@@ -56,24 +62,25 @@ function blankCourse(): Course {
   };
 }
 
-const GOALS = ['speak', 'read-texts', 'chanting', 'grammar', 'philosophy', 'kids'] as const;
+const GOALS = ['speak', 'read-texts', 'chanting', 'grammar', 'philosophy', 'kids', 'yoga', 'meditation', 'languages'] as const;
 
 function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) {
   const { user } = useAuth();
   const qc = useQueryClient();
   const navigate = useNavigate();
   const { data: teachers } = useTeachers();
+  const taxonomy = useTaxonomy();
   const [c, setC] = useState<Course>(initial);
   const [syllabus, setSyllabus] = useState(syllabusToText(initial.syllabus));
   const [outcomes, setOutcomes] = useState(initial.outcomes.join('\n'));
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const secretsQ = useQuery({ queryKey: ['admin', 'secrets', initial.id], queryFn: async () => (await backend()).getCourseSecrets(initial.id).catch(() => null) });
-  const [secrets, setSecrets] = useState<{ meetingLink: string; meetingNotes: string; recordings: string; resources: string } | null>(null);
+  const [secrets, setSecrets] = useState<{ meetingLink: string; meetingNotes: string; recordings: Recording[]; resources: string } | null>(null);
   const s = secrets ?? {
     meetingLink: secretsQ.data?.meetingLink ?? '',
     meetingNotes: secretsQ.data?.meetingNotes ?? '',
-    recordings: recordingsToText(secretsQ.data?.recordings ?? []),
+    recordings: secretsQ.data?.recordings ?? [],
     resources: (secretsQ.data?.resources ?? []).map((r) => `${r.title} | ${r.url}`).join('\n'),
   };
   const setS = (patch: Partial<typeof s>) => setSecrets({ ...s, ...patch });
@@ -86,7 +93,7 @@ function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) 
       courseId: course.id,
       meetingLink: s.meetingLink.trim(),
       meetingNotes: s.meetingNotes.trim(),
-      recordings: textToRecordings(s.recordings),
+      recordings: s.recordings.filter((r) => r.title.trim() || r.url.trim()).map((r) => ({ ...r, title: r.title.trim(), availableUntil: r.availableUntil ?? null })),
       resources: s.resources
         .split('\n')
         .map((l) => l.split('|').map((p) => p.trim()))
@@ -145,9 +152,47 @@ function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) 
             <NativeSelect id="ce-type" value={c.type} onChange={(e) => set('type', e.target.value as Course['type'])}>
               <option value="live">Live</option>
               <option value="recorded">Recorded</option>
-              <option value="hybrid">Hybrid</option>
+              <option value="hybrid">Hybrid (live + recordings)</option>
+              <option value="in-person">In-person</option>
             </NativeSelect>
           </Field>
+          <Field id="ce-cat" label="Category">
+            <NativeSelect
+              id="ce-cat"
+              value={c.category}
+              onChange={(e) => {
+                const cat = findCategory(taxonomy, e.target.value);
+                setC((x) => ({ ...x, category: e.target.value as Course['category'], subcategory: cat?.subs[0]?.id ?? '', variant: '' }));
+              }}
+            >
+              {taxonomy.categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.emoji} {cat.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </Field>
+          <Field id="ce-sub" label={c.category === 'reading' ? 'Scripture' : c.category === 'language' ? 'Language' : 'Sub-category'}>
+            <NativeSelect id="ce-sub" value={c.subcategory} onChange={(e) => setC((x) => ({ ...x, subcategory: e.target.value, variant: '' }))}>
+              {(findCategory(taxonomy, c.category)?.subs ?? []).map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.label}
+                </option>
+              ))}
+            </NativeSelect>
+          </Field>
+          {(findSub(taxonomy, c.category, c.subcategory)?.variants?.length ?? 0) > 0 && (
+            <Field id="ce-variant" label="Option">
+              <NativeSelect id="ce-variant" value={c.variant} onChange={(e) => set('variant', e.target.value)}>
+                <option value="">—</option>
+                {findSub(taxonomy, c.category, c.subcategory)?.variants?.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </NativeSelect>
+            </Field>
+          )}
           <Field id="ce-level" label="Level">
             <NativeSelect id="ce-level" value={c.level} onChange={(e) => set('level', e.target.value as Level)}>
               <option value="beginner">Beginner</option>
@@ -228,6 +273,9 @@ function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) 
           <Field id="ce-seats" label="Seat limit (0 = unlimited)">
             <Input id="ce-seats" type="number" min={0} value={c.seatLimit} onChange={(e) => set('seatLimit', num(e.target.value))} />
           </Field>
+          <Field id="ce-access" label="Access days after approval (0 = unlimited)" hint="Recordings & links lock automatically after this many days (enforced by Security Rules).">
+            <Input id="ce-access" type="number" min={0} value={c.accessDays} onChange={(e) => set('accessDays', num(e.target.value))} />
+          </Field>
           <Field id="ce-price" label="Price (INR, 0 = free)">
             <Input id="ce-price" type="number" min={0} value={c.priceInr} onChange={(e) => set('priceInr', num(e.target.value))} />
           </Field>
@@ -248,9 +296,14 @@ function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) 
           <Field id="ce-meetnotes" label="Joining notes">
             <Input id="ce-meetnotes" value={s.meetingNotes} onChange={(e) => setS({ meetingNotes: e.target.value })} />
           </Field>
-          <Field id="ce-recs" label="Recordings" hint="One per line — “Title | https://url | minutes” (unlisted YouTube, Drive or Vimeo links).">
-            <Textarea id="ce-recs" rows={6} className="font-mono text-sm" value={s.recordings} onChange={(e) => setS({ recordings: e.target.value })} />
-          </Field>
+          <fieldset>
+            <legend className="text-sm font-medium">Video recordings</legend>
+            <p className="mb-3 mt-1 text-xs text-muted-foreground">
+              Free hosting: upload to YouTube as <strong>Unlisted</strong>, to Google Drive (“Anyone with the link”), or Vimeo — then paste the link.
+              Videos play inside the app (no download button, watermarked) and lock when the learner’s access window ends.
+            </p>
+            <RecordingsEditor value={s.recordings} onChange={(recordings) => setS({ recordings })} />
+          </fieldset>
           <Field id="ce-res" label="Resources" hint="“Title | https://url” per line">
             <Textarea id="ce-res" rows={3} className="font-mono text-sm" value={s.resources} onChange={(e) => setS({ resources: e.target.value })} />
           </Field>

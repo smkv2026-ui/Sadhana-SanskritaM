@@ -1,6 +1,7 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { backend } from './index';
+import { DEFAULT_TAXONOMY, mergeTaxonomy, type Taxonomy } from './taxonomy';
 import type { Course, CourseStats, Registration } from './types';
 
 /**
@@ -20,6 +21,7 @@ export const qk = {
   subhashitas: ['subhashitas'] as const,
   siteStats: ['siteStats'] as const,
   settings: ['settings'] as const,
+  taxonomy: ['taxonomy'] as const,
   myRegs: (uid: string) => ['myRegistrations', uid] as const,
   myRequests: (uid: string) => ['myCustomRequests', uid] as const,
 };
@@ -115,4 +117,14 @@ export function useLiveRegistration(id: string | undefined): { data: Registratio
 export function useCourseMap(): Record<string, Course> {
   const { data } = useCourses();
   return useMemo(() => Object.fromEntries((data ?? []).map((c) => [c.id, c])), [data]);
+}
+
+/** Course categories (defaults merged with the admin-edited `site/taxonomy`). Never undefined. */
+export function useTaxonomy(): Taxonomy {
+  const q = useQuery({
+    queryKey: qk.taxonomy,
+    queryFn: async () => mergeTaxonomy(await (await backend()).getTaxonomy()),
+    staleTime: 30 * MIN,
+  });
+  return q.data ?? DEFAULT_TAXONOMY;
 }

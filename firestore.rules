@@ -92,7 +92,10 @@ service cloud.firestore {
     // ---------- paid content: readable only after approval ----------
     function isApprovedFor(courseId) {
       let reg = regPath(request.auth.uid, courseId);
-      return signedIn() && exists(reg) && get(reg).data.status == 'APPROVED';
+      let d = get(reg).data;
+      // accessUntil (set on approval from course.accessDays) closes the window for recordings/links.
+      return signedIn() && exists(reg) && d.status == 'APPROVED'
+        && (d.get('accessUntil', null) == null || request.time < d.accessUntil);
     }
 
     match /courseSecrets/{courseId} {
@@ -105,7 +108,7 @@ service cloud.firestore {
       return ['uid', 'courseId', 'courseTitle', 'courseSlug', 'courseType', 'startsAt', 'participant',
               'basePriceInr', 'discountInr', 'amountInr', 'couponCode', 'reference', 'status', 'utr',
               'utrSubmittedAt', 'holdExpiresAt', 'createdAt', 'updatedAt', 'decidedAt', 'decidedBy',
-              'rejectionReason', 'confirmationSentAt', 'reminder24SentAt', 'reminder1SentAt'];
+              'rejectionReason', 'confirmationSentAt', 'reminder24SentAt', 'reminder1SentAt', 'accessUntil'];
     }
 
     // Mirrors computePrice() in src/lib/pricing.ts.
@@ -169,6 +172,7 @@ service cloud.firestore {
         && d.utr == null && d.utrSubmittedAt == null
         && d.decidedAt == null && d.decidedBy == null && d.rejectionReason == null
         && d.confirmationSentAt == null && d.reminder24SentAt == null && d.reminder1SentAt == null
+        && d.accessUntil == null
         && d.createdAt == request.time && d.updatedAt == request.time
         && validHold(d)
         && d.reference is string && d.reference.matches('^SS-[A-Z0-9]{6}$')

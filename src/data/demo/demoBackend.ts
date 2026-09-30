@@ -4,7 +4,8 @@ import { readJson, STORAGE_KEYS, writeJson } from '@/lib/storage';
 import { couponError } from '@/lib/pricing';
 import { normalizeUtr, utrError } from '@/lib/utr';
 import { BackendError, type AuthApi, type Backend, type RegistrationQuery, type Unsubscribe } from '../backend';
-import { buildRegistration, canRestart, effectiveStatus, holdsSeat, isHoldExpired } from '../registrationLogic';
+import { accessUntilFor, buildRegistration, canRestart, effectiveStatus, holdsSeat, isAccessExpired, isHoldExpired } from '../registrationLogic';
+import type { Taxonomy } from '../taxonomy';
 import {
   seedCoupons,
   seedCourses,
@@ -45,7 +46,8 @@ import type {
  * Data lives in localStorage of this browser only.
  */
 interface DemoDb {
-  version: 1;
+  version: 2;
+  taxonomy: Taxonomy | null;
   courses: Record<string, Course>;
   secrets: Record<string, CourseSecrets>;
   stats: Record<string, CourseStats>;
@@ -73,7 +75,8 @@ const byId = <T extends { id: string }>(items: T[]) => Object.fromEntries(items.
 function freshDb(): DemoDb {
   const courses = seedCourses();
   return {
-    version: 1,
+    version: 2,
+    taxonomy: null,
     courses: byId(courses),
     secrets: Object.fromEntries(seedSecrets(courses).map((s) => [s.courseId, s])),
     stats: Object.fromEntries(
@@ -117,7 +120,7 @@ export class DemoBackend implements Backend {
 
   constructor(private readonly persist = true) {
     const stored = persist ? readJson<DemoDb | null>('local', STORAGE_KEYS.demoDb, null) : null;
-    this.db = stored && stored.version === 1 ? stored : freshDb();
+    this.db = stored && stored.version === 2 ? stored : freshDb();
     this.user = persist ? readJson<AuthUser | null>('local', STORAGE_KEYS.demoAuth, null) : null;
 
     if (persist && typeof window !== 'undefined') {
@@ -246,6 +249,9 @@ export class DemoBackend implements Backend {
   async getSettings() {
     return clone(this.db.settings);
   }
+  async getTaxonomy() {
+    return clone(this.db.taxonomy ?? null);
+  }
   async getCoupon(code: string) {
     await delay(200);
     const c = this.db.coupons[code.trim().toUpperCase()];
@@ -360,6 +366,9 @@ export class DemoBackend implements Backend {
     const reg = this.db.registrations[registrationId(u.uid, courseId)];
     if (!this.isAdminSync() && reg?.status !== 'APPROVED') {
       throw new BackendError('permission-denied', 'Access unlocks after your payment is verified.');
+    }
+    if (!this.isAdminSync() && reg && isAccessExpired(reg)) {
+      throw new BackendError('permission-denied', 'Your access window for this course has ended.');
     }
     return clone(this.db.secrets[courseId] ?? null);
   }
@@ -511,6 +520,9 @@ export class DemoBackend implements Backend {
   saveSettings(s: SiteSettings) {
     return this.adminWrite(() => void (this.db.settings = s));
   }
+  saveTaxonomy(t: Taxonomy) {
+    return this.adminWrite(() => void (this.db.taxonomy = clone(t)));
+  }
 
   async listRegistrations(q: RegistrationQuery): Promise<Page<Registration>> {
     this.requireAdmin();
@@ -545,8 +557,18 @@ export class DemoBackend implements Backend {
     if (!r) throw new BackendError('not-found', 'Registration not found.');
     const now = new Date().toISOString();
     if (decision === 'REJECTED' && holdsSeat(r.status)) this.bumpSeat(r.courseId, -1);
-    Object.assign(r, { status: decision, decidedAt: now, decidedBy: adminUid, rejectionReason: reason ?? null, updatedAt: now });
+    const accessUntil = decision === 'APPROVED' ? accessUntilFor(this.db.courses[r.courseId]?.accessDays) : null;
+    Object.assign(r, { status: decision, decidedAt: now, decidedBy: adminUid, rejectionReason: reason ?? null, updatedAt: now, accessUntil });
     this.db.audit.unshift({ id: autoId(), at: now, by: adminUid, action: `registration.${decision.toLowerCase()}`, target: id, details: reason ?? '' });
+    this.save();
+  }
+  async setAccessUntil(id: string, accessUntil: string | null, adminUid: string) {
+    this.requireAdmin();
+    const r = this.db.registrations[id];
+    if (!r) throw new BackendError('not-found', 'Registration not found.');
+    const now = new Date().toISOString();
+    Object.assign(r, { accessUntil, updatedAt: now });
+    this.db.audit.unshift({ id: autoId(), at: now, by: adminUid, action: 'registration.access', target: id, details: accessUntil ?? 'unlimited' });
     this.save();
   }
   async releaseExpiredHolds(adminUid: string) {

@@ -6,10 +6,11 @@
 export type ISODate = string;
 
 export type CourseKind = 'course' | 'event';
-export type CourseType = 'recorded' | 'live' | 'hybrid';
+export type CourseType = 'recorded' | 'live' | 'hybrid' | 'in-person';
 export type Level = 'beginner' | 'intermediate' | 'advanced';
 export type PublishStatus = 'draft' | 'published' | 'archived';
-export type Goal = 'speak' | 'read-texts' | 'chanting' | 'grammar' | 'philosophy' | 'kids';
+export type Goal = 'speak' | 'read-texts' | 'chanting' | 'grammar' | 'philosophy' | 'kids' | 'yoga' | 'meditation' | 'languages';
+export type { CategoryId } from './taxonomy';
 
 export interface SyllabusModule {
   id: string;
@@ -48,6 +49,12 @@ export interface Course {
   earlyBirdEndsAt: ISODate | null;
   /** 0 = unlimited seats. */
   seatLimit: number;
+  /** Taxonomy: e.g. yoga › ashtanga · "Theory + Practical" (see data/taxonomy.ts). */
+  category: import('./taxonomy').CategoryId;
+  subcategory: string;
+  variant: string;
+  /** Days of access to recordings/links after approval (0 = no limit). Enforced by Security Rules. */
+  accessDays: number;
   coverImage: string;
   accent: string;
   status: PublishStatus;
@@ -62,11 +69,15 @@ export interface CourseStats {
   seatsTaken: number;
 }
 
+export type VideoProvider = 'youtube' | 'vimeo' | 'drive' | 'file' | 'bunny';
+
 export interface Recording {
   id: string;
   title: string;
   url: string;
   durationMinutes: number;
+  /** Optional per-recording window (e.g. a live-class replay available for 7 days). */
+  availableUntil?: ISODate | null;
 }
 
 /** `courseSecrets/{courseId}` — readable only by admins and APPROVED registrants. */
@@ -169,6 +180,8 @@ export interface Registration {
   confirmationSentAt: ISODate | null;
   reminder24SentAt: ISODate | null;
   reminder1SentAt: ISODate | null;
+  /** End of the learner's access window (set on approval from course.accessDays; admins may extend). */
+  accessUntil: ISODate | null;
 }
 
 export interface NewRegistrationInput {

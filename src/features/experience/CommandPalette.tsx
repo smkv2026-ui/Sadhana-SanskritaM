@@ -19,7 +19,7 @@ import {
 import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { replayIntro } from '@/brand/IntroAnimation';
-import { useCourses } from '@/data/queries';
+import { useCourses, useTaxonomy } from '@/data/queries';
 import { routes } from '@/lib/links';
 import { useAuth } from '../auth/AuthProvider';
 import { OPEN_PALETTE_EVENT, openAssistant } from './commandBus';
@@ -48,6 +48,7 @@ export default function CommandPalette() {
   const { data: courses } = useCourses({ enabled: open });
   const { user, isAdmin, requestSignIn } = useAuth();
   const { toggleTheme, theme } = usePreferences();
+  const taxonomy = useTaxonomy();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -106,12 +107,30 @@ export default function CommandPalette() {
                 <Item icon={<Mail />} onSelect={() => go(routes.contact)}>Contact</Item>
                 {isAdmin && <Item icon={<LayoutDashboard />} onSelect={() => go(routes.admin)}>Admin dashboard</Item>}
               </Command.Group>
+              <Command.Group heading="Paths" className={groupCls}>
+                {taxonomy.categories.flatMap((cat) => [
+                  <Item key={cat.id} value={`${cat.label} ${cat.blurb}`} icon={<span aria-hidden>{cat.emoji}</span>} onSelect={() => go(`${routes.courses}?cat=${cat.id}`)}>
+                    {cat.label}
+                  </Item>,
+                  ...cat.subs.map((sub) => (
+                    <Item
+                      key={`${cat.id}-${sub.id}`}
+                      value={`${cat.label} ${sub.label}`}
+                      icon={<span aria-hidden className="opacity-60">{cat.emoji}</span>}
+                      hint={cat.label}
+                      onSelect={() => go(`${routes.courses}?cat=${cat.id}&sub=${sub.id}`)}
+                    >
+                      {sub.label}
+                    </Item>
+                  )),
+                ])}
+              </Command.Group>
               {courses && courses.length > 0 && (
                 <Command.Group heading="Courses & events" className={groupCls}>
                   {courses.map((c) => (
                     <Item
                       key={c.id}
-                      value={`${c.title} ${c.tags.join(' ')} ${c.level} ${c.type}`}
+                      value={`${c.title} ${c.tags.join(' ')} ${c.level} ${c.type} ${c.subcategory ?? ''} ${c.variant ?? ''}`}
                       icon={c.kind === 'event' ? <Calendar /> : <BookOpen />}
                       hint={c.kind === 'event' ? 'Event' : c.level}
                       onSelect={() => go(routes.course(c.slug))}

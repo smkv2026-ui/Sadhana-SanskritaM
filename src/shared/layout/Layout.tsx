@@ -1,6 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import { Suspense, lazy, useState } from 'react';
-import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { IntroAnimation } from '@/brand/IntroAnimation';
 import { env } from '@/config/env';
@@ -32,6 +32,9 @@ export function Layout() {
   const { theme } = usePreferences();
   const [introActive, setIntroActive] = useState(false);
   const { signInRequest } = useAuth();
+  const { pathname } = useLocation();
+  // Soft fade/blur between pages; admin sub-tabs keep their own transitions.
+  const routeKey = pathname.startsWith('/admin') ? '/admin' : pathname;
   return (
     <>
       <a
@@ -45,9 +48,11 @@ export function Layout() {
       <CursorGlow />
       <Header introActive={introActive} />
       <main id="main" tabIndex={-1} className="relative z-10 min-h-[70svh] outline-none">
-        <Suspense fallback={<PageLoader />}>
-          <Outlet />
-        </Suspense>
+        <div key={routeKey} className="route-enter">
+          <Suspense fallback={<PageLoader />}>
+            <Outlet />
+          </Suspense>
+        </div>
       </main>
       <Footer />
       <Suspense fallback={null}>

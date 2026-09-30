@@ -2,13 +2,15 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useCourseStats, useCourses } from '@/data/queries';
+import { useCourseStats, useCourses, useTaxonomy } from '@/data/queries';
+import { findCategory } from '@/data/taxonomy';
 import { routes } from '@/lib/links';
 import { cn } from '@/lib/utils';
 import { PageMeta } from '@/shared/components/PageMeta';
 import { CardSkeletons, EmptyState, ErrorState } from '@/shared/components/States';
 import { Button } from '@/shared/ui/button';
 import { Input, NativeSelect } from '@/shared/ui/primitives';
+import { CategoryNav } from './CategoryNav';
 import { CourseCard } from './CourseCard';
 import { DEFAULT_FILTER, filterCourses, filterFromSearch, filterToSearch, type CourseFilter } from './courseFilters';
 
@@ -53,6 +55,8 @@ export default function CoursesPage() {
   const filter = useMemo(() => filterFromSearch(location.search), [location.search]);
   const { data, isLoading, error, refetch } = useCourses();
   const { data: stats } = useCourseStats();
+  const taxonomy = useTaxonomy();
+  const activeCat = findCategory(taxonomy, filter.cat);
   const results = useMemo(() => filterCourses(data ?? [], filter, stats), [data, filter, stats]);
 
   const set = (patch: Partial<CourseFilter>) =>
@@ -61,14 +65,20 @@ export default function CoursesPage() {
 
   return (
     <div className="container py-12 sm:py-16">
-      <PageMeta title="Courses" description="Explore live cohorts, recorded courses and events in spoken Sanskrit, grammar, chanting and the classical texts." path={routes.courses} />
+      <PageMeta title="Courses" description="Explore live, recorded and in-person courses in Sanskrit and other languages, yoga & meditation, chanting, meaning of the texts and scripture reading (sat-saṅga)." path={routes.courses} />
       <header className="max-w-3xl">
         <p className="eyebrow">Catalogue</p>
-        <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">Explore courses & events</h1>
-        <p className="mt-4 text-lg text-muted-foreground">Filter by format and level — results update instantly.</p>
+        <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">{activeCat ? `${activeCat.label} paths` : 'Explore courses & events'}</h1>
+        <p className="mt-4 text-lg text-muted-foreground">
+          Language, Yoga, Chanting, Meaning and Sat-saṅga reading — choose a path, then live, recorded or in-person.
+        </p>
       </header>
 
-      <div className="z-20 -mx-4 mt-8 border-b bg-background/85 px-4 py-4 backdrop-blur-xl lg:sticky lg:top-16">
+      <div className="mt-8">
+        <CategoryNav taxonomy={taxonomy} courses={data ?? []} filter={filter} onChange={set} />
+      </div>
+
+      <div className="z-20 -mx-4 mt-6 border-b bg-background/85 px-4 py-4 backdrop-blur-xl lg:sticky lg:top-16">
         <LayoutGroup>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative flex-1">
@@ -118,6 +128,7 @@ export default function CoursesPage() {
                 { value: 'live', label: 'Live' },
                 { value: 'recorded', label: 'Recorded' },
                 { value: 'hybrid', label: 'Hybrid' },
+                { value: 'in-person', label: 'In-person' },
               ]}
             />
             <Chips

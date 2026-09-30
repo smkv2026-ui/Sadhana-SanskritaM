@@ -40,7 +40,8 @@ import { couponError } from '@/lib/pricing';
 import { readStorage, removeStorage, STORAGE_KEYS, writeStorage } from '@/lib/storage';
 import { normalizeUtr, utrError } from '@/lib/utr';
 import { BackendError, type AuthApi, type Backend, type RegistrationQuery, type Unsubscribe } from '../backend';
-import { buildRegistration, canRestart, holdsSeat, isHoldExpired } from '../registrationLogic';
+import { accessUntilFor, buildRegistration, canRestart, holdsSeat, isHoldExpired } from '../registrationLogic';
+import type { Taxonomy } from '../taxonomy';
 import { seedCoupons, seedCourses, seedSecrets, seedSettings, seedStats, seedSubhashitas, seedTeachers, seedTestimonials } from '../seed';
 import type {
   AuthUser,
@@ -258,6 +259,14 @@ export class FirestoreBackend implements Backend {
   async getSettings() {
     const d = await getDoc(doc(this.db, COL.site, 'settings'));
     return (d.exists() ? fromFs<SiteSettings>(d.data()) : seedSettings) as SiteSettings;
+  }
+  async getTaxonomy() {
+    try {
+      const d = await getDoc(doc(this.db, COL.site, 'taxonomy'));
+      return d.exists() ? (fromFs<Taxonomy>(d.data()) as Taxonomy) : null;
+    } catch {
+      return null;
+    }
   }
   async getCoupon(code: string) {
     const clean = code.trim().toUpperCase();
@@ -589,6 +598,9 @@ export class FirestoreBackend implements Backend {
   async saveSettings(s: SiteSettings) {
     await setDoc(doc(this.db, COL.site, 'settings'), s);
   }
+  async saveTaxonomy(t: Taxonomy) {
+    await setDoc(doc(this.db, COL.site, 'taxonomy'), JSON.parse(JSON.stringify(t)) as Taxonomy);
+  }
 
   async listRegistrations(q: RegistrationQuery) {
     const c: QueryConstraint[] = [];
@@ -617,8 +629,11 @@ export class FirestoreBackend implements Backend {
       const reg = snap<Registration>(r);
       const statsRef = doc(this.db, COL.stats, reg.courseId);
       const stats = await tx.get(statsRef);
+      const course = decision === 'APPROVED' ? await tx.get(doc(this.db, COL.courses, reg.courseId)) : null;
+      const until = accessUntilFor(Number(course?.data()?.accessDays ?? 0));
       tx.update(regRef, {
         status: decision,
+        accessUntil: decision === 'APPROVED' ? ts(until) : null,
         decidedAt: serverTimestamp(),
         decidedBy: adminUid,
         rejectionReason: reason ?? null,
@@ -635,6 +650,18 @@ export class FirestoreBackend implements Backend {
         details: reason ?? '',
       });
     });
+  }
+  async setAccessUntil(id: string, accessUntil: string | null, adminUid: string) {
+    const batch = writeBatch(this.db);
+    batch.update(doc(this.db, COL.registrations, id), { accessUntil: ts(accessUntil), updatedAt: serverTimestamp() });
+    batch.set(doc(collection(this.db, COL.auditLog)), {
+      at: serverTimestamp(),
+      by: adminUid,
+      action: 'registration.access',
+      target: id,
+      details: accessUntil ?? 'unlimited',
+    });
+    await batch.commit();
   }
   async releaseExpiredHolds(adminUid: string) {
     const res = await getDocs(

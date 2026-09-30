@@ -6,6 +6,8 @@ import { BRAND } from '@/brand/logoGeometry';
 import { useCourseStats, useCourses, useSiteStats, useTeachers, useTestimonials } from '@/data/queries';
 import { CourseCard } from '@/features/courses/CourseCard';
 import { PetalParticles } from '@/features/experience/Ambient';
+import { PathsGrid } from '@/features/experience/PathsGrid';
+import { Diya, LotusDivider, Mandala } from '@/features/experience/Sacred';
 import { usePreferences } from '@/features/experience/preferences';
 import { ScrollStory } from '@/features/experience/ScrollStory';
 import { ScriptText, ScriptToggle } from '@/features/experience/ScriptText';
@@ -57,7 +59,9 @@ function Hero() {
       />
       <PetalParticles className="pointer-events-none absolute inset-0 -z-10 h-full w-full" />
       <div className="container flex flex-col items-center text-center">
-        <motion.div {...fade(0)} className="-mb-2">
+        <motion.div {...fade(0)} className="relative -mb-2">
+          <Mandala className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[170%] w-[170%] -translate-x-1/2 -translate-y-1/2 text-primary opacity-25 dark:opacity-30" />
+          <span aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.28),transparent_65%)] blur-2xl" />
           <Logo3D fit={{ vh: 30, vw: 60, max: 240 }} decorative />
         </motion.div>
         <motion.div {...fade(0.1)}>
@@ -70,8 +74,8 @@ function Hero() {
           Where knowledge <span className="text-gradient-gold">blooms</span> into wisdom
         </motion.h1>
         <motion.p {...fade(0.45)} className="mt-6 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl">
-          Learn to speak, read and chant Sanskrit with warm, expert teachers — live cohorts, beautiful recorded courses and
-          community events, all in one serene place.
+          Sanskrit and other languages, yoga & meditation, chanting, the meaning of the stotras and the Gītā, and
+          sat-saṅga reading — live, recorded or in-person, with warm, expert teachers, all in one serene place.
         </motion.p>
         <motion.div {...fade(0.6)} className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <MagneticButton asChild variant="gold" size="lg">
@@ -91,6 +95,7 @@ function Hero() {
           </Button>
         </motion.div>
         <motion.p {...fade(0.8)} className="mt-6 text-sm text-muted-foreground">
+          <Diya className="-mt-1 mr-1 inline h-5 w-5 text-saffron-deep" />
           Not sure where to begin?{' '}
           <Link to={routes.finder} className="font-semibold text-foreground underline decoration-accent underline-offset-4">
             Find your path in 60 seconds
@@ -235,18 +240,22 @@ export default function HomePage() {
           name: BRAND.name,
           alternateName: BRAND.nameDeva,
           slogan: BRAND.tagline,
-          description: 'Authentic, joyful Sanskrit learning: live cohorts, recorded courses and events.',
+          description: 'Authentic, joyful learning: Sanskrit & languages, yoga & meditation, chanting, meaning of the texts and sat-saṅga — live, recorded and in-person.',
         }}
       />
       <Hero />
       <ScrollStory />
+      <PathsGrid />
+      <LotusDivider />
       <FeaturedCourses />
       <section className="container" aria-label="Subhashita of the day">
         <SubhashitaCard />
       </section>
+      <LotusDivider className="pt-16" />
       <Teachers />
       <Counters />
       <Testimonials />
+      <LotusDivider />
       <Faq />
     </>
   );

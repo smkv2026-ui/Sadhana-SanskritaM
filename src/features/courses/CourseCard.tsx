@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, CalendarDays, Clock, PlayCircle, Radio, Users } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Clock, MapPin, PlayCircle, Radio, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTaxonomy } from '@/data/queries';
+import { findCategory, findSub } from '@/data/taxonomy';
 import type { Course, CourseStats } from '@/data/types';
 import { formatDate } from '@/lib/format';
 import { routes } from '@/lib/links';
@@ -14,6 +16,7 @@ export const TYPE_META = {
   live: { label: 'Live', icon: Radio },
   recorded: { label: 'Recorded', icon: PlayCircle },
   hybrid: { label: 'Hybrid', icon: Users },
+  'in-person': { label: 'In-person', icon: MapPin },
 } as const;
 
 export function CourseCover({ course, className }: { course: Course; className?: string }) {
@@ -44,7 +47,10 @@ export function CourseCover({ course, className }: { course: Course; className?:
 
 export function CourseCard({ course, stats, index = 0 }: { course: Course; stats?: CourseStats; index?: number }) {
   const price = computePrice(course);
-  const Type = TYPE_META[course.type];
+  const Type = TYPE_META[course.type] ?? TYPE_META.live;
+  const taxonomy = useTaxonomy();
+  const cat = findCategory(taxonomy, course.category);
+  const sub = findSub(taxonomy, course.category, course.subcategory);
   return (
     <motion.article
       layout
@@ -57,7 +63,17 @@ export function CourseCard({ course, stats, index = 0 }: { course: Course; stats
       <TiltCard className="h-full rounded-3xl">
         <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border bg-card p-4 shadow-sm transition-shadow duration-300 hover:shadow-glow">
           <CourseCover course={course} className="h-36" />
-          <div className="mt-4 flex flex-wrap items-center gap-1.5">
+          {cat && (
+            <p className="mt-4 flex min-w-0 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
+              <span aria-hidden>{cat.emoji}</span>
+              <span className="truncate">
+                {cat.label}
+                {sub ? ` · ${sub.label}` : ''}
+                {course.variant ? ` · ${course.variant}` : ''}
+              </span>
+            </p>
+          )}
+          <div className={cn('flex flex-wrap items-center gap-1.5', cat ? 'mt-2' : 'mt-4')}>
             <Badge variant={course.type === 'recorded' ? 'diamond' : 'gold'}>
               <Type.icon className="h-3 w-3" aria-hidden /> {Type.label}
             </Badge>

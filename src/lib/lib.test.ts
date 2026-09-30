@@ -9,6 +9,7 @@ import { isE164, toE164 } from './phone';
 import { applyCoupon, computePrice, couponError, isEarlyBird } from './pricing';
 import { buildUpiLink, isValidVpa, parseUpiLink, sanitizeNote } from './upi';
 import { findDuplicateUtr, isValidUtr, normalizeUtr, utrError } from './utr';
+import { isRecordingAvailable, parseVideoUrl, timeLeftLabel } from './video';
 
 const course = (o: Partial<Course> = {}): Course => ({ ...seedCourses()[0], id: 'c1', priceInr: 2000, earlyBirdPriceInr: null, earlyBirdEndsAt: null, ...o });
 const coupon = (o: Partial<Coupon> = {}): Coupon => ({ code: 'X10', kind: 'percent', value: 10, courseIds: [], validUntil: null, active: true, description: '', ...o });
@@ -148,5 +149,60 @@ describe('csv', () => {
       ['a', 'b'],
       ['1', '2'],
     ]);
+  });
+});
+
+describe('parseVideoUrl', () => {
+  it('recognises YouTube variants and embeds via youtube-nocookie', () => {
+    for (const u of [
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=10',
+      'https://youtu.be/dQw4w9WgXcQ',
+      'https://m.youtube.com/shorts/dQw4w9WgXcQ',
+      'https://www.youtube.com/live/dQw4w9WgXcQ?si=x',
+    ]) {
+      const v = parseVideoUrl(u);
+      expect(v?.provider).toBe('youtube');
+      expect(v?.id).toBe('dQw4w9WgXcQ');
+      expect(v?.embedUrl).toMatch(/^https:\/\/www\.youtube-nocookie\.com\/embed\/dQw4w9WgXcQ\?/);
+    }
+    expect(parseVideoUrl('https://youtube.com/watch?v=short')).toBeNull();
+  });
+
+  it('keeps the Vimeo unlisted hash', () => {
+    expect(parseVideoUrl('https://vimeo.com/76979871/abc123def')?.embedUrl).toContain('/video/76979871?');
+    expect(parseVideoUrl('https://vimeo.com/76979871/abc123def')?.embedUrl).toContain('h=abc123def');
+    expect(parseVideoUrl('https://player.vimeo.com/video/76979871?h=zz9')?.embedUrl).toContain('h=zz9');
+  });
+
+  it('maps Google Drive links to /preview', () => {
+    expect(parseVideoUrl('https://drive.google.com/file/d/1AbCdEfGhIjKlMn/view?usp=sharing')?.embedUrl).toBe(
+      'https://drive.google.com/file/d/1AbCdEfGhIjKlMn/preview',
+    );
+    expect(parseVideoUrl('https://drive.google.com/open?id=1AbCdEfGhIjKlMn')?.provider).toBe('drive');
+  });
+
+  it('supports Bunny Stream (keeping signed params) and direct files', () => {
+    const b = parseVideoUrl('https://iframe.mediadelivery.net/play/1234/abcd-ef01?token=t0k&expires=99');
+    expect(b?.provider).toBe('bunny');
+    expect(b?.embedUrl).toContain('/embed/1234/abcd-ef01');
+    expect(b?.embedUrl).toContain('token=t0k');
+    expect(parseVideoUrl('https://cdn.example.org/class-1.mp4')?.provider).toBe('file');
+  });
+
+  it('rejects junk and non-http schemes', () => {
+    expect(parseVideoUrl('')).toBeNull();
+    expect(parseVideoUrl('not a url')).toBeNull();
+    expect(parseVideoUrl('javascript:alert(1)')).toBeNull();
+    expect(parseVideoUrl('https://example.com/page.html')).toBeNull();
+  });
+
+  it('computes availability windows and labels', () => {
+    const now = new Date('2026-01-10T00:00:00Z');
+    expect(isRecordingAvailable({ availableUntil: null }, now)).toBe(true);
+    expect(isRecordingAvailable({ availableUntil: '2026-01-09T00:00:00Z' }, now)).toBe(false);
+    expect(timeLeftLabel('2026-01-15T00:00:00Z', now)).toBe('5 days left');
+    expect(timeLeftLabel('2026-01-10T05:00:00Z', now)).toBe('5 hours left');
+    expect(timeLeftLabel('2026-01-01T00:00:00Z', now)).toBe('Expired');
+    expect(timeLeftLabel(null, now)).toBeNull();
   });
 });

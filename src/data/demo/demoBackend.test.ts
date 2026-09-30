@@ -76,6 +76,27 @@ describe('UTR uniqueness and approval gate', () => {
     await expect(b.getRegistration(r.id)).rejects.toMatchObject({ code: 'permission-denied' });
   });
 
+  it('sets an access window on approval that locks content when it ends; admins can extend', async () => {
+    const c = course('speak-sanskrit-in-30-days');
+    as(ALICE);
+    const r = await b.createRegistration({ uid: ALICE.uid, course: c, participant: person, couponCode: null });
+    await b.submitUtr(r.id, '412345678902');
+    as(ADMIN);
+    await b.decideRegistration(r.id, 'APPROVED', ADMIN.uid);
+    const approved = (await b.getRegistration(r.id))!;
+    if (c.accessDays) {
+      const days = (new Date(approved.accessUntil!).getTime() - Date.now()) / 86_400_000;
+      expect(Math.round(days)).toBe(c.accessDays);
+    } else expect(approved.accessUntil).toBeNull();
+    await b.setAccessUntil(r.id, new Date(Date.now() - 60_000).toISOString(), ADMIN.uid);
+    as(ALICE);
+    await expect(b.getCourseSecrets(c.id)).rejects.toMatchObject({ code: 'permission-denied' });
+    as(ADMIN);
+    await b.setAccessUntil(r.id, new Date(Date.now() + 30 * 86_400_000).toISOString(), ADMIN.uid);
+    as(ALICE);
+    expect((await b.getCourseSecrets(c.id))?.meetingLink).toMatch(/^https:/);
+  });
+
   it('rejection releases the seat', async () => {
     const c = course('speak-sanskrit-in-30-days');
     as(ALICE);

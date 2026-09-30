@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, Tabs, TabsContent, Ta
 import { Badge, Checkbox, Field, Input, Textarea } from '@/shared/ui/primitives';
 import { AdminHeader } from './AdminApp';
 import { fromLocalInput, toLocalInput } from './courseForm';
+import { TaxonomyEditor } from './TaxonomyEditor';
 
 type FieldType = 'text' | 'textarea' | 'number' | 'bool' | 'datetime' | 'list' | 'deva';
 interface FieldDef<T> {
@@ -182,15 +183,19 @@ export default function ContentAdmin() {
   const b = () => backend();
   return (
     <div>
-      <AdminHeader title="Content" description="Teachers, testimonials, the Subhāṣita of the day, coupons and site settings." />
-      <Tabs defaultValue="subhashitas">
+      <AdminHeader title="Content" description="Course categories, teachers, testimonials, the Subhāṣita of the day, coupons and site settings." />
+      <Tabs defaultValue="categories">
         <TabsList className="flex-wrap">
+          <TabsTrigger value="categories">Categories</TabsTrigger>
           <TabsTrigger value="subhashitas">Subhāṣitas</TabsTrigger>
           <TabsTrigger value="teachers">Teachers</TabsTrigger>
           <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
           <TabsTrigger value="coupons">Coupons</TabsTrigger>
           <TabsTrigger value="site">Site</TabsTrigger>
         </TabsList>
+        <TabsContent value="categories">
+          <TaxonomyEditor />
+        </TabsContent>
         <TabsContent value="subhashitas">
           <SimpleCrud<Subhashita>
             title="Subhashitas"

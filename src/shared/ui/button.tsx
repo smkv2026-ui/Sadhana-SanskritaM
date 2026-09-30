@@ -10,7 +10,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md',
-        gold: 'bg-gradient-to-r from-saffron-deep via-saffron to-saffron-light text-midnight shadow-[0_8px_30px_-10px_rgba(217,164,65,0.7)] hover:brightness-105',
+        gold: 'btn-diya bg-gradient-to-r from-saffron-deep via-saffron to-saffron-light text-midnight shadow-[0_8px_30px_-10px_rgba(217,164,65,0.7)] hover:brightness-105',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         outline: 'border border-border bg-background/60 backdrop-blur hover:border-accent hover:bg-accent/10',
         ghost: 'hover:bg-accent/15 hover:text-foreground',

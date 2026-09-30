@@ -136,6 +136,6 @@ export const TabsTrigger = forwardRef<ElementRef<typeof TabsPrimitive.Trigger>, 
 
 export const TabsContent = forwardRef<ElementRef<typeof TabsPrimitive.Content>, ComponentPropsWithoutRef<typeof TabsPrimitive.Content>>(
   function TabsContent({ className, ...props }, ref) {
-    return <TabsPrimitive.Content ref={ref} className={cn('mt-6 focus-visible:outline-none', className)} {...props} />;
+    return <TabsPrimitive.Content ref={ref} className={cn('mt-6 focus-visible:outline-none data-[state=inactive]:hidden', className)} {...props} />;
   },
 );
