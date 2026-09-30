@@ -9,12 +9,12 @@
  */
 export const siteConfig = {
   firebase: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
+    apiKey: 'AIzaSyBJ2XLyMTYdhHHxzmq-E7TYVX8NV1qoIac',
+    authDomain: 'sadhana-sanskritam.firebaseapp.com',
+    projectId: 'sadhana-sanskritam',
+    storageBucket: 'sadhana-sanskritam.firebasestorage.app',
+    messagingSenderId: '754695866552',
+    appId: '1:754695866552:web:d08479177fe70b38af4c4d',
   },
   /** Your UPI ID (ideally a business/merchant VPA) and the name registered on it. */
   upi: { vpa: '', payeeName: 'Sadhana Sanskritam' },
