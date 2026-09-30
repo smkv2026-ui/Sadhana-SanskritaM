@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theme tokens. "Dawn" (light) and "Dusk" (dark) themes, both anchored in the logo.
+ * HSL channels so Tailwind opacity modifiers work (shadcn/ui convention).
+ */
+@layer base {
+  :root {
+    --background: 42 100% 98%; /* ivory */
+    --foreground: 230 55% 10%; /* midnight */
+    --card: 45 40% 99%;
+    --card-foreground: 230 55% 10%;
+    --popover: 45 40% 99%;
+    --popover-foreground: 230 55% 10%;
+    --primary: 232 45% 22%; /* deep indigo */
+    --primary-foreground: 42 100% 98%;
+    --secondary: 42 45% 93%;
+    --secondary-foreground: 230 55% 14%;
+    --muted: 42 30% 92%;
+    --muted-foreground: 230 15% 36%;
+    --accent: 39 67% 55%; /* saffron-gold */
+    --accent-foreground: 230 55% 10%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 55% 32%;
+    --success-foreground: 0 0% 100%;
+    --border: 40 25% 84%;
+    --input: 40 25% 80%;
+    --ring: 39 67% 45%;
+    --radius: 0.85rem;
+    --glow: 39 67% 55%;
+    --diamond: 187 75% 68%;
+    color-scheme: light;
+  }
+
+  .dark {
+    --background: 230 55% 7%;
+    --foreground: 42 60% 95%;
+    --card: 230 45% 11%;
+    --card-foreground: 42 60% 95%;
+    --popover: 230 45% 11%;
+    --popover-foreground: 42 60% 95%;
+    --primary: 40 80% 66%;
+    --primary-foreground: 230 55% 8%;
+    --secondary: 230 35% 17%;
+    --secondary-foreground: 42 60% 95%;
+    --muted: 230 30% 16%;
+    --muted-foreground: 230 18% 72%;
+    --accent: 39 67% 58%;
+    --accent-foreground: 230 55% 8%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 50% 45%;
+    --success-foreground: 230 55% 8%;
+    --border: 230 25% 22%;
+    --input: 230 25% 26%;
+    --ring: 39 67% 58%;
+    --glow: 187 75% 68%;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+    line-height: 1.15;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background: hsl(var(--accent) / 0.35);
+  }
+
+  [lang='sa'],
+  .deva {
+    font-family: 'Tiro Devanagari Sanskrit', 'Mukta', serif;
+    line-height: 1.8;
+  }
+}
+
+@layer components {
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-saffron-deep via-saffron to-saffron-light bg-clip-text text-transparent;
+  }
+  .glass {
+    @apply border border-border/60 bg-card/70 backdrop-blur-md;
+  }
+  .section {
+    @apply py-20 sm:py-28;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-accent;
+  }
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-muted;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent dark:via-white/10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+}

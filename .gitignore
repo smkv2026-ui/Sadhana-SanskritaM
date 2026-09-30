@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+*.local
+.env
+.env.*
+!.env.example
+*.log
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+.firebase/
+.DS_Store
+*.tsbuildinfo

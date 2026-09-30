@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Sadhana Sanskritam — Where knowledge blooms into wisdom</title>
+    <meta name="description" content="Learn Sanskrit joyfully — live cohorts, recorded courses and events rooted in tradition. Speak, read, chant and understand the original texts." />
+    <meta name="theme-color" content="#FFFBF2" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sadhana Sanskritam" />
+    <meta property="og:title" content="Sadhana Sanskritam — Where knowledge blooms into wisdom" />
+    <meta property="og:description" content="Learn Sanskrit joyfully — live cohorts, recorded courses and events rooted in tradition." />
+    <meta property="og:image" content="%BASE_URL%og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // Apply the saved dawn/dusk theme before first paint (no flash). Storage may be blocked.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('ss.theme'); } catch (e) {}
+        if (!t) { try { t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dusk' : 'dawn'; } catch (e) { t = 'dawn'; } }
+        if (t === 'dusk') document.documentElement.classList.add('dark');
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="max-width:640px;margin:48px auto;padding:0 16px;font-family:Georgia,serif">
+        <h1>Sadhana Sanskritam</h1>
+        <p>Where knowledge blooms into wisdom. Please enable JavaScript to explore our Sanskrit courses, events and learning dashboard.</p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

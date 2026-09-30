@@ -1,0 +1,269 @@
+/*
+ * Logo colour tokens (follow the dawn/dusk theme unless a tone class forces one)
+ * and the intro keyframes. Only transform, opacity and stroke-dashoffset are animated.
+ */
+.ss-logo,
+.ss-logo.tone-full {
+  --logo-petal-tip: #ffffff;
+  --logo-petal-mid: #fffcf5;
+  --logo-petal-base: #f3dfcf;
+  --logo-petal-stroke: #b7832a;
+  --logo-cover: #1b2350;
+  --logo-page: #fffbf2;
+  --logo-line: #d9a441;
+  --logo-stem: #b7832a;
+  --logo-leaf: #c99a3e;
+  --logo-halo: #f1c66e;
+  --logo-d-table: #e9fbfd;
+  --logo-d-crownL: #9be8f2;
+  --logo-d-crownR: #6fddeb;
+  --logo-d-pavL: #2bb3c6;
+  --logo-d-pavC: #6fddeb;
+  --logo-d-pavR: #1b8fa0;
+  --logo-d-stroke: #1b2350;
+}
+.dark .ss-logo:not(.tone-full),
+.ss-logo.tone-full-dark {
+  --logo-petal-base: #ebd7c7;
+  --logo-petal-mid: #fffdf8;
+  --logo-petal-stroke: #f1c66e;
+  --logo-cover: #d9a441;
+  --logo-stem: #f1c66e;
+  --logo-leaf: #d9a441;
+  --logo-d-table: #f2fdfe;
+  --logo-d-crownL: #b6f0f7;
+  --logo-d-crownR: #8ee6f0;
+  --logo-d-pavL: #4cc8d8;
+  --logo-d-pavC: #8ee6f0;
+  --logo-d-pavR: #2bb3c6;
+  --logo-d-stroke: #e9fbfd;
+}
+.ss-logo.tone-mono {
+  --logo-petal-tip: var(--logo-knockout, hsl(var(--background)));
+  --logo-petal-mid: var(--logo-knockout, hsl(var(--background)));
+  --logo-petal-base: var(--logo-knockout, hsl(var(--background)));
+  --logo-petal-stroke: currentColor;
+  --logo-cover: transparent;
+  --logo-page: transparent;
+  --logo-line: currentColor;
+  --logo-stem: currentColor;
+  --logo-leaf: currentColor;
+  --logo-halo: transparent;
+  --logo-d-table: transparent;
+  --logo-d-crownL: transparent;
+  --logo-d-crownR: transparent;
+  --logo-d-pavL: transparent;
+  --logo-d-pavC: transparent;
+  --logo-d-pavR: transparent;
+  --logo-d-stroke: currentColor;
+}
+.ss-logo.tone-mono .logo-cover,
+.ss-logo.tone-mono .logo-page,
+.ss-logo.tone-mono .logo-facet {
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.ss-logo .logo-flower {
+  transform: rotate(var(--lean, 0deg));
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Intro / "animated" sequence (≈5 s) ---------- */
+.ss-logo.is-animated .logo-book {
+  animation: ss-fade-up 0.6s ease-out 0.25s both;
+}
+.ss-logo.is-animated .logo-book-side {
+  animation: ss-book-open 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s both;
+}
+.ss-logo.is-animated .logo-stem {
+  stroke-dasharray: 1;
+  animation: ss-draw 1.1s cubic-bezier(0.45, 0, 0.2, 1) 1.35s both;
+}
+.ss-logo.is-animated .logo-sway {
+  transform-origin: 120px 204px;
+  animation: ss-sway 7s ease-in-out 2.45s infinite;
+}
+.ss-logo.is-animated .logo-leaf-r {
+  transform-origin: 121px 168px;
+  animation: ss-leaf 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.95s both;
+}
+.ss-logo.is-animated .logo-leaf-l {
+  transform-origin: 118px 186px;
+  animation: ss-leaf 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.75s both;
+}
+.ss-logo.is-animated .logo-halo {
+  transform-origin: 120px 86px;
+  animation: ss-halo 1.8s ease-out 2.5s both;
+}
+.ss-logo.is-animated .logo-petal {
+  animation: ss-petal 1s cubic-bezier(0.34, 1.45, 0.64, 1) both;
+  animation-delay: calc(2.35s + var(--layer) * 0.2s);
+}
+.ss-logo.is-animated .logo-diamond {
+  transform-origin: 0 0;
+  animation: ss-diamond 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 3.65s both;
+}
+.ss-logo.is-animated .logo-glint,
+.ss-logo.do-glint .logo-glint {
+  animation: ss-glint 0.9s ease-in-out 4.35s both;
+}
+.ss-logo.do-glint .logo-glint {
+  animation-delay: 0.1s;
+}
+.ss-logo.is-animated .logo-sparkle,
+.ss-logo.do-glint .logo-sparkle {
+  transform-origin: 0 0;
+  animation: ss-sparkle 0.8s ease-out 4.7s both;
+}
+.ss-logo.do-glint .logo-sparkle {
+  animation-delay: 0.45s;
+}
+.ss-logo .logo-glint,
+.ss-logo .logo-sparkle {
+  opacity: 0;
+}
+
+@keyframes ss-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ss-book-open {
+  from {
+    transform: scaleX(0.05);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes ss-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ss-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(1.2deg);
+  }
+  70% {
+    transform: rotate(-1deg);
+  }
+}
+@keyframes ss-leaf {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes ss-halo {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes ss-petal {
+  from {
+    transform: rotate(0deg) scale(0.15);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--a)) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes ss-diamond {
+  from {
+    transform: translateY(8px) scale(0.3) rotate(-20deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ss-glint {
+  from {
+    transform: translateX(-4px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.95;
+  }
+  to {
+    transform: translateX(34px);
+    opacity: 0;
+  }
+}
+@keyframes ss-sparkle {
+  from {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1) rotate(45deg);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+/* Intro overlay particles */
+.ss-particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(241, 198, 110, 0.9), rgba(241, 198, 110, 0));
+  animation: ss-drift var(--dur, 9s) ease-in-out var(--delay, 0s) infinite;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+@keyframes ss-drift {
+  0% {
+    transform: translate3d(0, 20px, 0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(var(--dx, 12px), -120px, 0) scale(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-logo .logo-flower {
+    transition: none;
+  }
+  .ss-particle {
+    display: none;
+  }
+}

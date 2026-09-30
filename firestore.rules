@@ -1,0 +1,391 @@
+rules_version = '2';
+
+// Sadhana Sanskritam — Firestore Security Rules (Spark plan, no Cloud Functions).
+// Deny by default: anything not matched below is refused.
+// Every rule here is exercised by tests/rules/firestore.rules.test.ts in CI.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function isStr(v, min, max) {
+      return v is string && v.size() >= min && v.size() <= max;
+    }
+    function isEmail(v) {
+      return isStr(v, 3, 254) && v.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+    }
+    function isE164(v) {
+      return v is string && v.matches('^\\+[1-9][0-9]{6,14}$');
+    }
+    function regPath(uid, courseId) {
+      return /databases/$(database)/documents/registrations/$(uid + '_' + courseId);
+    }
+    function statsPath(courseId) {
+      return /databases/$(database)/documents/courseStats/$(courseId);
+    }
+    function ownsIdPrefix(docId) {
+      // Registration/progress ids are "<uid>_<courseId>" (Firebase uids never contain "_").
+      return signedIn() && docId.split('_')[0] == request.auth.uid;
+    }
+
+    // ---------- admins (created by hand in the console) ----------
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+
+    // ---------- public catalogue ----------
+    match /courses/{courseId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /teachers/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /subhashitas/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /site/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Coupons can be checked by code but never enumerated.
+    match /coupons/{code} {
+      allow get: if true;
+      allow list, write: if isAdmin();
+    }
+
+    // ---------- seat counters ----------
+    // A learner may only add exactly one seat, in the same batch/transaction that creates
+    // (or restarts) their own registration, and never beyond the course's seat limit.
+    function claimsSeat(courseId) {
+      let reg = regPath(request.auth.uid, courseId);
+      let course = get(/databases/$(database)/documents/courses/$(courseId)).data;
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seatsTaken'])
+        && request.resource.data.seatsTaken == resource.data.seatsTaken + 1
+        && (course.seatLimit == 0 || request.resource.data.seatsTaken <= course.seatLimit)
+        && existsAfter(reg)
+        && getAfter(reg).data.status in ['PENDING_PAYMENT', 'PENDING_VERIFICATION']
+        && (!exists(reg) || get(reg).data.status in ['EXPIRED', 'REJECTED']);
+    }
+
+    match /courseStats/{courseId} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+      allow update: if claimsSeat(courseId) || isAdmin();
+    }
+
+    // ---------- paid content: readable only after approval ----------
+    function isApprovedFor(courseId) {
+      let reg = regPath(request.auth.uid, courseId);
+      return signedIn() && exists(reg) && get(reg).data.status == 'APPROVED';
+    }
+
+    match /courseSecrets/{courseId} {
+      allow get: if isApprovedFor(courseId) || isAdmin();
+      allow list, write: if isAdmin();
+    }
+
+    // ---------- registrations ----------
+    function regKeys() {
+      return ['uid', 'courseId', 'courseTitle', 'courseSlug', 'courseType', 'startsAt', 'participant',
+              'basePriceInr', 'discountInr', 'amountInr', 'couponCode', 'reference', 'status', 'utr',
+              'utrSubmittedAt', 'holdExpiresAt', 'createdAt', 'updatedAt', 'decidedAt', 'decidedBy',
+              'rejectionReason', 'confirmationSentAt', 'reminder24SentAt', 'reminder1SentAt'];
+    }
+
+    // Mirrors computePrice() in src/lib/pricing.ts.
+    function basePrice(course) {
+      let eb = course.get('earlyBirdPriceInr', null);
+      let ebEnds = course.get('earlyBirdEndsAt', null);
+      return (eb != null && ebEnds != null && request.time < ebEnds) ? eb : course.priceInr;
+    }
+    function couponOk(c, courseId) {
+      return c.active == true
+        && (c.get('validUntil', null) == null || request.time < c.validUntil)
+        && (c.courseIds.size() == 0 || courseId in c.courseIds);
+    }
+    function couponDiscount(base, c) {
+      return c.kind == 'percent'
+        ? math.round(base * c.value / 100.0)
+        : (c.value > base ? base : c.value);
+    }
+    function discountFor(base, d) {
+      return d.couponCode == null
+        ? 0
+        : couponDiscount(base, get(/databases/$(database)/documents/coupons/$(d.couponCode)).data);
+    }
+    function validCoupon(d) {
+      return d.couponCode == null
+        || (isStr(d.couponCode, 3, 24)
+            && couponOk(get(/databases/$(database)/documents/coupons/$(d.couponCode)).data, d.courseId));
+    }
+    function validParticipant(p) {
+      return p is map
+        && p.keys().hasOnly(['name', 'email', 'phone', 'city'])
+        && p.keys().hasAll(['name', 'email', 'phone', 'city'])
+        && isStr(p.name, 2, 80)
+        && isEmail(p.email)
+        && isE164(p.phone)
+        && isStr(p.city, 0, 60);
+    }
+    function validHold(d) {
+      return d.holdExpiresAt is timestamp
+        && d.holdExpiresAt > request.time + duration.value(1, 'h')
+        && d.holdExpiresAt < request.time + duration.value(25, 'h');
+    }
+
+    // Learner creates (or restarts) their own registration: status and price are enforced here.
+    function validNewRegistration(regId) {
+      let d = request.resource.data;
+      let course = get(/databases/$(database)/documents/courses/$(d.courseId)).data;
+      let base = basePrice(course);
+      return signedIn()
+        && d.keys().hasOnly(regKeys()) && d.keys().hasAll(regKeys())
+        && d.uid == request.auth.uid
+        && regId == request.auth.uid + '_' + d.courseId
+        && course.status == 'published'
+        && d.courseTitle == course.title && d.courseSlug == course.slug && d.courseType == course.type
+        && (d.startsAt == null || d.startsAt is timestamp)
+        && validCoupon(d)
+        && d.basePriceInr == base
+        && d.discountInr == discountFor(base, d)
+        && d.amountInr == base - d.discountInr
+        && ((d.amountInr > 0 && d.status == 'PENDING_PAYMENT') || (d.amountInr == 0 && d.status == 'PENDING_VERIFICATION'))
+        && d.utr == null && d.utrSubmittedAt == null
+        && d.decidedAt == null && d.decidedBy == null && d.rejectionReason == null
+        && d.confirmationSentAt == null && d.reminder24SentAt == null && d.reminder1SentAt == null
+        && d.createdAt == request.time && d.updatedAt == request.time
+        && validHold(d)
+        && d.reference is string && d.reference.matches('^SS-[A-Z0-9]{6}$')
+        && validParticipant(d.participant)
+        && getAfter(statsPath(d.courseId)).data.seatsTaken == get(statsPath(d.courseId)).data.seatsTaken + 1;
+    }
+
+    // Learner submits (or corrects) the UTR while pending; uniqueness via utrIndex/{utr}.
+    function validUtrSubmission(regId) {
+      let d = request.resource.data;
+      let r = resource.data;
+      return signedIn()
+        && r.uid == request.auth.uid
+        && r.status in ['PENDING_PAYMENT', 'PENDING_VERIFICATION']
+        && (r.status == 'PENDING_VERIFICATION' || request.time < r.holdExpiresAt)
+        && d.diff(r).affectedKeys().hasOnly(['utr', 'utrSubmittedAt', 'status', 'updatedAt'])
+        && d.status == 'PENDING_VERIFICATION'
+        && d.utr is string && d.utr.matches('^[0-9]{12}$')
+        && d.utrSubmittedAt == request.time
+        && d.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/utrIndex/$(d.utr)).data.registrationId == regId;
+    }
+
+    // Learner renews a lapsed 24h hold (the seat is still counted until an admin releases it).
+    function validHoldRenewal() {
+      let d = request.resource.data;
+      let r = resource.data;
+      return signedIn()
+        && r.uid == request.auth.uid
+        && r.status == 'PENDING_PAYMENT'
+        && request.time >= r.holdExpiresAt
+        && d.diff(r).affectedKeys().hasOnly(['holdExpiresAt', 'updatedAt'])
+        && d.updatedAt == request.time
+        && validHold(d);
+    }
+
+    match /registrations/{regId} {
+      allow get: if isAdmin()
+        || (resource == null ? ownsIdPrefix(regId) : (signedIn() && resource.data.uid == request.auth.uid));
+      allow list: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if validNewRegistration(regId);
+      allow update: if validUtrSubmission(regId)
+        || validHoldRenewal()
+        || (resource.data.status in ['EXPIRED', 'REJECTED'] && validNewRegistration(regId))
+        || isAdmin();   // only admins can set APPROVED / REJECTED / EXPIRED
+      allow delete: if false;
+    }
+
+    // One document per UTR → a UTR can be attached to only one registration.
+    match /utrIndex/{utr} {
+      allow get: if isAdmin() || (signedIn() && (resource == null || resource.data.uid == request.auth.uid));
+      allow list: if isAdmin();
+      allow create: if signedIn()
+        && utr.matches('^[0-9]{12}$')
+        && request.resource.data.keys().hasOnly(['uid', 'registrationId', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.uid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/registrations/$(request.resource.data.registrationId)).data.utr == utr;
+      allow update, delete: if isAdmin();
+    }
+
+    // ---------- learner-owned data (separate from registration status) ----------
+    match /progress/{pid} {
+      allow get: if isAdmin()
+        || (resource == null ? ownsIdPrefix(pid) : (signedIn() && resource.data.uid == request.auth.uid));
+      allow create, update: if signedIn()
+        && pid == request.auth.uid + '_' + request.resource.data.courseId
+        && request.resource.data.keys().hasOnly(['uid', 'courseId', 'completed', 'lastRecordingId', 'updatedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && isStr(request.resource.data.courseId, 1, 80)
+        && request.resource.data.completed is map
+        && request.resource.data.completed.size() <= 500
+        && (request.resource.data.lastRecordingId == null || isStr(request.resource.data.lastRecordingId, 1, 120))
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /users/{uid} {
+      allow get: if (signedIn() && request.auth.uid == uid) || isAdmin();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'streakCount', 'streakLastDay', 'createdAt', 'updatedAt'])
+        && isStr(request.resource.data.displayName, 0, 80)
+        && isStr(request.resource.data.email, 0, 254)
+        && request.resource.data.streakCount is int
+        && request.resource.data.streakCount >= 0 && request.resource.data.streakCount <= 100000
+        && (request.resource.data.streakLastDay == null || request.resource.data.streakLastDay.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'))
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt == request.time;
+      allow list, delete: if isAdmin();
+    }
+
+    // ---------- notification subscribers ----------
+    // Public create with strict validation; never publicly readable or listable.
+    // The document id IS the 160-bit secret token from the emailed link, so only the link holder
+    // can address the document; updates are limited to consent/preference fields.
+    function subKeys() {
+      return ['name', 'email', 'whatsapp', 'interests', 'channels', 'consent', 'status', 'token', 'source',
+              'createdAt', 'updatedAt', 'confirmedAt', 'unsubscribedAt'];
+    }
+    function consentOk(c, on) {
+      return on
+        ? (c is map
+           && c.keys().hasOnly(['granted', 'at', 'source', 'textVersion'])
+           && c.granted == true
+           && c.at == request.time
+           && isStr(c.source, 1, 40)
+           && isStr(c.textVersion, 1, 10))
+        : c == null;
+    }
+    function validChannels(d) {
+      return d.channels is map
+        && d.channels.keys().hasOnly(['email', 'whatsapp'])
+        && d.channels.keys().hasAll(['email', 'whatsapp'])
+        && d.channels.email is bool && d.channels.whatsapp is bool
+        && (!d.channels.whatsapp || d.whatsapp != null);
+    }
+    function validInterests(d) {
+      return d.interests is list && d.interests.size() <= 12;
+    }
+
+    match /subscribers/{subId} {
+      allow create: if subId.matches('^[a-f0-9]{40}$')
+        && request.resource.data.keys().hasOnly(subKeys())
+        && request.resource.data.keys().hasAll(subKeys())
+        && request.resource.data.token == subId
+        && isStr(request.resource.data.name, 2, 80)
+        && isEmail(request.resource.data.email)
+        && (request.resource.data.whatsapp == null || isE164(request.resource.data.whatsapp))
+        && validInterests(request.resource.data) && request.resource.data.interests.size() >= 1
+        && validChannels(request.resource.data)
+        && (request.resource.data.channels.email || request.resource.data.channels.whatsapp)
+        && request.resource.data.consent is map
+        && request.resource.data.consent.keys().hasOnly(['email', 'whatsapp'])
+        && consentOk(request.resource.data.consent.email, request.resource.data.channels.email)
+        && consentOk(request.resource.data.consent.whatsapp, request.resource.data.channels.whatsapp)
+        && request.resource.data.status == 'PENDING'
+        && isStr(request.resource.data.source, 1, 40)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.confirmedAt == null
+        && request.resource.data.unsubscribedAt == null;
+
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'channels', 'interests', 'consent', 'updatedAt', 'confirmedAt', 'unsubscribedAt'])
+        && request.resource.data.status in ['PENDING', 'CONFIRMED', 'UNSUBSCRIBED']
+        && validInterests(request.resource.data)
+        && validChannels(request.resource.data)
+        && request.resource.data.updatedAt == request.time
+        && (request.resource.data.confirmedAt == resource.data.confirmedAt || request.resource.data.confirmedAt == request.time)
+        && (request.resource.data.unsubscribedAt == resource.data.unsubscribedAt || request.resource.data.unsubscribedAt == request.time));
+
+      allow get, list, delete: if isAdmin();
+    }
+
+    // ---------- custom app requests ----------
+    function crKeys() {
+      return ['uid', 'reference', 'contact', 'projectType', 'problem', 'targetUsers', 'features', 'referenceLinks',
+              'budgetInr', 'timelineWeeks', 'preferredChannel', 'status', 'statusHistory', 'createdAt', 'updatedAt'];
+    }
+    function validCustomRequest() {
+      let d = request.resource.data;
+      return signedIn()
+        && d.keys().hasOnly(crKeys()) && d.keys().hasAll(crKeys())
+        && d.uid == request.auth.uid
+        && d.status == 'RECEIVED'
+        && d.statusHistory is list && d.statusHistory.size() == 1
+        && d.reference is string && d.reference.matches('^CR-[A-Z0-9]{6}$')
+        && d.contact is map && d.contact.keys().hasOnly(['name', 'email', 'phone', 'organisation'])
+        && isStr(d.contact.name, 2, 80) && isEmail(d.contact.email)
+        && (d.contact.phone == '' || isE164(d.contact.phone))
+        && isStr(d.contact.organisation, 0, 120)
+        && isStr(d.projectType, 1, 60)
+        && isStr(d.problem, 20, 2000)
+        && isStr(d.targetUsers, 3, 300)
+        && d.features is list && d.features.size() >= 1 && d.features.size() <= 16
+        && d.referenceLinks is list && d.referenceLinks.size() <= 8
+        && d.budgetInr is map && d.budgetInr.min is number && d.budgetInr.max is number && d.budgetInr.min <= d.budgetInr.max
+        && d.timelineWeeks is int && d.timelineWeeks >= 1 && d.timelineWeeks <= 104
+        && d.preferredChannel in ['email', 'whatsapp', 'phone']
+        && d.createdAt == request.time && d.updatedAt == request.time;
+    }
+
+    match /customRequests/{id} {
+      allow create: if validCustomRequest();
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if false;
+
+      match /notes/{noteId} {
+        allow read, write: if isAdmin();
+      }
+    }
+
+    // ---------- inbox (contact + "delete my data") ----------
+    match /contactMessages/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'subject', 'message', 'kind', 'uid', 'createdAt'])
+        && isStr(request.resource.data.name, 2, 80)
+        && isEmail(request.resource.data.email)
+        && isStr(request.resource.data.subject, 1, 40)
+        && isStr(request.resource.data.message, 10, 3000)
+        && request.resource.data.kind in ['contact', 'delete-my-data']
+        && (request.resource.data.uid == null || (signedIn() && request.resource.data.uid == request.auth.uid))
+        && request.resource.data.createdAt == request.time;
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+
+    // ---------- admin-only logs (append-only) ----------
+    match /notificationLog/{id} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+    match /auditLog/{id} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

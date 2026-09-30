@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs>
+<radialGradient id="bg" cx="0.3" cy="0.45" r="0.8"><stop offset="0" stop-color="#2A3270"/><stop offset="0.7" stop-color="#0B1026"/></radialGradient>
+<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F1C66E" stop-opacity=".35"/><stop offset="1" stop-color="#F1C66E" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<circle cx="300" cy="300" r="260" fill="url(#glow)"/>
+<g transform="translate(150 60) scale(1.9231)"><defs>
+<linearGradient id="og-petal" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#EBD7C7"/><stop offset=".45" stop-color="#FFFDF8"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+<radialGradient id="og-halo"><stop offset="0" stop-color="#F1C66E" stop-opacity=".55"/><stop offset="1" stop-color="#F1C66E" stop-opacity="0"/></radialGradient>
+</defs><circle cx="120" cy="86" r="62" fill="url(#og-halo)"/><g transform="translate(120 204)">
+<path d="M0 4C-26 -6-60-8-88 0L-88 36C-60 28-26 30 0 40Z" fill="#D9A441" stroke="none" stroke-width="2"/>
+<path d="M0 4C26 -6 60-8 88 0L88 36C60 28 26 30 0 40Z" fill="#D9A441" stroke="none" stroke-width="2"/>
+<path d="M0 0C-24-10-56-12-82-4L-82 28C-56 20-24 22 0 32Z" fill="#FFFBF2" stroke="#D9A441" stroke-width="0.8"/>
+<path d="M0 0C24-10 56-12 82-4L82 28C56 20 24 22 0 32Z" fill="#FFFBF2" stroke="#D9A441" stroke-width="0.8"/>
+<path d="M-10 9C-28 2-50 1-70 5" fill="none" stroke="#D9A441" stroke-width="1.2" stroke-linecap="round" opacity=".7"/><path d="M-10 17C-28 10-50 9-70 13" fill="none" stroke="#D9A441" stroke-width="1.2" stroke-linecap="round" opacity=".7"/><path d="M10 9C28 2 50 1 70 5" fill="none" stroke="#D9A441" stroke-width="1.2" stroke-linecap="round" opacity=".7"/><path d="M10 17C28 10 50 9 70 13" fill="none" stroke="#D9A441" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>
+</g>
+<path d="M120 204C112 180 129 152 120 116" fill="none" stroke="#F1C66E" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M121 168C131 158 146 156 156 146C144 145 130 150 121 168Z" fill="#D9A441" stroke="none" stroke-width="1.6"/>
+<path d="M118 186C108 180 96 180 86 173C95 170 108 172 118 186Z" fill="#D9A441" stroke="none" stroke-width="1.6"/><g transform="translate(120 116)"><path transform="rotate(-80)" d="M0 0C11 -10.2 8.6 -27.2 0 -34C-8.6 -27.2 -11 -10.2 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(80)" d="M0 0C11 -10.2 8.6 -27.2 0 -34C-8.6 -27.2 -11 -10.2 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(-56)" d="M0 0C13 -13.2 10.1 -35.2 0 -44C-10.1 -35.2 -13 -13.2 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(56)" d="M0 0C13 -13.2 10.1 -35.2 0 -44C-10.1 -35.2 -13 -13.2 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(-32)" d="M0 0C14 -15 10.9 -40 0 -50C-10.9 -40 -14 -15 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(32)" d="M0 0C14 -15 10.9 -40 0 -50C-10.9 -40 -14 -15 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(-13)" d="M0 0C13 -16.5 10.1 -44 0 -55C-10.1 -44 -13 -16.5 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(13)" d="M0 0C13 -16.5 10.1 -44 0 -55C-10.1 -44 -13 -16.5 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/><path transform="rotate(0)" d="M0 0C14.5 -18 11.3 -48 0 -60C-11.3 -48 -14.5 -18 0 0Z" fill="url(#og-petal)" stroke="#F1C66E" stroke-width="0.9" stroke-linejoin="round"/></g><g transform="translate(120 35)"><path d="M-9-11L9-11L4-3L-4-3Z" fill="#F2FDFE"/><path d="M-9-11L-4-3L-15-3Z" fill="#B6F0F7"/><path d="M9-11L4-3L15-3Z" fill="#8EE6F0"/><path d="M-15-3L-4-3L0 17Z" fill="#4CC8D8"/><path d="M-4-3L4-3L0 17Z" fill="#8EE6F0"/><path d="M4-3L15-3L0 17Z" fill="#2BB3C6"/><path d="M-9-11L9-11L15-3L0 17L-15-3Z" fill="none" stroke="#E9FBFD" stroke-width="1" stroke-linejoin="round"/></g></g>
+<text x="560" y="260" font-family="'Tiro Devanagari Sanskrit', Georgia, serif" font-size="64" font-weight="600" fill="#FFFBF2">Sadhana Sanskritam</text>
+<text x="562" y="325" font-family="'Tiro Devanagari Sanskrit', Georgia, serif" font-size="36" font-style="italic" fill="#F1C66E">vidyā dadāti vinayam</text>
+<text x="562" y="410" font-family="'Tiro Devanagari Sanskrit', Georgia, serif" font-size="34" font-style="italic" fill="#d8d3c4">Where knowledge blooms into wisdom</text>
+<text x="562" y="500" font-family="'Tiro Devanagari Sanskrit', Georgia, serif" font-size="26" fill="#9aa0bf">Live cohorts · Recorded courses · Events</text>
+</svg>
