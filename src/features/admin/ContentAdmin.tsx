@@ -183,7 +183,7 @@ export default function ContentAdmin() {
   const b = () => backend();
   return (
     <div>
-      <AdminHeader title="Content" description="Course categories, teachers, testimonials, the Subhāṣita of the day, coupons and site settings." />
+      <AdminHeader title="Categories & content" description="Course categories, teachers, testimonials, the Subhāṣita of the day, coupons and site settings." />
       <Tabs defaultValue="categories">
         <TabsList className="flex-wrap">
           <TabsTrigger value="categories">Categories</TabsTrigger>

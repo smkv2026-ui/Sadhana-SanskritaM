@@ -90,7 +90,7 @@ From now on, every push to `main` redeploys automatically; any failing check blo
 | `VITE_UPI_PAYEE_NAME` | the name registered on that UPI ID |
 | `VITE_CONTACT_EMAIL` | public contact email |
 | `VITE_CONTACT_WHATSAPP` | optional, `+91…` |
-| `VITE_WHATSAPP_CHANNEL_URL` | optional WhatsApp Channel/Community link (also editable in Admin → Content → Site) |
+| `VITE_WHATSAPP_CHANNEL_URL` | optional WhatsApp Channel/Community link (also editable in Admin → Categories & content → Site) |
 | `VITE_ADMIN_ALERT_EMAIL` | where new custom-app requests are announced |
 
 Then **Actions → Deploy → Run workflow**. The demo banner disappears: you're live on Firebase.
@@ -101,7 +101,7 @@ Then **Actions → Deploy → Run workflow**. The demo banner disappears: you're
 2. Firebase console → **Firestore → Start collection** → Collection ID `admins` → Document ID = **your UID** →
    add a field `role` (string) `owner` → **Save**.
 3. Reload `/admin`. On **Overview** press **Load demo data** to seed courses, teachers, subhāṣitas and coupons —
-   then edit or replace them in **Courses & events** and **Content**.
+   then edit or replace them in **Courses & events** and **Categories & content** (paths, sub-categories and options are all editable there).
 
 ### 7. Email with EmailJS (free: 200 emails / month)
 

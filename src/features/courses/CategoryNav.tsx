@@ -27,7 +27,7 @@ export function CategoryNav({
 
   return (
     <nav aria-label="Browse by path" className="space-y-3">
-      <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 lg:grid-cols-6">
+      <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-[repeat(auto-fill,minmax(11.5rem,1fr))] sm:overflow-visible sm:px-0">
         <CatTile active={filter.cat === 'all'} onClick={() => onChange({ cat: 'all', sub: '', variant: '' })} emoji="✨" label="All paths" sa="सर्वम्" n={published.length} />
         {taxonomy.categories.map((c) => (
           <CatTile
@@ -103,7 +103,8 @@ function CatTile({ active, onClick, emoji, label, sa, n }: { active: boolean; on
       <span className="relative min-w-0">
         <span className="block truncate text-sm font-semibold">{label}</span>
         <span className="deva block truncate text-xs text-muted-foreground" lang="sa">
-          {sa} · {n}
+          {sa ? `${sa} · ` : ''}
+          {n} {n === 1 ? 'offering' : 'offerings'}
         </span>
       </span>
     </button>

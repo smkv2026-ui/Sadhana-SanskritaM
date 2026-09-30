@@ -27,7 +27,7 @@ export const ADMIN_NAV = [
   { to: '/admin/notify', label: 'Notify', icon: Megaphone },
   { to: '/admin/subscribers', label: 'Subscribers', icon: Users },
   { to: '/admin/requests', label: 'Custom requests', icon: Workflow },
-  { to: '/admin/content', label: 'Content', icon: Palette },
+  { to: '/admin/content', label: 'Categories & content', icon: Palette },
   { to: '/admin/audit', label: 'Audit & inbox', icon: FileClock },
 ];
 

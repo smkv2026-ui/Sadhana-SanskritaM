@@ -1,9 +1,10 @@
 /**
- * Course taxonomy: category → sub-category → optional variants.
- * These defaults ship with the app; admins can add/rename sub-categories and variants
- * (e.g. a new language or scripture) in Admin → Content → Categories, stored in `site/taxonomy`.
+ * Course taxonomy: category → sub-category → optional variants (options).
+ * These are only the starting defaults. Admins own the whole tree in Admin → Content → Categories
+ * (stored in `site/taxonomy`): add, rename, reorder or remove categories, sub-categories and options.
  */
-export type CategoryId = 'language' | 'yoga' | 'chanting' | 'meaning' | 'reading';
+/** Slug of a category, e.g. "yoga". Free-form: admins can create new ones. */
+export type CategoryId = string;
 
 export interface SubCategory {
   id: string;
@@ -18,7 +19,25 @@ export interface Category {
   labelSa: string;
   emoji: string;
   blurb: string;
+  /** Accent colour as an HSL triple ("152 45% 48%"); optional. */
+  hue?: string;
   subs: SubCategory[];
+}
+
+/** Jewel-tone palette offered in the editor (and used when a category has no colour yet). */
+export const CATEGORY_HUES: { name: string; hue: string }[] = [
+  { name: 'Gold', hue: '42 85% 58%' },
+  { name: 'Leaf', hue: '152 45% 48%' },
+  { name: 'Saffron', hue: '18 85% 60%' },
+  { name: 'Amethyst', hue: '265 55% 66%' },
+  { name: 'Sky', hue: '205 75% 60%' },
+  { name: 'Lotus pink', hue: '335 70% 66%' },
+  { name: 'Turquoise', hue: '178 55% 45%' },
+  { name: 'Crimson', hue: '355 70% 58%' },
+];
+
+export function categoryHue(c: Pick<Category, 'hue'>, index: number): string {
+  return c.hue || (CATEGORY_HUES[index % CATEGORY_HUES.length] as { hue: string }).hue;
 }
 
 export interface Taxonomy {
@@ -29,6 +48,7 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
   categories: [
     {
       id: 'language',
+      hue: '42 85% 58%',
       label: 'Language',
       labelSa: 'भाषा',
       emoji: '🗣️',
@@ -40,6 +60,7 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
     },
     {
       id: 'yoga',
+      hue: '152 45% 48%',
       label: 'Yoga',
       labelSa: 'योगः',
       emoji: '🧘',
@@ -55,6 +76,7 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
     },
     {
       id: 'chanting',
+      hue: '18 85% 60%',
       label: 'Learn Chanting',
       labelSa: 'पाठः',
       emoji: '🎶',
@@ -67,6 +89,7 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
     },
     {
       id: 'meaning',
+      hue: '265 55% 66%',
       label: 'Learn Meaning',
       labelSa: 'अर्थः',
       emoji: '📖',
@@ -80,6 +103,7 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
     },
     {
       id: 'reading',
+      hue: '205 75% 60%',
       label: 'Reading (Sat-saṅga)',
       labelSa: 'सत्सङ्गः',
       emoji: '🪔',
@@ -97,15 +121,32 @@ export const DEFAULT_TAXONOMY: Taxonomy = {
   ],
 };
 
-/** Merge an admin-saved taxonomy over the defaults (unknown categories are ignored). */
+const SLUG = /^[a-z0-9][a-z0-9-]{0,39}$/;
+
+/**
+ * The admin-saved taxonomy wins entirely (so categories/sub-categories can be removed or
+ * reordered); defaults are used only until something is saved. Malformed entries are dropped.
+ */
 export function mergeTaxonomy(saved: Partial<Taxonomy> | null | undefined): Taxonomy {
-  if (!saved?.categories?.length) return DEFAULT_TAXONOMY;
-  return {
-    categories: DEFAULT_TAXONOMY.categories.map((def) => {
-      const s = saved.categories?.find((c) => c.id === def.id);
-      return s ? { ...def, ...s, id: def.id, subs: Array.isArray(s.subs) && s.subs.length ? s.subs : def.subs } : def;
-    }),
-  };
+  if (!Array.isArray(saved?.categories) || saved.categories.length === 0) return DEFAULT_TAXONOMY;
+  const categories = saved.categories
+    .filter((c): c is Category => Boolean(c && typeof c.id === 'string' && SLUG.test(c.id) && typeof c.label === 'string'))
+    .map((c) => ({
+      id: c.id,
+      label: c.label,
+      labelSa: typeof c.labelSa === 'string' ? c.labelSa : '',
+      emoji: typeof c.emoji === 'string' && c.emoji ? c.emoji : '🪷',
+      blurb: typeof c.blurb === 'string' ? c.blurb : '',
+      ...(typeof c.hue === 'string' && c.hue ? { hue: c.hue } : {}),
+      subs: (Array.isArray(c.subs) ? c.subs : [])
+        .filter((x) => x && typeof x.id === 'string' && SLUG.test(x.id) && typeof x.label === 'string')
+        .map((x) => ({ id: x.id, label: x.label, ...(Array.isArray(x.variants) && x.variants.length ? { variants: x.variants.filter((v) => typeof v === 'string' && v) } : {}) })),
+    }));
+  return categories.length ? { categories } : DEFAULT_TAXONOMY;
+}
+
+export function isCategorySlug(v: string): boolean {
+  return SLUG.test(v);
 }
 
 export function findCategory(t: Taxonomy, id: string | undefined): Category | undefined {

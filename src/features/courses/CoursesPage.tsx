@@ -70,7 +70,8 @@ export default function CoursesPage() {
         <p className="eyebrow">Catalogue</p>
         <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">{activeCat ? `${activeCat.label} paths` : 'Explore courses & events'}</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Language, Yoga, Chanting, Meaning and Sat-saṅga reading — choose a path, then live, recorded or in-person.
+          {activeCat?.blurb ||
+            `${taxonomy.categories.map((c) => c.label).join(' · ')} — choose a path, then live, recorded or in-person.`}
         </p>
       </header>
 

@@ -2,20 +2,20 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCourses, useTaxonomy } from '@/data/queries';
-import type { CategoryId } from '@/data/taxonomy';
+import { categoryHue } from '@/data/taxonomy';
 import { routes } from '@/lib/links';
 import { SectionHeading } from '@/shared/components/Bits';
 import { TiltCard } from '@/shared/components/Motion';
-import { Mandala } from './Sacred';
+import { LotusMandala } from './Sacred';
 
-/** Each path gets its own jewel tone (works on both dawn and dusk themes). */
-const HUE: Record<CategoryId, string> = {
-  language: '42 85% 58%',
-  yoga: '152 45% 48%',
-  chanting: '18 85% 60%',
-  meaning: '265 55% 66%',
-  reading: '205 75% 60%',
-};
+const NUM: Record<number, string> = { 1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine' };
+
+/** Rows of three on desktop; a shorter last row stretches to fill the width. */
+function spanFor(i: number, n: number): string {
+  const lastRow = n % 3;
+  if (lastRow === 0 || i < n - lastRow) return 'lg:col-span-2';
+  return lastRow === 2 ? 'lg:col-span-3' : 'lg:col-span-6';
+}
 
 /** "Explore by path" — the five categories as glowing, tilting cards on the home page. */
 export function PathsGrid() {
@@ -25,7 +25,7 @@ export function PathsGrid() {
 
   return (
     <section className="section container" aria-labelledby="paths-title">
-      <SectionHeading id="paths-title" eyebrow="पन्थाः · Paths" title="Choose your path of sādhanā" lead="Five streams, one source. Live, recorded or in-person — go at the pace your practice asks for." />
+      <SectionHeading id="paths-title" eyebrow="पन्थाः · Paths" title="Choose your path of sādhanā" lead={`${NUM[taxonomy.categories.length] ?? taxonomy.categories.length} streams, one source. Live, recorded or in-person — go at the pace your practice asks for.`} />
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6">
         {taxonomy.categories.map((cat, i) => (
           <motion.div
@@ -34,15 +34,15 @@ export function PathsGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className={i < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}
+            className={spanFor(i, taxonomy.categories.length)}
           >
             <TiltCard className="h-full rounded-3xl" max={6}>
               <Link
                 to={`${routes.courses}?cat=${cat.id}`}
                 className="path-card shimmer-border group/path relative flex h-full min-h-[15rem] flex-col overflow-hidden rounded-3xl border bg-card p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                style={{ '--path': HUE[cat.id] } as React.CSSProperties}
+                style={{ '--path': categoryHue(cat, i) } as React.CSSProperties}
               >
-                <Mandala className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 text-[hsl(var(--path))] opacity-[0.16] transition-opacity duration-500 group-hover/path:opacity-40" />
+                <LotusMandala animated={false} className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 opacity-40 transition-opacity duration-500 group-hover/path:opacity-90" />
                 <div className="relative flex items-start justify-between gap-3">
                   <span className="path-medallion grid h-14 w-14 place-items-center rounded-2xl text-3xl" aria-hidden>
                     {cat.emoji}

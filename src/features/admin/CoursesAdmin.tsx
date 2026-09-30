@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { backend } from '@/data';
 import { useTaxonomy, useTeachers } from '@/data/queries';
 import { findCategory, findSub } from '@/data/taxonomy';
+import { QuickAddSub } from './QuickAddSub';
 import type { Course, CourseSecrets, Level, Recording } from '@/data/types';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { formatDate } from '@/lib/format';
@@ -172,14 +173,28 @@ function Editor({ initial, onClose }: { initial: Course; onClose: () => void }) 
               ))}
             </NativeSelect>
           </Field>
-          <Field id="ce-sub" label={c.category === 'reading' ? 'Scripture' : c.category === 'language' ? 'Language' : 'Sub-category'}>
-            <NativeSelect id="ce-sub" value={c.subcategory} onChange={(e) => setC((x) => ({ ...x, subcategory: e.target.value, variant: '' }))}>
-              {(findCategory(taxonomy, c.category)?.subs ?? []).map((sub) => (
-                <option key={sub.id} value={sub.id}>
-                  {sub.label}
-                </option>
-              ))}
-            </NativeSelect>
+          <Field
+            id="ce-sub"
+            label={
+              <span className="flex items-center justify-between gap-2">
+                Sub-category
+                <Link to="/admin/content" className="text-xs font-normal text-accent hover:underline">
+                  Manage categories
+                </Link>
+              </span>
+            }
+          >
+            <div className="flex gap-2">
+              <NativeSelect id="ce-sub" value={c.subcategory} onChange={(e) => setC((x) => ({ ...x, subcategory: e.target.value, variant: '' }))}>
+                {!findSub(taxonomy, c.category, c.subcategory) && <option value={c.subcategory}>{c.subcategory ? `${c.subcategory} (removed)` : '—'}</option>}
+                {(findCategory(taxonomy, c.category)?.subs ?? []).map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.label}
+                  </option>
+                ))}
+              </NativeSelect>
+              <QuickAddSub categoryId={c.category} onAdded={(id) => setC((x) => ({ ...x, subcategory: id, variant: '' }))} />
+            </div>
           </Field>
           {(findSub(taxonomy, c.category, c.subcategory)?.variants?.length ?? 0) > 0 && (
             <Field id="ce-variant" label="Option">

@@ -5,7 +5,7 @@ import { matchStatement, parseStatement } from './admin/csvMatch';
 import { recordingsToText, syllabusToText, textToRecordings, textToSyllabus, validateCourse } from './admin/courseForm';
 import { dedupeSubscribers } from './admin/NotifyComposer';
 import { DEFAULT_FILTER, filterCourses, filterFromSearch, filterToSearch } from './courses/courseFilters';
-import { DEFAULT_TAXONOMY, findSub } from '@/data/taxonomy';
+import { DEFAULT_TAXONOMY, findSub, mergeTaxonomy } from '@/data/taxonomy';
 import { estimateWeeks, suggestFeatures } from './custom-requests/ideaHelper';
 import { answer } from './experience/assistantBrain';
 import { pickOfTheDay } from './experience/SubhashitaCard';
@@ -70,7 +70,7 @@ describe('course explorer filters', () => {
     expect(filterFromSearch('?type=bogus').type).toBe('all');
     const t = { ...DEFAULT_FILTER, cat: 'yoga' as const, sub: 'ashtanga', variant: 'Theory + Practical' };
     expect(filterFromSearch(filterToSearch(t))).toEqual(t);
-    expect(filterFromSearch('?cat=nope').cat).toBe('all');
+    expect(filterFromSearch('?cat=Not%20a%20slug!').cat).toBe('all');
   });
   it('drills down category → sub-category → variant', () => {
     const yoga = filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga' });
@@ -79,6 +79,19 @@ describe('course explorer filters', () => {
     const ashtanga = filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga', sub: 'ashtanga' });
     expect(ashtanga.length).toBeGreaterThanOrEqual(2);
     expect(filterCourses(courses, { ...DEFAULT_FILTER, cat: 'yoga', sub: 'ashtanga', variant: 'Theory' }).map((c) => c.variant)).toEqual(['Theory']);
+  });
+  it('admin-saved taxonomy fully replaces the defaults (add, remove, reorder) and drops junk', () => {
+    const saved = mergeTaxonomy({
+      categories: [
+        { id: 'ayurveda', label: 'Ayurveda', labelSa: '', emoji: '🌿', blurb: '', subs: [{ id: 'dinacharya', label: 'Dinacharya' }, { id: 'BAD ID', label: 'x' }] },
+        { id: 'yoga', label: 'Yoga', labelSa: 'योगः', emoji: '🧘', blurb: '', subs: [] },
+        { id: '', label: 'no id', labelSa: '', emoji: '', blurb: '', subs: [] },
+      ],
+    });
+    expect(saved.categories.map((c) => c.id)).toEqual(['ayurveda', 'yoga']);
+    expect(saved.categories[0].subs.map((s) => s.id)).toEqual(['dinacharya']);
+    expect(findSub(saved, 'yoga', 'yoga-pregnancy')).toBeUndefined();
+    expect(mergeTaxonomy(null)).toBe(DEFAULT_TAXONOMY);
   });
   it('every seeded course points at a real taxonomy node', () => {
     for (const c of courses) {

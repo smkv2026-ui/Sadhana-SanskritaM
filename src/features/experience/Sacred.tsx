@@ -1,33 +1,92 @@
 import { motion } from 'framer-motion';
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 import { usePreferences } from './preferences';
 
 /**
- * Sacred-geometry ornaments used across the site: a slowly turning mandala (hero / section
- * backdrops) and a lotus divider that draws itself in when it scrolls into view.
- * Pure SVG + CSS — no images, no runtime cost when off-screen (animations are compositor-only).
+ * Sacred ornaments used across the site: a top-view, fully bloomed lotus mandala that sits
+ * behind the logo, a lotus divider that draws itself in, and a flickering diya.
+ * Pure SVG + CSS. The mandala's position is set by its wrapper and never animated; only
+ * the petal layers inside it unfold once and then "breathe" around their own centre.
  */
-export function Mandala({ className, petals = 16, rings = 5 }: { className?: string; petals?: number; rings?: number }) {
+
+interface PetalLayer {
+  count: number;
+  /** inner / outer radius of each petal */
+  r0: number;
+  r1: number;
+  /** half-width of the petal */
+  w: number;
+  offset: number;
+  vein?: boolean;
+}
+
+const LAYERS: PetalLayer[] = [
+  { count: 16, r0: 30, r1: 88, w: 15, offset: 0, vein: true },
+  { count: 16, r0: 24, r1: 72, w: 13, offset: 11.25, vein: true },
+  { count: 8, r0: 17, r1: 54, w: 13, offset: 22.5 },
+  { count: 8, r0: 11, r1: 38, w: 10, offset: 0 },
+];
+
+const petalPath = ({ r0, r1, w }: PetalLayer) => {
+  const len = r1 - r0;
+  return `M0,${-r0} C${w},${-r0 - len * 0.28} ${w * 0.85},${-r0 - len * 0.72} 0,${-r1} C${-w * 0.85},${-r0 - len * 0.72} ${-w},${-r0 - len * 0.28} 0,${-r0}Z`;
+};
+
+export function LotusMandala({ className, animated = true }: { className?: string; animated?: boolean }) {
   const { reducedMotion } = usePreferences();
-  const petal = 'M0,-46 C9,-34 9,-18 0,-10 C-9,-18 -9,-34 0,-46Z';
+  const live = animated && !reducedMotion;
+  const uid = useId().replace(/:/g, '');
   return (
-    <svg aria-hidden viewBox="-100 -100 200 200" className={cn('mandala', !reducedMotion && 'mandala-spin', className)} fill="none" stroke="currentColor">
-      {Array.from({ length: rings }, (_, i) => (
-        <circle key={`c${i}`} r={20 + i * 17} strokeWidth={i % 2 ? 0.25 : 0.45} strokeDasharray={i % 2 ? '1.5 3' : undefined} />
-      ))}
-      <g className={cn(!reducedMotion && 'mandala-spin-rev')}>
-        {Array.from({ length: petals }, (_, i) => (
-          <path key={`p${i}`} d={petal} transform={`rotate(${(360 / petals) * i}) translate(0,-26)`} strokeWidth={0.5} />
-        ))}
+    <svg aria-hidden viewBox="-100 -100 200 200" className={cn('lotus-mandala overflow-visible', className)}>
+      <defs>
+        <linearGradient id={`lp-${uid}`} x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" style={{ stopColor: 'var(--lotus-base)' }} />
+          <stop offset="100%" style={{ stopColor: 'var(--lotus-tip)' }} />
+        </linearGradient>
+        <radialGradient id={`lh-${uid}`}>
+          <stop offset="0%" style={{ stopColor: 'var(--lotus-halo)' }} />
+          <stop offset="100%" style={{ stopColor: 'var(--lotus-halo)', stopOpacity: 0 }} />
+        </radialGradient>
+      </defs>
+      <circle r={99} fill={`url(#lh-${uid})`} />
+      {/* Outer rings: a string of pearls and a fine gold line. */}
+      <g className={cn(live && 'lotus-pearls')}>
+        {Array.from({ length: 72 }, (_, i) => {
+          const a = (i / 72) * Math.PI * 2;
+          return <circle key={i} cx={Math.sin(a) * 95} cy={-Math.cos(a) * 95} r={i % 3 === 0 ? 1.1 : 0.55} className="lotus-dot" />;
+        })}
       </g>
-      {Array.from({ length: petals * 2 }, (_, i) => (
-        <path key={`o${i}`} d="M0,-92 C4,-86 4,-80 0,-76 C-4,-80 -4,-86 0,-92Z" transform={`rotate(${(360 / (petals * 2)) * i})`} strokeWidth={0.35} />
+      <circle r={91} fill="none" className="lotus-line" strokeWidth={0.35} />
+      {LAYERS.map((layer, li) => (
+        <g key={li} className={cn(live && 'lotus-open')} style={{ animationDelay: `${0.15 + (LAYERS.length - li) * 0.18}s` }}>
+          <g className={cn(live && 'lotus-breathe')} style={{ animationDelay: `${li * 0.6}s` }}>
+            {Array.from({ length: layer.count }, (_, i) => {
+              const rot = layer.offset + (360 / layer.count) * i;
+              return (
+                <g key={i} transform={`rotate(${rot})`}>
+                  <path d={petalPath(layer)} fill={`url(#lp-${uid})`} className="lotus-petal" strokeWidth={li < 2 ? 0.55 : 0.65} />
+                  {layer.vein && <path d={`M0,${-layer.r0 - 3} L0,${-layer.r1 + 8}`} className="lotus-line" strokeWidth={0.3} />}
+                </g>
+              );
+            })}
+          </g>
+        </g>
       ))}
-      {Array.from({ length: 8 }, (_, i) => (
-        <line key={`l${i}`} y1={-18} y2={-72} transform={`rotate(${45 * i + 22.5})`} strokeWidth={0.2} />
-      ))}
-      <circle r={6} strokeWidth={0.6} />
-      <circle r={2} fill="currentColor" stroke="none" />
+      {/* Stamens around the seed pod. */}
+      <g className={cn(live && 'lotus-open')} style={{ animationDelay: '0.1s' }}>
+        {Array.from({ length: 28 }, (_, i) => (
+          <g key={i} transform={`rotate(${(360 / 28) * i})`}>
+            <line y1={-9} y2={-14.5} className="lotus-line" strokeWidth={0.45} />
+            <circle cy={-15.2} r={0.9} className="lotus-dot" />
+          </g>
+        ))}
+        <circle r={8.5} className="lotus-pod" strokeWidth={0.6} />
+        {[0, 60, 120, 180, 240, 300].map((a) => (
+          <circle key={a} cx={Math.sin((a * Math.PI) / 180) * 4.6} cy={-Math.cos((a * Math.PI) / 180) * 4.6} r={1.1} className="lotus-dot" />
+        ))}
+        <circle r={1.3} className="lotus-dot" />
+      </g>
     </svg>
   );
 }

@@ -178,15 +178,49 @@
 
 /* ---------- Sacred motion: mandala, diya, gold shimmer, route transitions ---------- */
 @layer components {
-  .mandala-spin {
-    animation: mandala-turn 120s linear infinite;
-    transform-origin: center;
-    transform-box: fill-box;
+  /* Lotus mandala (top view). Colours per theme via --lotus-*. */
+  .lotus-mandala {
+    --lotus-base: hsl(38 85% 55% / 0.34);
+    --lotus-tip: hsl(40 100% 97% / 0.06);
+    --lotus-halo: hsl(42 90% 70% / 0.22);
+    --lotus-stroke: hsl(36 70% 45% / 0.55);
   }
-  .mandala-spin-rev {
-    animation: mandala-turn 80s linear infinite reverse;
-    transform-origin: center;
-    transform-box: fill-box;
+  .dark .lotus-mandala {
+    --lotus-base: hsl(42 85% 62% / 0.3);
+    --lotus-tip: hsl(220 60% 30% / 0.05);
+    --lotus-halo: hsl(42 90% 62% / 0.16);
+    --lotus-stroke: hsl(42 80% 66% / 0.6);
+  }
+  .lotus-petal {
+    stroke: var(--lotus-stroke);
+  }
+  .lotus-line {
+    stroke: var(--lotus-stroke);
+    fill: none;
+  }
+  .lotus-dot {
+    fill: var(--lotus-stroke);
+  }
+  .lotus-pod {
+    fill: var(--lotus-base);
+    stroke: var(--lotus-stroke);
+  }
+  /* Layers unfold once, then breathe in place. Groups carry no transform attribute,
+     so the CSS transform never fights the SVG layout. */
+  .lotus-open {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: lotus-open 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .lotus-breathe {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: lotus-breathe 9s ease-in-out infinite;
+  }
+  .lotus-pearls {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: lotus-twinkle 6s ease-in-out infinite;
   }
   /* Gold hairline that sweeps around the border on hover. */
   .shimmer-border {
@@ -225,6 +259,12 @@
   }
   .path-card:hover {
     box-shadow: 0 24px 60px -24px hsl(var(--path) / 0.55), 0 0 0 1px hsl(var(--path) / 0.35);
+  }
+  .path-card .lotus-mandala {
+    --lotus-base: hsl(var(--path) / 0.22);
+    --lotus-tip: hsl(var(--path) / 0.02);
+    --lotus-halo: transparent;
+    --lotus-stroke: hsl(var(--path) / 0.55);
   }
   .path-medallion {
     background: radial-gradient(circle at 30% 25%, hsl(var(--path) / 0.35), hsl(var(--path) / 0.1) 70%);
@@ -277,9 +317,32 @@
     --sweep: 360deg;
   }
 }
-@keyframes mandala-turn {
+@keyframes lotus-open {
+  from {
+    opacity: 0;
+    transform: scale(0.55) rotate(-12deg);
+  }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes lotus-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+}
+@keyframes lotus-twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
   }
 }
 @keyframes diya-breathe {
@@ -317,12 +380,10 @@
 @keyframes route-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
     filter: blur(6px);
   }
   to {
     opacity: 1;
-    transform: none;
     filter: blur(0);
   }
 }

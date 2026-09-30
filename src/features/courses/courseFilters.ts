@@ -1,6 +1,5 @@
+import { isCategorySlug } from '@/data/taxonomy';
 import type { CategoryId, Course, CourseStats, CourseType, Level } from '@/data/types';
-
-const CATEGORY_IDS = ['all', 'language', 'yoga', 'chanting', 'meaning', 'reading'] as const;
 
 export type SortKey = 'recommended' | 'soonest' | 'price-asc' | 'price-desc';
 
@@ -74,7 +73,7 @@ export function filterFromSearch(search: string): CourseFilter {
     level: pick('level', ['all', 'beginner', 'intermediate', 'advanced'] as const, 'all'),
     kind: pick('kind', ['all', 'course', 'event'] as const, 'all'),
     sort: pick('sort', ['recommended', 'soonest', 'price-asc', 'price-desc'] as const, 'recommended'),
-    cat: pick('cat', CATEGORY_IDS, 'all'),
+    cat: isCategorySlug(p.get('cat') ?? '') ? (p.get('cat') as string) : 'all',
     sub: (p.get('sub') ?? '').replace(/[^a-z0-9-]/g, '').slice(0, 40),
     variant: (p.get('variant') ?? '').slice(0, 60),
   };

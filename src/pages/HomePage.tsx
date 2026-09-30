@@ -7,7 +7,7 @@ import { useCourseStats, useCourses, useSiteStats, useTeachers, useTestimonials 
 import { CourseCard } from '@/features/courses/CourseCard';
 import { PetalParticles } from '@/features/experience/Ambient';
 import { PathsGrid } from '@/features/experience/PathsGrid';
-import { Diya, LotusDivider, Mandala } from '@/features/experience/Sacred';
+import { Diya, LotusDivider, LotusMandala } from '@/features/experience/Sacred';
 import { usePreferences } from '@/features/experience/preferences';
 import { ScrollStory } from '@/features/experience/ScrollStory';
 import { ScriptText, ScriptToggle } from '@/features/experience/ScriptText';
@@ -48,7 +48,7 @@ function Hero() {
   const fade = (delay: number) =>
     reducedMotion ? {} : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] as const } };
   return (
-    <section className="relative isolate overflow-hidden pb-20 pt-12 sm:pt-20" aria-labelledby="hero-title">
+    <section className="relative isolate overflow-hidden pb-20 pt-16 sm:pt-28" aria-labelledby="hero-title">
       <div
         aria-hidden
         className="absolute inset-0 -z-10"
@@ -59,11 +59,15 @@ function Hero() {
       />
       <PetalParticles className="pointer-events-none absolute inset-0 -z-10 h-full w-full" />
       <div className="container flex flex-col items-center text-center">
-        <motion.div {...fade(0)} className="relative -mb-2">
-          <Mandala className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[170%] w-[170%] -translate-x-1/2 -translate-y-1/2 text-primary opacity-25 dark:opacity-30" />
-          <span aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.28),transparent_65%)] blur-2xl" />
-          <Logo3D fit={{ vh: 30, vw: 60, max: 240 }} decorative />
-        </motion.div>
+        <div className="relative -mb-2">
+          {/* Fixed in place, centred on the logo's lotus (≈37% down the logo). */}
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-[37%] -z-10 aspect-square w-[185%] -translate-x-1/2 -translate-y-1/2">
+            <LotusMandala className="h-full w-full" />
+          </div>
+          <motion.div {...(reducedMotion ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 1 } })}>
+            <Logo3D fit={{ vh: 30, vw: 60, max: 240 }} decorative />
+          </motion.div>
+        </div>
         <motion.div {...fade(0.1)}>
           <ScriptToggle />
         </motion.div>
