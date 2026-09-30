@@ -23,7 +23,7 @@ jobs:
         run: echo "::notice::Preview skipped (no FIREBASE_SERVICE_ACCOUNT secret, or PR from a fork)."
       - uses: actions/checkout@v4
         if: env.HAS_SA == 'true' && github.event.pull_request.head.repo.full_name == github.repository
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         if: env.HAS_SA == 'true' && github.event.pull_request.head.repo.full_name == github.repository
         with:
           node-version: 22
