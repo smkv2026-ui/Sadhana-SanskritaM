@@ -104,12 +104,12 @@
 .l3-half-l {
   left: -90px;
   transform-origin: 100% 50%;
-  transform: rotateY(var(--open-l, 16deg));
+  transform: rotateY(var(--open-l, 9deg));
 }
 .l3-half-r {
   left: 0;
   transform-origin: 0 50%;
-  transform: rotateY(var(--open-r, -16deg));
+  transform: rotateY(var(--open-r, -9deg));
 }
 .l3-cover {
   position: absolute;
@@ -131,32 +131,107 @@
   left: 0;
   border-radius: 0 4px 4px 0;
 }
+.l3-strip {
+  position: absolute;
+  top: 0;
+  width: 22.5px;
+  height: 70px;
+  transform-style: preserve-3d;
+}
+.l3-strip-r {
+  left: 0;
+  transform-origin: 0 50%;
+}
+.l3-strip-l {
+  left: 67.5px;
+  transform-origin: 100% 50%;
+}
+/* Nested strips hang off the outer edge of their parent. */
+.l3-strip-r .l3-strip-r {
+  left: 22.5px;
+}
+.l3-strip-l .l3-strip-l {
+  left: -22.5px;
+}
 .l3-sheet {
   position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--l3-sheet);
+  border-top: 0.5px solid var(--l3-gilt);
+  border-bottom: 0.5px solid var(--l3-gilt);
+  backface-visibility: hidden;
+}
+.l3-strip-r .l3-sheet-fore {
+  border-right: 0.8px solid var(--l3-gilt);
+  border-radius: 0 3px 3px 0;
+}
+.l3-strip-l .l3-sheet-fore {
+  border-left: 0.8px solid var(--l3-gilt);
+  border-radius: 3px 0 0 3px;
+}
+.l3-strip-r > .l3-sheet {
+  left: 0;
+  right: -0.9px;
+}
+.l3-strip-l > .l3-sheet {
+  left: -0.9px;
+  right: 0;
+}
+.l3-strip-r > .l3-sheet-fore {
+  right: 0;
+}
+.l3-strip-l > .l3-sheet-fore {
+  left: 0;
+}
+/* The cover bends with the page block, a little larger than the pages. */
+.l3-cover-strip {
+  position: absolute;
+  top: -3.5px;
+  bottom: -3.5px;
+  transform: translateZ(-0.6px);
+  background: linear-gradient(135deg, var(--l3-cover-2), var(--l3-cover));
+  box-shadow: inset 0 1px 0 rgba(241, 198, 110, 0.5), inset 0 -1px 0 rgba(241, 198, 110, 0.5);
+  backface-visibility: visible;
+}
+.l3-strip-r > .l3-cover-strip {
+  left: 0;
+  right: -0.9px;
+}
+.l3-strip-l > .l3-cover-strip {
+  left: -0.9px;
+  right: 0;
+}
+.l3-strip-r > .l3-cover-fore {
+  right: -4px;
+  border-radius: 0 4px 4px 0;
+  box-shadow: inset 0 1px 0 rgba(241, 198, 110, 0.5), inset 0 -1px 0 rgba(241, 198, 110, 0.5), inset -1px 0 0 rgba(241, 198, 110, 0.6);
+}
+.l3-strip-l > .l3-cover-fore {
+  left: -4px;
+  border-radius: 4px 0 0 4px;
+  box-shadow: inset 0 1px 0 rgba(241, 198, 110, 0.5), inset 0 -1px 0 rgba(241, 198, 110, 0.5), inset 1px 0 0 rgba(241, 198, 110, 0.6);
+}
+.l3-strip-text {
+  position: absolute;
+  top: 0;
+  width: 90px;
+  height: 70px;
+}
+.l3-strip-shade {
+  position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, var(--l3-sheet-edge), var(--l3-sheet) 18%, var(--l3-sheet) 82%, var(--l3-sheet-edge));
-  border: 0.5px solid var(--l3-gilt);
-}
-.l3-half-l .l3-sheet {
-  border-radius: 6px 1px 1px 6px;
-}
-.l3-half-r .l3-sheet {
-  border-radius: 1px 6px 6px 1px;
+  background: #6b4a22;
+  pointer-events: none;
 }
 .l3-sheet-top {
   overflow: hidden;
-  background:
-    radial-gradient(140% 100% at 55% 45%, rgba(255, 255, 255, 0.9), transparent 70%),
-    linear-gradient(90deg, #efe0c4, var(--l3-sheet) 14%, #fffdf7 55%, var(--l3-sheet));
-}
-.l3-half-r .l3-sheet-top {
-  background:
-    radial-gradient(140% 100% at 45% 45%, rgba(255, 255, 255, 0.9), transparent 70%),
-    linear-gradient(90deg, var(--l3-sheet), #fffdf7 45%, var(--l3-sheet) 86%, #efe0c4);
+  background: linear-gradient(180deg, #fffdf8, var(--l3-sheet) 60%, #f8eedb);
 }
 .l3-sheet-top svg {
   position: absolute;
   inset: 0;
+  display: block;
 }
 /* Printed text: hair-thin, ink-brown, broken into words by dash patterns. */
 .l3-text {
@@ -186,18 +261,6 @@
 .l3-half-r .l3-gutter {
   left: 0;
   background: linear-gradient(270deg, transparent, rgba(120, 84, 40, 0.1) 55%, rgba(90, 60, 25, 0.34));
-}
-/* Silk ribbon bookmark hanging over the bottom edge. */
-.l3-ribbon {
-  position: absolute;
-  left: 14px;
-  top: 30px;
-  width: 4px;
-  height: 56px;
-  background: linear-gradient(90deg, #7a1422, #c0283c 45%, #8e1a2a);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%);
-  transform: translateZ(8.4px);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .l3-spine {
   position: absolute;
@@ -277,15 +340,12 @@
   display: block;
   overflow: visible;
 }
-.l3-petal-face {
-  stroke: var(--l3-petal-edge);
-  stroke-width: 0.9;
-  stroke-linejoin: round;
+.l3-petal-rim {
+  fill: var(--l3-petal-edge);
 }
-.l3-petal-vein {
-  stroke: rgba(217, 164, 65, 0.28);
-  stroke-width: 0.8;
-  fill: none;
+/* A soft blush "heart" line up the middle of each petal instead of hairline veins. */
+.l3-petal-heart {
+  fill: rgba(236, 170, 150, 0.18);
 }
 .l3-root.is-bloom .l3-petal {
   transform: rotateY(var(--a)) translateZ(calc(var(--r) * var(--bl)))
@@ -314,31 +374,50 @@
   border-radius: 9999px;
   background: #ffd45c;
 }
-/* Petals breathe: each opens and closes a few degrees, outer rings the most. */
-.l3-petal {
-  transform-style: preserve-3d;
+/* Living light instead of moving petals (moving intersecting planes flicker when zoomed):
+   the halo breathes and fine motes of gold rise from the bloom. */
+.l3-halo {
+  animation: l3-halo 5s ease-in-out infinite;
 }
-.l3-petal-svg {
-  transform-origin: 50% 100%;
-  animation: l3-breathe 6.5s ease-in-out infinite;
-  animation-delay: calc(var(--layer) * -0.9s);
-}
-@keyframes l3-breathe {
+@keyframes l3-halo {
   0%,
   100% {
-    transform: rotateX(0deg);
+    opacity: 0.75;
+    transform: translateZ(-30px) scale(0.95);
   }
   50% {
-    transform: rotateX(calc(-3deg - var(--layer) * 2.2deg));
+    opacity: 1;
+    transform: translateZ(-30px) scale(1.12);
   }
 }
-/* The whole bloom turns slowly on its stem. */
-.l3-flower {
-  animation: l3-turn 48s linear infinite;
+.l3-motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
-@keyframes l3-turn {
-  to {
-    transform: rotateY(360deg);
+.l3-motes span {
+  position: absolute;
+  top: 118px;
+  width: 2.4px;
+  height: 2.4px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fff6d0, #f1c66e 60%, transparent 70%);
+  box-shadow: 0 0 6px 1px rgba(241, 198, 110, 0.7);
+  opacity: 0;
+  animation: l3-mote 6s ease-out infinite;
+  animation-delay: calc(var(--i) * 0.6s);
+}
+@keyframes l3-mote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc((var(--i) - 4.5) * 3px), -95px) scale(1.1);
   }
 }
 
@@ -491,7 +570,7 @@
     transform: rotateY(89deg);
   }
   to {
-    transform: rotateY(var(--open-l, 16deg));
+    transform: rotateY(var(--open-l, 9deg));
   }
 }
 @keyframes l3-open-r {
@@ -499,7 +578,7 @@
     transform: rotateY(-89deg);
   }
   to {
-    transform: rotateY(var(--open-r, -16deg));
+    transform: rotateY(var(--open-r, -9deg));
   }
 }
 .l3-root.is-animated .l3-stem {
@@ -573,9 +652,11 @@
     animation: none;
     transform: rotateX(-10deg) rotateY(-14deg);
   }
-  .l3-petal-svg,
-  .l3-flower {
+  .l3-halo {
     animation: none;
+  }
+  .l3-motes {
+    display: none;
   }
   .l3-gem-spin {
     animation: none;

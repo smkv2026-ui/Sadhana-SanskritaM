@@ -25,8 +25,8 @@ interface PetalRing {
 // Inner rings stay upright (the cup); outer rings open wide.
 // Fully bloomed: the outermost ring lies almost flat, inner rings form an open cup.
 export const PETAL_RINGS: PetalRing[] = [
-  { layer: 3, count: 12, len: 40, w: 14, radius: 15, tilt: 86, offset: 8 },
-  { layer: 3, count: 10, len: 46, w: 16, radius: 12, tilt: 72, offset: 26 },
+  { layer: 3, count: 12, len: 40, w: 14, radius: 15, tilt: 78, offset: 8 },
+  { layer: 3, count: 10, len: 46, w: 16, radius: 12, tilt: 66, offset: 26 },
   { layer: 2, count: 9, len: 54, w: 18, radius: 9, tilt: 52, offset: 0 },
   { layer: 1, count: 7, len: 58, w: 17, radius: 6, tilt: 33, offset: 25 },
   { layer: 0, count: 5, len: 56, w: 14, radius: 3, tilt: 14, offset: 0 },
@@ -38,8 +38,10 @@ function Petal({ ring, index, gradId }: { ring: PetalRing; index: number; gradId
   const angle = ring.offset + (360 / ring.count) * index;
   const style = {
     '--a': `${angle}deg`,
-    '--r': `${ring.radius}px`,
-    '--tilt': `${ring.tilt}deg`,
+    // Alternate petals sit at slightly different angles/radii, so no two petals share a plane
+    // (coplanar overlaps make the browser flip their order frame to frame → flicker).
+    '--r': `${ring.radius + (index % 2) * 1.2}px`,
+    '--tilt': `${ring.tilt + (index % 2 ? 4 : -2)}deg`,
     '--layer': ring.layer,
     '--bl': `var(--b${ring.layer}, 1)`,
     width: ring.w * 2,
@@ -51,16 +53,13 @@ function Petal({ ring, index, gradId }: { ring: PetalRing; index: number; gradId
   return (
     <div className="l3-petal" style={style}>
       <svg className="l3-petal-svg" viewBox={`${-ring.w} ${-ring.len} ${ring.w * 2} ${ring.len}`} width={ring.w * 2} height={ring.len} aria-hidden>
-        <path
-          d={petalPath(ring.len, ring.w)}
-          fill={`url(#${gradId})`}
-          className="l3-petal-face"
-        />
+        {/* Soft gold rim (a filled shape, not a hairline stroke: thin strokes shimmer on tilted
+            3D planes) with the white petal body inset inside it. */}
+        <path d={petalPath(ring.len, ring.w)} className="l3-petal-rim" />
+        <path d={petalPath(ring.len - 2.2, ring.w - 1.8)} fill={`url(#${gradId})`} transform="translate(0 -0.6)" />
         {/* cheap shading overlay instead of a CSS filter (filters are costly on 3D layers) */}
         <path d={petalPath(ring.len, ring.w)} fill="#b98a5a" fillOpacity={(1 - shade) * 1.6} stroke="none" />
-        <path d={`M0 -2 L0 ${-ring.len * 0.82}`} className="l3-petal-vein" />
-        <path d={`M0 -3 C${ring.w * 0.35} ${-ring.len * 0.3} ${ring.w * 0.4} ${-ring.len * 0.55} ${ring.w * 0.18} ${-ring.len * 0.78}`} className="l3-petal-vein" />
-        <path d={`M0 -3 C${-ring.w * 0.35} ${-ring.len * 0.3} ${-ring.w * 0.4} ${-ring.len * 0.55} ${-ring.w * 0.18} ${-ring.len * 0.78}`} className="l3-petal-vein" />
+        <path d={petalPath(ring.len * 0.55, ring.w * 0.28)} className="l3-petal-heart" />
       </svg>
     </div>
   );
@@ -160,18 +159,45 @@ function PageText({ side }: { side: 'left' | 'right' }) {
   );
 }
 
+/**
+ * Each half is a chain of four hinged strips so the page block rises out of the gutter
+ * and flattens towards the fore-edge — the soft curve of a real open book.
+ * Angles are relative to the previous strip (right half; the left half mirrors them).
+ */
+const STRIP_W = 22.5;
+const STRIP_BEND = [-15, 8, 5, 3];
+const STRIP_SHADE = [0.1, 0.03, 0, 0.02];
+
+function PageStrip({ side, index }: { side: 'left' | 'right'; index: number }) {
+  const sign = side === 'right' ? 1 : -1;
+  // x offset of this strip inside the 90px page, measured from the page's left edge.
+  const x = side === 'right' ? index * STRIP_W : 90 - (index + 1) * STRIP_W;
+  const last = index === STRIP_BEND.length - 1;
+  return (
+    <div
+      className={cn('l3-strip', side === 'right' ? 'l3-strip-r' : 'l3-strip-l', index === 0 && 'l3-strip-first')}
+      style={{ transform: `rotateY(${sign * (STRIP_BEND[index] as number)}deg)` }}
+    >
+      <div className={cn('l3-cover-strip', last && 'l3-cover-fore')} />
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className={cn('l3-sheet', last && 'l3-sheet-fore')} style={{ transform: `translateZ(${1 + i * 1.1}px)` }} />
+      ))}
+      <div className={cn('l3-sheet l3-sheet-top', last && 'l3-sheet-fore')} style={{ transform: 'translateZ(7.8px)' }}>
+        <div className="l3-strip-text" style={{ left: -x }}>
+          <PageText side={side} />
+        </div>
+        {index === 0 && <div className="l3-gutter" />}
+        <div className="l3-strip-shade" style={{ opacity: STRIP_SHADE[index] }} />
+      </div>
+      {!last && <PageStrip side={side} index={index + 1} />}
+    </div>
+  );
+}
+
 function BookHalf({ side }: { side: 'left' | 'right' }) {
   return (
     <div className={cn('l3-half', side === 'left' ? 'l3-half-l' : 'l3-half-r')}>
-      <div className="l3-cover" />
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="l3-sheet" style={{ transform: `translateZ(${1 + i * 1.1}px)` } as CSSProperties} />
-      ))}
-      <div className="l3-sheet l3-sheet-top" style={{ transform: 'translateZ(7.8px)' }}>
-        <PageText side={side} />
-        <div className="l3-gutter" />
-      </div>
-      {side === 'right' && <div className="l3-ribbon" />}
+      <PageStrip side={side} index={0} />
     </div>
   );
 }
@@ -311,8 +337,14 @@ export function Logo3D({
           </linearGradient>
         </defs>
       </svg>
-      <div className="l3-scale" style={{ transform: `scale(${scale})` }}>
+      {/* zoom (not transform: scale) so the 3D scene is laid out and rasterised at its real size — crisp petals at any zoom level. */}
+      <div className="l3-scale" style={{ zoom: scale }}>
         <div className="l3-glow" />
+        <div className="l3-motes" aria-hidden>
+          {Array.from({ length: 10 }, (_, i) => (
+            <span key={i} style={{ '--i': i, left: `${88 + ((i * 37) % 64)}px` } as CSSProperties} />
+          ))}
+        </div>
         <div ref={tiltRef} className="l3-tilt">
           <div className="l3-stage">
             <div className="l3-book">
