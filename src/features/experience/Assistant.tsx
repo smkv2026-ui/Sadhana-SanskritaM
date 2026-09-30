@@ -73,7 +73,7 @@ export default function Assistant() {
       <motion.button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lift transition hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring no-print"
+        className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lift transition hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring no-print"
         aria-label={open ? 'Close assistant' : 'Open help assistant'}
         aria-expanded={open}
         initial={reducedMotion ? false : { scale: 0 }}
@@ -92,7 +92,7 @@ export default function Assistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-4 z-50 flex h-[min(560px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-sm origin-bottom-right flex-col overflow-hidden rounded-3xl border bg-popover shadow-lift"
+            className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] right-4 z-50 flex h-[min(560px,calc(100dvh-8rem))] w-[calc(100vw-2rem)] max-w-sm origin-bottom-right flex-col overflow-hidden rounded-3xl border bg-popover shadow-lift"
           >
             <header className="flex items-center gap-3 border-b bg-gradient-to-r from-midnight to-midnight-700 px-4 py-3 text-pearl">
               <LogoMark size={34} compact variant="full-dark" decorative />
@@ -172,7 +172,7 @@ export default function Assistant() {
                 onChange={(e) => setInput(e.target.value)}
                 maxLength={200}
                 placeholder="Ask about fees, payment, access…"
-                className="h-10 flex-1 rounded-full border bg-background px-4 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="h-10 min-w-0 flex-1 rounded-full border bg-background px-4 text-base outline-none sm:text-sm focus-visible:ring-2 focus-visible:ring-ring"
               />
               <button type="submit" className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground" aria-label="Send">
                 <Send className="h-4 w-4" />

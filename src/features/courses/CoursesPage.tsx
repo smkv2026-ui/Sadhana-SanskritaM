@@ -24,7 +24,7 @@ function Chips<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1.5">
+    <div role="radiogroup" aria-label={label} className="-mx-4 flex gap-1.5 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
       {options.map((o) => (
         <button
           key={o.value}
@@ -33,7 +33,7 @@ function Chips<T extends string>({
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            'relative rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
+            'relative shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
             value === o.value ? 'border-transparent text-primary-foreground' : 'hover:border-accent',
           )}
         >
@@ -68,9 +68,9 @@ export default function CoursesPage() {
         <p className="mt-4 text-lg text-muted-foreground">Filter by format and level — results update instantly.</p>
       </header>
 
-      <div className="sticky top-16 z-20 -mx-4 mt-8 border-b bg-background/85 px-4 py-4 backdrop-blur-xl">
+      <div className="z-20 -mx-4 mt-8 border-b bg-background/85 px-4 py-4 backdrop-blur-xl lg:sticky lg:top-16">
         <LayoutGroup>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
               <label htmlFor="course-search" className="sr-only">
@@ -86,11 +86,11 @@ export default function CoursesPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" aria-hidden />
+              <SlidersHorizontal className="hidden h-4 w-4 text-muted-foreground sm:block" aria-hidden />
               <label htmlFor="course-sort" className="sr-only">
                 Sort
               </label>
-              <NativeSelect id="course-sort" value={filter.sort} onChange={(e) => set({ sort: e.target.value as CourseFilter['sort'] })} className="w-48">
+              <NativeSelect id="course-sort" value={filter.sort} onChange={(e) => set({ sort: e.target.value as CourseFilter['sort'] })} className="w-full sm:w-48">
                 <option value="recommended">Recommended</option>
                 <option value="soonest">Starting soonest</option>
                 <option value="price-asc">Price: low to high</option>
@@ -98,7 +98,7 @@ export default function CoursesPage() {
               </NativeSelect>
             </div>
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
             <Chips
               label="Kind"
               value={filter.kind}

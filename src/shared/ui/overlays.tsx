@@ -22,11 +22,11 @@ export const DialogContent = forwardRef<
         className={cn(
           'fixed z-50 border bg-card text-card-foreground shadow-lift duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           side === 'center' &&
-            'left-1/2 top-1/2 max-h-[90vh] w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl p-6 data-[state=open]:zoom-in-95',
+            'left-1/2 top-1/2 max-h-[90dvh] w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl p-6 data-[state=open]:zoom-in-95',
           side === 'right' &&
             'inset-y-0 right-0 h-full w-[min(100vw,440px)] overflow-y-auto rounded-l-3xl p-6 data-[state=open]:slide-in-from-right',
           side === 'bottom' &&
-            'inset-x-0 bottom-0 max-h-[88vh] overflow-y-auto rounded-t-3xl p-6 data-[state=open]:slide-in-from-bottom',
+            'inset-x-0 bottom-0 max-h-[88dvh] overflow-y-auto rounded-t-3xl p-6 data-[state=open]:slide-in-from-bottom',
           className,
         )}
         {...props}

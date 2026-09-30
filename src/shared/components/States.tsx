@@ -70,7 +70,7 @@ export function CardSkeletons({ count = 3 }: { count?: number }) {
 
 export function PageLoader() {
   return (
-    <div className="flex min-h-[50vh] items-center justify-center" aria-busy="true" aria-label="Loading page">
+    <div className="flex min-h-[50svh] items-center justify-center" aria-busy="true" aria-label="Loading page">
       <LogoMark size={72} compact decorative className="animate-pulse" />
     </div>
   );

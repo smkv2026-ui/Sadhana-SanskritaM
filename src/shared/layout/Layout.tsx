@@ -20,7 +20,10 @@ function DemoBanner() {
   return (
     <div className="relative z-50 bg-midnight px-4 py-2 text-center text-xs text-pearl">
       <Sparkles className="mr-1.5 inline h-3.5 w-3.5 text-saffron-light" aria-hidden />
-      Demo mode — Firebase isn’t connected yet, so data is stored only in this browser. Sign in as a demo learner or admin to try everything.
+      <span className="sm:hidden">Demo mode — data stays in this browser.</span>
+      <span className="hidden sm:inline">
+        Demo mode — Firebase isn’t connected yet, so data is stored only in this browser. Sign in as a demo learner or admin to try everything.
+      </span>
     </div>
   );
 }
@@ -41,7 +44,7 @@ export function Layout() {
       <DemoBanner />
       <CursorGlow />
       <Header introActive={introActive} />
-      <main id="main" tabIndex={-1} className="relative z-10 min-h-[70vh] outline-none">
+      <main id="main" tabIndex={-1} className="relative z-10 min-h-[70svh] outline-none">
         <Suspense fallback={<PageLoader />}>
           <Outlet />
         </Suspense>

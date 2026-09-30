@@ -21,10 +21,10 @@ export default function AboutPage() {
   return (
     <div className="container py-12 sm:py-16">
       <PageMeta title="About" description="Our story, our mark and the teachers behind Sadhana Sanskritam." path={routes.about} />
-      <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
         <Reveal>
           <p className="eyebrow">About us</p>
-          <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">Sanskrit is not a relic. It is a lotus still blooming.</h1>
+          <h1 className="mt-3 text-balance text-4xl font-semibold sm:text-5xl">Sanskrit is not a relic. It is a lotus still blooming.</h1>
           <p className="mt-6 text-lg text-muted-foreground">
             {BRAND.name} began as a small study circle of friends who wanted to read the texts they loved in the original. Today we are a
             community of learners across the world, taught by teachers who combine traditional rigour with modern, joyful pedagogy.
@@ -34,7 +34,7 @@ export default function AboutPage() {
           </p>
         </Reveal>
         <Reveal delay={0.1} className="flex justify-center">
-          <Logo lockup="stacked" size={220} showTagline />
+          <Logo lockup="stacked" size={200} showTagline className="max-w-full [&_svg]:h-auto [&_svg]:max-h-[40svh]" />
         </Reveal>
       </div>
 

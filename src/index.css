@@ -68,6 +68,27 @@
   html {
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Never scroll sideways on phones ("clip" keeps position: sticky working, unlike "hidden"). */
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  /* Grid children may shrink below their content width (prevents grid blow-out on narrow screens). */
+  .grid > * {
+    min-width: 0;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
   }
 
   body {

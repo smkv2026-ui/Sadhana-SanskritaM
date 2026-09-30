@@ -38,7 +38,7 @@ export function CardFooter({ className, ...props }: HTMLAttributes<HTMLDivElemen
 
 // ---------- Inputs ----------
 const fieldBase =
-  'w-full rounded-xl border border-input bg-background/70 px-3.5 text-[15px] shadow-sm transition-colors placeholder:text-muted-foreground/70 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive';
+  'w-full rounded-xl border border-input bg-background/70 px-3.5 text-base shadow-sm sm:text-[15px] transition-colors placeholder:text-muted-foreground/70 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-destructive';
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input({ className, ...props }, ref) {
   return <input ref={ref} className={cn(fieldBase, 'h-11', className)} {...props} />;

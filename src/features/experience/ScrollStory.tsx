@@ -38,7 +38,7 @@ function Chapter({ index, eyebrow, title, children, onActive }: { index: number;
     if (inView) onActive(index);
   }, [inView, index, onActive]);
   return (
-    <section ref={ref} aria-labelledby={`chapter-${index}`} className="flex min-h-[85vh] items-center py-16">
+    <section ref={ref} aria-labelledby={`chapter-${index}`} className="flex min-h-[85svh] items-center py-12 md:py-16">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -101,14 +101,14 @@ export function ScrollStory() {
         <div
           ref={lotusRef}
           aria-hidden
-          className="pointer-events-none sticky top-16 z-0 -mb-[70vh] flex h-[70vh] items-center justify-center opacity-25 md:mb-0 md:h-[calc(100vh-4rem)] md:self-start md:opacity-100"
+          className="pointer-events-none sticky top-16 z-0 -mb-[70svh] flex h-[70svh] items-center justify-center overflow-hidden opacity-25 md:mb-0 md:h-[calc(100svh-4rem)] md:self-start md:overflow-visible md:opacity-100"
         >
           <div className="relative">
             <div
               className="absolute inset-0 -z-10 scale-150 rounded-full blur-3xl"
               style={{ background: 'radial-gradient(circle, hsl(var(--glow) / 0.35), transparent 65%)', opacity: 'var(--halo, 0)' as unknown as number }}
             />
-            <LogoMark size={420} bloomControlled decorative className={cn('h-[min(56vh,440px)] w-auto', glint && 'do-glint')} />
+            <LogoMark size={420} bloomControlled decorative className={cn('h-[min(56svh,440px)] w-auto max-w-[80vw] md:max-w-full', glint && 'do-glint')} />
           </div>
           <ol className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 gap-2 md:flex" aria-label="Story progress">
             {CHAPTERS.map((c, i) => (
@@ -167,12 +167,12 @@ export function ScrollStory() {
           </Chapter>
 
           <Chapter index={3} eyebrow="How it works" title="From curiosity to class in four steps" onActive={onActive}>
-            <ol className="relative space-y-6 border-l border-accent/40 pl-8">
+            <ol className="relative ml-4 space-y-6 border-l border-accent/40 pl-8">
               {STEPS.map((s, i) => (
                 <motion.li
                   key={s.title}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                   className="relative"

@@ -76,15 +76,15 @@ export default function EventsPage() {
                 <h2 id={`m-${month}`} className="sticky top-16 z-10 -mx-4 bg-background/85 px-4 py-2 font-display text-2xl backdrop-blur">
                   {month}
                 </h2>
-                <ol className="relative mt-6 space-y-8 border-l-2 border-dashed border-accent/40 pl-8 sm:pl-10">
+                <ol className="relative ml-4 mt-6 space-y-8 border-l-2 border-dashed border-accent/40 pl-7 sm:ml-5 sm:pl-10">
                   {items.map((c, i) => {
                     const d = new Date(c.startsAt as string);
                     const price = computePrice(c);
                     return (
                       <motion.li
                         key={c.id}
-                        initial={{ opacity: 0, x: 24 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.5, delay: i * 0.05 }}
                         className="relative"
@@ -92,7 +92,7 @@ export default function EventsPage() {
                         <span className="absolute -left-[49px] top-2 flex h-8 w-8 flex-col items-center justify-center rounded-full border-2 border-accent bg-background text-[10px] font-bold leading-none sm:-left-[57px] sm:h-10 sm:w-10 sm:text-xs">
                           {d.getDate()}
                         </span>
-                        <div className="grid gap-4 rounded-3xl border bg-card p-5 transition-shadow hover:shadow-glow sm:grid-cols-[1fr_220px] sm:p-6">
+                        <div className="grid grid-cols-1 gap-4 rounded-3xl border bg-card p-4 transition-shadow hover:shadow-glow sm:grid-cols-[1fr_220px] sm:p-6">
                           <div>
                             <div className="flex flex-wrap gap-2">
                               <Badge variant={c.kind === 'event' ? 'outline' : 'gold'}>{c.kind === 'event' ? 'Event' : 'Course starts'}</Badge>
@@ -100,7 +100,7 @@ export default function EventsPage() {
                                 {c.type}
                               </Badge>
                             </div>
-                            <h3 className="mt-3 font-display text-2xl font-semibold">
+                            <h3 className="mt-3 font-display text-xl font-semibold sm:text-2xl">
                               <Link to={routes.course(c.slug)} className="hover:text-accent">
                                 {c.title}
                               </Link>

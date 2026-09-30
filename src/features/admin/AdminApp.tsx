@@ -58,9 +58,9 @@ function Shell() {
   return (
     <div className="container py-8">
       <PageMeta title="Admin" noindex />
-      <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-        <nav aria-label="Admin" className="lg:sticky lg:top-24 lg:self-start">
-          <ul className="flex gap-1 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:gap-8">
+        <nav aria-label="Admin" className="-mx-4 min-w-0 px-4 lg:sticky lg:top-24 lg:mx-0 lg:self-start lg:px-0">
+          <ul className="flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] lg:flex-col lg:overflow-visible">
             {NAV.map((n) => (
               <li key={n.to} className="shrink-0">
                 <NavLink
@@ -108,7 +108,7 @@ export function AdminHeader({ title, description, actions }: { title: string; de
   return (
     <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="text-3xl font-semibold">{title}</h1>
+        <h1 className="text-2xl font-semibold sm:text-3xl">{title}</h1>
         {description && <p className="mt-1 text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}

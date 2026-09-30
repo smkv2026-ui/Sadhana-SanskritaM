@@ -117,7 +117,7 @@ export function PaymentStep({ reg, onSubmitted }: { reg: Registration; onSubmitt
               <div key={row.k} className="flex items-center justify-between gap-3 px-4 py-3">
                 <div className="min-w-0">
                   <dt className="text-xs text-muted-foreground">{row.k}</dt>
-                  <dd className="truncate font-display text-lg font-semibold">{row.v}</dd>
+                  <dd className="break-all font-display text-lg font-semibold">{row.v}</dd>
                 </div>
                 {row.copy ? <CopyButton value={row.copy} label={row.k.split(' ')[0]} /> : null}
               </div>

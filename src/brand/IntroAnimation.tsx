@@ -202,7 +202,7 @@ export function IntroAnimation({ onVisibilityChange }: { onVisibilityChange?: (v
                 variant="full-dark"
                 animated={!reducedMotion}
                 size={reducedMotion ? 200 : 240}
-                className="h-[min(42vh,260px)] w-auto"
+                className="h-[min(42svh,260px)] w-auto"
                 decorative
               />
             </motion.div>

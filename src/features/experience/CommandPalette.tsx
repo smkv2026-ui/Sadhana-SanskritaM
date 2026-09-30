@@ -80,7 +80,7 @@ export default function CommandPalette() {
         <DialogPrimitive.Overlay className="fixed inset-0 z-[60] bg-midnight/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0" />
         <DialogPrimitive.Content
           aria-describedby={undefined}
-          className="fixed left-1/2 top-[12vh] z-[61] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-3xl border bg-popover shadow-lift data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
+          className="fixed left-1/2 top-[10svh] z-[61] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-3xl border bg-popover shadow-lift data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
         >
           <DialogPrimitive.Title className="sr-only">Command palette</DialogPrimitive.Title>
           <Command label="Command palette" loop>
@@ -89,11 +89,11 @@ export default function CommandPalette() {
               <Command.Input
                 autoFocus
                 placeholder="Search courses, pages and actions…"
-                className="h-14 flex-1 bg-transparent text-[15px] outline-none placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-14 min-w-0 flex-1 bg-transparent text-base sm:text-[15px] outline-none placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               <kbd className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">Esc</kbd>
             </div>
-            <Command.List className="max-h-[60vh] overflow-y-auto p-2">
+            <Command.List className="max-h-[60dvh] overflow-y-auto p-2">
               <Command.Empty className="py-10 text-center text-sm text-muted-foreground">No matches. Try “grammar” or “events”.</Command.Empty>
               <Command.Group heading="Pages" className={groupCls}>
                 <Item icon={<Home />} onSelect={() => go('/')}>Home</Item>

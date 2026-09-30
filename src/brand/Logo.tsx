@@ -208,14 +208,14 @@ export function Logo({ lockup = 'icon', size = 40, showTagline = false, classNam
       <span className={cn('flex flex-col leading-none', stacked && 'items-center')} aria-hidden>
         <span
           className="font-display font-semibold tracking-tight"
-          style={{ fontSize: Math.max(15, size * (stacked ? 0.34 : 0.42)) }}
+          style={{ fontSize: Math.max(15, Math.min(stacked ? 40 : 30, size * (stacked ? 0.34 : 0.42))) }}
         >
           {BRAND.name}
         </span>
         <span
           lang="sa"
           className="deva mt-1 text-muted-foreground"
-          style={{ fontSize: Math.max(11, size * (stacked ? 0.2 : 0.25)), lineHeight: 1.2 }}
+          style={{ fontSize: Math.max(11, Math.min(stacked ? 24 : 18, size * (stacked ? 0.2 : 0.25))), lineHeight: 1.2 }}
         >
           {BRAND.nameDeva}
         </span>

@@ -42,8 +42,8 @@ export function Footer() {
   const channel = settings?.whatsappChannelUrl || env.contact.whatsappChannelUrl;
   return (
     <footer className="relative z-10 mt-24 border-t bg-card/40">
-      <div className="container grid gap-12 py-16 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-        <div className="space-y-5">
+      <div className="container grid grid-cols-2 gap-x-6 gap-y-10 py-12 sm:py-16 md:grid-cols-[1.4fr_repeat(3,1fr)] md:gap-12">
+        <div className="col-span-2 space-y-5 md:col-span-1">
           <Logo lockup="horizontal" size={44} />
           <p className="max-w-xs text-sm text-muted-foreground">{BRAND.tagline}. Authentic Sanskrit learning — joyful, rigorous and open to every seeker.</p>
           <p lang="sa" className="deva text-sm text-accent">
