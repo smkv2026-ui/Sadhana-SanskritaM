@@ -34,7 +34,7 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -106,7 +106,7 @@ jobs:
         run: |
           echo "::notice::FIREBASE_SERVICE_ACCOUNT secret or VITE_FIREBASE_PROJECT_ID variable not set — skipping rules deploy."
           echo "::notice::Paste firestore.rules into Firebase console → Firestore → Rules instead (see README)."
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
         with:
           node-version: 22
@@ -136,7 +136,7 @@ jobs:
         run: echo "::notice::FIREBASE_SERVICE_ACCOUNT secret or VITE_FIREBASE_PROJECT_ID variable not set — skipping Firebase Hosting (GitHub Pages still deploys)."
       - uses: actions/checkout@v4
         if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
         with:
           node-version: 22
