@@ -1,7 +1,8 @@
 name: Deploy
 
 # Every push to main: full CI → build → publish to GitHub Pages (free, public URL).
-# If the FIREBASE_SERVICE_ACCOUNT secret exists, Firestore rules + indexes are deployed too.
+# If the FIREBASE_SERVICE_ACCOUNT secret exists, the site is ALSO published to Firebase Hosting
+# (https://<site>.web.app, the personalised address) and Firestore rules + indexes are deployed.
 on:
   push:
     branches: [main]
@@ -118,3 +119,67 @@ jobs:
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
           npx -y firebase-tools@15 deploy --only firestore:rules,firestore:indexes --project "$PROJECT_ID" --non-interactive
           rm -f "$RUNNER_TEMP/sa.json"
+
+  firebase-hosting:
+    name: Publish to Firebase Hosting (personalised .web.app address, optional)
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HAS_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+      PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+      # Hosting site name → https://<site>.web.app (defaults to the project id).
+      HOSTING_SITE: ${{ vars.FIREBASE_HOSTING_SITE || vars.VITE_FIREBASE_PROJECT_ID }}
+    steps:
+      - name: Skip notice
+        if: env.HAS_SA != 'true' || env.PROJECT_ID == ''
+        run: echo "::notice::FIREBASE_SERVICE_ACCOUNT secret or VITE_FIREBASE_PROJECT_ID variable not set — skipping Firebase Hosting (GitHub Pages still deploys)."
+      - uses: actions/checkout@v4
+        if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
+      - uses: actions/setup-node@v4
+        if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build (served from the domain root)
+        if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
+        run: npm ci && npm run build
+        env:
+          BASE_PATH: /
+          VITE_SITE_URL: ${{ vars.FIREBASE_SITE_URL || format('https://{0}.web.app/', vars.FIREBASE_HOSTING_SITE || vars.VITE_FIREBASE_PROJECT_ID) }}
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+          VITE_BACKEND: ${{ vars.VITE_BACKEND }}
+          VITE_UPI_VPA: ${{ vars.VITE_UPI_VPA }}
+          VITE_UPI_PAYEE_NAME: ${{ vars.VITE_UPI_PAYEE_NAME }}
+          VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL }}
+          VITE_CONTACT_WHATSAPP: ${{ vars.VITE_CONTACT_WHATSAPP }}
+          VITE_WHATSAPP_CHANNEL_URL: ${{ vars.VITE_WHATSAPP_CHANNEL_URL }}
+          VITE_ADMIN_ALERT_EMAIL: ${{ vars.VITE_ADMIN_ALERT_EMAIL }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ vars.VITE_EMAILJS_PUBLIC_KEY }}
+          VITE_EMAILJS_SERVICE_ID: ${{ vars.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ vars.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_MONTHLY_QUOTA: ${{ vars.VITE_EMAILJS_MONTHLY_QUOTA }}
+          VITE_PAYMENT_PROVIDER: ${{ vars.VITE_PAYMENT_PROVIDER }}
+          VITE_EMAIL_PROVIDER: ${{ vars.VITE_EMAIL_PROVIDER }}
+          VITE_WHATSAPP_PROVIDER: ${{ vars.VITE_WHATSAPP_PROVIDER }}
+          VITE_ACCESS_PROVIDER: ${{ vars.VITE_ACCESS_PROVIDER }}
+          VITE_FLAG_INTRO: ${{ vars.VITE_FLAG_INTRO }}
+          VITE_FLAG_ASSISTANT: ${{ vars.VITE_FLAG_ASSISTANT }}
+          VITE_FLAG_AMBIENT: ${{ vars.VITE_FLAG_AMBIENT }}
+      - name: Deploy to Firebase Hosting (live channel)
+        if: env.HAS_SA == 'true' && env.PROJECT_ID != ''
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          # Point firebase.json at the chosen Hosting site (e.g. "sadhana-sanskritam").
+          node -e "const f='firebase.json',j=require('./'+f);j.hosting.site=process.env.HOSTING_SITE;require('fs').writeFileSync(f,JSON.stringify(j,null,2))"
+          npx -y firebase-tools@15 deploy --only hosting --project "$PROJECT_ID" --non-interactive
+          rm -f "$RUNNER_TEMP/sa.json"
+          echo "::notice::Live at https://${HOSTING_SITE}.web.app"

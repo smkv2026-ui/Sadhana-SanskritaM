@@ -128,7 +128,20 @@ Without these, emails use the mock Console provider (the admin overview warns yo
 
 Now each deploy also publishes rules + indexes, and every pull request gets a 7-day preview URL comment.
 
-### 9. (Optional) Custom domain
+### 9. Personalised address: `https://sadhana-sanskritam.web.app` (free)
+
+Once step 8's `FIREBASE_SERVICE_ACCOUNT` secret exists, every deploy also publishes the site to Firebase Hosting.
+
+1. Firebase console → **Build → Hosting → Get started** → click through (no CLI needed).
+2. If your project ID is exactly `sadhana-sanskritam`, you're done: the site is `https://sadhana-sanskritam.web.app`.
+   Otherwise (project IDs are global, so it may have a suffix): **Hosting → Add another site** → site ID
+   `sadhana-sanskritam` (or the closest free name) → then add a repository variable `FIREBASE_HOSTING_SITE` with that name,
+   and add `sadhana-sanskritam.web.app` under **Authentication → Settings → Authorized domains**.
+3. **Actions → Deploy → Run workflow.** The run summary prints the live address.
+
+GitHub Pages keeps deploying as a backup copy.
+
+### 10. (Optional) Custom domain
 
 **Settings → Pages → Custom domain**, then add repository variables `BASE_PATH` = `/` and `SITE_URL` =
 `https://your-domain/`, and add the domain to Firebase **Authorized domains**.
