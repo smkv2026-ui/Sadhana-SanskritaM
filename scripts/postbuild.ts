@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BRAND } from '../src/brand/logoGeometry';
 import { seedCourses } from '../src/data/seed';
+import { siteConfig } from '../src/config/site.config';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -80,8 +81,8 @@ interface CourseLite {
 }
 
 async function publishedCourses(): Promise<CourseLite[]> {
-  const project = process.env.VITE_FIREBASE_PROJECT_ID;
-  const key = process.env.VITE_FIREBASE_API_KEY;
+  const project = process.env.VITE_FIREBASE_PROJECT_ID || siteConfig.firebase.projectId;
+  const key = process.env.VITE_FIREBASE_API_KEY || siteConfig.firebase.apiKey;
   if (!project || !key || process.env.VITE_BACKEND === 'demo') {
     return seedCourses().filter((c) => c.status === 'published');
   }

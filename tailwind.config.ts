@@ -33,7 +33,7 @@ export default {
         success: { DEFAULT: 'hsl(var(--success))', foreground: 'hsl(var(--success-foreground))' },
         pearl: '#F8F6F0',
         ivory: '#FFFBF2',
-        midnight: { DEFAULT: '#0B1026', 800: '#121A3A', 700: '#1B2350', 600: '#2A3270' },
+        midnight: { DEFAULT: '#0A1633', 800: '#11224C', 700: '#1A2F66', 600: '#26407F' },
         saffron: { DEFAULT: '#D9A441', light: '#F1C66E', deep: '#B7832A' },
         diamond: { DEFAULT: '#6FDDEB', deep: '#2BB3C6' },
         petal: '#FBEDEA',

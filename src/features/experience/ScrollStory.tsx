@@ -2,7 +2,7 @@ import { motion, useInView, useMotionValueEvent, useScroll } from 'framer-motion
 import { ArrowRight, BookOpen, CalendarHeart, CreditCard, Mail, PlayCircle, Radio, Search, ShieldCheck, Sparkles, Wand2 } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { LogoMark } from '@/brand/Logo';
+import { Logo3D } from '@/brand/Logo3D';
 import { routes } from '@/lib/links';
 import { clamp, cn } from '@/lib/utils';
 import { MagneticButton } from '@/shared/components/Motion';
@@ -108,7 +108,7 @@ export function ScrollStory() {
               className="absolute inset-0 -z-10 scale-150 rounded-full blur-3xl"
               style={{ background: 'radial-gradient(circle, hsl(var(--glow) / 0.35), transparent 65%)', opacity: 'var(--halo, 0)' as unknown as number }}
             />
-            <LogoMark size={420} bloomControlled decorative className={cn('h-[min(56svh,440px)] w-auto max-w-[80vw] md:max-w-full', glint && 'do-glint')} />
+            <Logo3D bloomControlled glint={glint} fit={{ vh: 58, vw: 80, max: 460 }} decorative />
           </div>
           <ol className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 gap-2 md:flex" aria-label="Story progress">
             {CHAPTERS.map((c, i) => (

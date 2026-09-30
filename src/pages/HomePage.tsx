@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Bell, Quote, Wand2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Logo3D } from '@/brand/Logo3D';
 import { BRAND } from '@/brand/logoGeometry';
 import { useCourseStats, useCourses, useSiteStats, useTeachers, useTestimonials } from '@/data/queries';
 import { CourseCard } from '@/features/courses/CourseCard';
@@ -56,6 +57,9 @@ function Hero() {
       />
       <PetalParticles className="pointer-events-none absolute inset-0 -z-10 h-full w-full" />
       <div className="container flex flex-col items-center text-center">
+        <motion.div {...fade(0)} className="-mb-2">
+          <Logo3D fit={{ vh: 30, vw: 60, max: 240 }} decorative />
+        </motion.div>
         <motion.div {...fade(0.1)}>
           <ScriptToggle />
         </motion.div>

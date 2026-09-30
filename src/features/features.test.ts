@@ -153,3 +153,11 @@ describe('subhashita of the day', () => {
     expect(pickOfTheDay([], d1)).toBeUndefined();
   });
 });
+
+describe('admin navigation', () => {
+  it('uses absolute links (relative links inside /admin/* stacked up and rendered blank pages)', async () => {
+    const { ADMIN_NAV } = await import('./admin/AdminApp');
+    for (const item of ADMIN_NAV) expect(item.to).toMatch(/^\/admin(\/[a-z]+)?$/);
+    expect(new Set(ADMIN_NAV.map((n) => n.to)).size).toBe(ADMIN_NAV.length);
+  });
+});

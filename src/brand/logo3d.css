@@ -1,0 +1,488 @@
+/* ------------------------------------------------------------------
+   3D logo — CSS 3D transforms only (transform / opacity animations).
+   Stage box: 240 × 260. Pivots: book spine (120,205), flower base (120,118),
+   diamond centre (120,40).
+------------------------------------------------------------------- */
+.l3-root {
+  --l3-cover: #1b2350;
+  --l3-cover-2: #2a3270;
+  --l3-sheet: #fffbf2;
+  --l3-sheet-edge: #eadfca;
+  --l3-line: #d9a441;
+  --l3-stem: #b7832a;
+  --l3-leaf: #c99a3e;
+  --l3-petal-edge: rgba(183, 131, 42, 0.55);
+  --l3-glow: rgba(241, 198, 110, 0.45);
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  pointer-events: none;
+  contain: layout style;
+}
+.dark .l3-root:not(.l3-tone-light),
+.l3-root.l3-tone-dark {
+  --l3-cover: #c9922f;
+  --l3-cover-2: #f1c66e;
+  --l3-sheet: #fffaf0;
+  --l3-sheet-edge: #e3cfa8;
+  --l3-stem: #f1c66e;
+  --l3-leaf: #d9a441;
+  --l3-petal-edge: rgba(241, 198, 110, 0.7);
+  --l3-glow: rgba(241, 198, 110, 0.55);
+}
+
+.l3-scale {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 260px;
+  transform-origin: 0 0;
+  perspective: 820px;
+  perspective-origin: 50% 40%;
+}
+
+.l3-glow {
+  position: absolute;
+  left: 30px;
+  top: 0;
+  width: 180px;
+  height: 180px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--l3-glow), transparent 68%);
+  opacity: 0.9;
+}
+
+.l3-tilt,
+.l3-stage {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.l3-tilt {
+  transform: rotateY(var(--px, 0deg)) rotateX(var(--py, 0deg));
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.l3-stage {
+  transform-origin: 120px 160px;
+  transform: rotateX(-10deg);
+  animation: l3-sway 11s ease-in-out infinite;
+}
+@keyframes l3-sway {
+  0%,
+  100% {
+    transform: rotateX(-10deg) rotateY(-24deg);
+  }
+  50% {
+    transform: rotateX(-10deg) rotateY(24deg);
+  }
+}
+
+/* ---------- book ---------- */
+.l3-book {
+  position: absolute;
+  left: 120px;
+  top: 205px;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.l3-book-inner {
+  position: absolute;
+  transform-style: preserve-3d;
+  transform: rotateX(66deg);
+}
+.l3-half {
+  position: absolute;
+  top: -35px;
+  width: 90px;
+  height: 70px;
+  transform-style: preserve-3d;
+}
+.l3-half-l {
+  left: -90px;
+  transform-origin: 100% 50%;
+  transform: rotateY(var(--open-l, 16deg));
+}
+.l3-half-r {
+  left: 0;
+  transform-origin: 0 50%;
+  transform: rotateY(var(--open-r, -16deg));
+}
+.l3-cover {
+  position: absolute;
+  inset: -3px -4px -3px -4px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--l3-cover-2), var(--l3-cover));
+  box-shadow: 0 6px 18px rgba(11, 16, 38, 0.35);
+}
+.l3-half-l .l3-cover {
+  right: 0;
+  border-radius: 4px 0 0 4px;
+}
+.l3-half-r .l3-cover {
+  left: 0;
+  border-radius: 0 4px 4px 0;
+}
+.l3-sheet {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--l3-sheet-edge), var(--l3-sheet) 18%, var(--l3-sheet) 82%, var(--l3-sheet-edge));
+  border: 0.5px solid var(--l3-sheet-edge);
+}
+.l3-half-l .l3-sheet {
+  border-radius: 6px 1px 1px 6px;
+}
+.l3-half-r .l3-sheet {
+  border-radius: 1px 6px 6px 1px;
+}
+.l3-sheet-top {
+  background: linear-gradient(90deg, #f6ecd9, var(--l3-sheet) 22%, #ffffff 60%, var(--l3-sheet));
+}
+.l3-half-r .l3-sheet-top {
+  background: linear-gradient(90deg, var(--l3-sheet), #ffffff 40%, var(--l3-sheet) 78%, #f6ecd9);
+}
+.l3-sheet-top svg {
+  position: absolute;
+  inset: 0;
+}
+.l3-line {
+  fill: none;
+  stroke: var(--l3-line);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+.l3-spine {
+  position: absolute;
+  left: -1.5px;
+  top: -36px;
+  width: 3px;
+  height: 72px;
+  background: var(--l3-cover);
+  transform: translateZ(-2px);
+}
+
+/* ---------- stem (two crossed planes) ---------- */
+.l3-stem {
+  position: absolute;
+  left: 120px;
+  top: 205px;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform-origin: 0 0;
+}
+.l3-stem-plane {
+  position: absolute;
+  left: -30px;
+  top: -92px;
+  width: 60px;
+  height: 92px;
+  transform-origin: 30px 92px;
+}
+.l3-stem-path {
+  fill: none;
+  stroke: var(--l3-stem);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+}
+.l3-leaf {
+  fill: var(--l3-leaf);
+}
+
+/* ---------- lotus ---------- */
+.l3-flower {
+  position: absolute;
+  left: 120px;
+  top: 124px;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.l3-halo {
+  position: absolute;
+  left: -70px;
+  top: -100px;
+  width: 140px;
+  height: 140px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--l3-glow), transparent 65%);
+  transform: translateZ(-30px);
+}
+.l3-pod {
+  position: absolute;
+  left: -7px;
+  top: -9px;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 40% 35%, #fff3c4, #d9a441 70%);
+  transform: translateY(-4px) rotateX(90deg);
+}
+.l3-petal {
+  position: absolute;
+  bottom: 0;
+  transform-origin: 50% 100%;
+  transform: rotateY(var(--a)) translateZ(var(--r)) rotateX(calc(-1 * var(--tilt)));
+  backface-visibility: visible;
+}
+.l3-petal svg {
+  display: block;
+  overflow: visible;
+}
+.l3-petal-face {
+  stroke: var(--l3-petal-edge);
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+.l3-petal-vein {
+  stroke: rgba(217, 164, 65, 0.28);
+  stroke-width: 0.8;
+  fill: none;
+}
+.l3-root.is-bloom .l3-petal {
+  transform: rotateY(var(--a)) translateZ(calc(var(--r) * var(--bl)))
+    rotateX(calc(-1 * var(--tilt) * var(--bl))) scale(calc(0.45 + 0.55 * var(--bl)));
+  opacity: calc(0.35 + 0.65 * var(--bl));
+}
+
+/* ---------- diamond ---------- */
+.l3-gem {
+  position: absolute;
+  left: 120px;
+  top: 30px;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.l3-gem-drop,
+.l3-gem-spin,
+.l3-gem-spin > div {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+.l3-gem-spin {
+  animation: l3-spin 7s linear infinite;
+}
+@keyframes l3-spin {
+  from {
+    transform: rotateX(-8deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(-8deg) rotateY(360deg);
+  }
+}
+.l3-facet {
+  position: absolute;
+  backface-visibility: visible;
+  background: linear-gradient(
+    180deg,
+    hsl(187 80% calc(56% + 30% * var(--l, 0.8))),
+    hsl(190 75% calc(30% + 28% * var(--l, 0.8)))
+  );
+  opacity: 0.92;
+}
+.l3-facet-pav {
+  transform-origin: 50% 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.l3-facet-crown {
+  transform-origin: 50% 100%;
+  background: linear-gradient(0deg, hsl(187 70% calc(55% + 25% * var(--l, 0.8))), hsl(185 90% 92%));
+}
+.l3-gem-table {
+  clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
+  background: linear-gradient(135deg, #f2fdfe, #9be8f2);
+  opacity: 0.95;
+}
+.l3-glint {
+  position: absolute;
+  left: -16px;
+  top: -12px;
+  width: 32px;
+  height: 34px;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.95) 50%, transparent 65%);
+  clip-path: polygon(22% 0, 78% 0, 100% 28%, 50% 100%, 0 28%);
+  opacity: 0;
+  transform: translateZ(20px);
+}
+.l3-sparkle {
+  position: absolute;
+  left: 10px;
+  top: -18px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  opacity: 0;
+  transform: translateZ(22px);
+}
+
+/* Periodic glint so the gem keeps catching the light */
+.l3-root:not(.is-animated) .l3-glint {
+  animation: l3-glint 1s ease-in-out 1.5s both, l3-glint-loop 9s ease-in-out 4s infinite;
+}
+.l3-root.do-glint .l3-glint {
+  animation: l3-glint 0.9s ease-in-out 0.1s both;
+}
+.l3-root.do-glint .l3-sparkle {
+  animation: l3-sparkle 0.9s ease-out 0.45s both;
+}
+@keyframes l3-glint {
+  from {
+    opacity: 0;
+    transform: translateZ(20px) translateX(-14px);
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateZ(20px) translateX(14px);
+  }
+}
+@keyframes l3-glint-loop {
+  0%,
+  88% {
+    opacity: 0;
+    transform: translateZ(20px) translateX(-14px);
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateZ(20px) translateX(14px);
+  }
+}
+@keyframes l3-sparkle {
+  from {
+    opacity: 0;
+    transform: translateZ(22px) scale(0) rotate(0deg);
+  }
+  40% {
+    opacity: 1;
+    transform: translateZ(22px) scale(1) rotate(45deg);
+  }
+  to {
+    opacity: 0;
+    transform: translateZ(22px) scale(0) rotate(90deg);
+  }
+}
+
+/* ---------- intro sequence (~5 s) ---------- */
+.l3-root.is-animated .l3-book-inner {
+  animation: l3-book-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@keyframes l3-book-in {
+  from {
+    opacity: 0;
+    transform: rotateX(66deg) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(66deg);
+  }
+}
+.l3-root.is-animated .l3-half-l {
+  animation: l3-open-l 1.3s cubic-bezier(0.65, 0, 0.2, 1) 0.6s both;
+}
+.l3-root.is-animated .l3-half-r {
+  animation: l3-open-r 1.3s cubic-bezier(0.65, 0, 0.2, 1) 0.6s both;
+}
+@keyframes l3-open-l {
+  from {
+    transform: rotateY(89deg);
+  }
+  to {
+    transform: rotateY(var(--open-l, 16deg));
+  }
+}
+@keyframes l3-open-r {
+  from {
+    transform: rotateY(-89deg);
+  }
+  to {
+    transform: rotateY(var(--open-r, -16deg));
+  }
+}
+.l3-root.is-animated .l3-stem {
+  animation: l3-grow 1s cubic-bezier(0.45, 0, 0.2, 1) 1.55s both;
+}
+@keyframes l3-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.l3-root.is-animated .l3-halo,
+.l3-root.is-animated .l3-glow {
+  animation: l3-fade 1.8s ease-out 2.4s both;
+}
+@keyframes l3-fade {
+  from {
+    opacity: 0;
+  }
+}
+.l3-root.is-animated .l3-pod {
+  animation: l3-fade 0.6s ease-out 2.3s both;
+}
+.l3-root.is-animated .l3-petal {
+  animation: l3-bloom 1.15s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: calc(2.35s + var(--layer) * 0.24s);
+}
+@keyframes l3-bloom {
+  from {
+    opacity: 0;
+    transform: rotateY(var(--a)) translateZ(0) rotateX(0deg) scale(0.3);
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(var(--a)) translateZ(var(--r)) rotateX(calc(-1 * var(--tilt))) scale(1);
+  }
+}
+.l3-root.is-animated .l3-gem-drop {
+  animation: l3-gem-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 3.55s both;
+}
+@keyframes l3-gem-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.l3-root.is-animated .l3-glint {
+  animation: l3-glint 0.9s ease-in-out 4.35s both, l3-glint-loop 9s ease-in-out 8s infinite;
+}
+.l3-root.is-animated .l3-sparkle {
+  animation: l3-sparkle 0.9s ease-out 4.7s both;
+}
+
+/* Off-screen / hidden tab → pause everything. */
+.l3-root[data-paused] *,
+.l3-root[data-paused] {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l3-stage {
+    animation: none;
+    transform: rotateX(-10deg) rotateY(-14deg);
+  }
+  .l3-gem-spin {
+    animation: none;
+    transform: rotateX(-8deg) rotateY(20deg);
+  }
+  .l3-tilt {
+    transition: none;
+  }
+}

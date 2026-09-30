@@ -94,7 +94,7 @@ export function PetalParticles({ count = 14, className }: { count?: number; clas
       vr: -0.01 + Math.random() * 0.02,
       alpha: 0.25 + Math.random() * 0.4,
     }));
-    const color = theme === 'dusk' ? '255, 250, 240' : '217, 164, 65';
+    const color = theme === 'dusk' ? '241, 198, 110' : '217, 164, 65';
 
     let frame = 0;
     let visible = true;

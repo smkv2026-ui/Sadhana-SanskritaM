@@ -58,7 +58,7 @@ function applyTheme(theme: Theme) {
   root.classList.toggle('dark', theme === 'dusk');
   root.dataset.theme = theme;
   const meta = document.querySelector('meta[name="theme-color"]');
-  meta?.setAttribute('content', theme === 'dusk' ? '#0B1026' : '#FFFBF2');
+  meta?.setAttribute('content', theme === 'dusk' ? '#0A1633' : '#FFFBF2');
 }
 
 interface Transition {
@@ -143,13 +143,13 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
             }}
           >
             <svg viewBox="-50 -50 100 100" width="100" height="100">
-              <circle r="30" fill={transition.next === 'dusk' ? '#0B1026' : '#FFFBF2'} />
+              <circle r="30" fill={transition.next === 'dusk' ? '#0A1633' : '#FFFBF2'} />
               {LOTUS_PETALS.map((p) => (
                 <path
                   key={p.a}
                   transform={`translate(0 18) rotate(${p.a})`}
                   d={petalPath(p.len, p.w)}
-                  fill={transition.next === 'dusk' ? '#0B1026' : '#FFFBF2'}
+                  fill={transition.next === 'dusk' ? '#0A1633' : '#FFFBF2'}
                 />
               ))}
             </svg>

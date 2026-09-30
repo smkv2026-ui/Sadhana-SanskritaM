@@ -121,10 +121,10 @@ export default function Overview() {
         </ul>
       )}
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <Stat label="Awaiting verification" value={counts.data?.pending} icon={ClipboardCheck} to="verify" />
-        <Stat label="Approved registrations" value={counts.data?.approved} icon={Users} to="registrations" />
-        <Stat label="Active subscribers" value={counts.data?.subs} icon={Users} to="subscribers" />
-        <Stat label="Open custom requests" value={counts.data?.requests} icon={Workflow} to="requests" />
+        <Stat label="Awaiting verification" value={counts.data?.pending} icon={ClipboardCheck} to="/admin/verify" />
+        <Stat label="Approved registrations" value={counts.data?.approved} icon={Users} to="/admin/registrations" />
+        <Stat label="Active subscribers" value={counts.data?.subs} icon={Users} to="/admin/subscribers" />
+        <Stat label="Open custom requests" value={counts.data?.requests} icon={Workflow} to="/admin/requests" />
       </div>
       <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
         <SeatsChart />

@@ -23,7 +23,7 @@ export function CourseCover({ course, className }: { course: Course; className?:
       style={{
         background: course.coverImage
           ? `center/cover no-repeat url(${JSON.stringify(course.coverImage)})`
-          : `radial-gradient(120% 90% at 20% 10%, ${course.accent}55, transparent 60%), linear-gradient(135deg, #121A3A, #0B1026)`,
+          : `radial-gradient(120% 90% at 20% 10%, ${course.accent}55, transparent 60%), linear-gradient(135deg, #16295C, #0A1633)`,
       }}
     >
       {!course.coverImage && (

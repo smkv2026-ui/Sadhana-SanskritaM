@@ -19,16 +19,16 @@ const NotifyComposer = lazy(() => import('./NotifyComposer'));
 const RequestsKanban = lazy(() => import('./RequestsKanban'));
 const AuditAdmin = lazy(() => import('./AuditAdmin'));
 
-const NAV = [
-  { to: '', label: 'Overview', icon: LayoutDashboard, end: true },
-  { to: 'verify', label: 'Verify payments', icon: ClipboardCheck },
-  { to: 'registrations', label: 'Registrations', icon: Table2 },
-  { to: 'courses', label: 'Courses & events', icon: BookOpen },
-  { to: 'notify', label: 'Notify', icon: Megaphone },
-  { to: 'subscribers', label: 'Subscribers', icon: Users },
-  { to: 'requests', label: 'Custom requests', icon: Workflow },
-  { to: 'content', label: 'Content', icon: Palette },
-  { to: 'audit', label: 'Audit & inbox', icon: FileClock },
+export const ADMIN_NAV = [
+  { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
+  { to: '/admin/verify', label: 'Verify payments', icon: ClipboardCheck },
+  { to: '/admin/registrations', label: 'Registrations', icon: Table2 },
+  { to: '/admin/courses', label: 'Courses & events', icon: BookOpen },
+  { to: '/admin/notify', label: 'Notify', icon: Megaphone },
+  { to: '/admin/subscribers', label: 'Subscribers', icon: Users },
+  { to: '/admin/requests', label: 'Custom requests', icon: Workflow },
+  { to: '/admin/content', label: 'Content', icon: Palette },
+  { to: '/admin/audit', label: 'Audit & inbox', icon: FileClock },
 ];
 
 function NotAdmin() {
@@ -61,7 +61,7 @@ function Shell() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:gap-8">
         <nav aria-label="Admin" className="-mx-4 min-w-0 px-4 lg:sticky lg:top-24 lg:mx-0 lg:self-start lg:px-0">
           <ul className="flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] lg:flex-col lg:overflow-visible">
-            {NAV.map((n) => (
+            {ADMIN_NAV.map((n) => (
               <li key={n.to} className="shrink-0">
                 <NavLink
                   to={n.to}

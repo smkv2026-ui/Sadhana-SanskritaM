@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Logo } from '@/brand/Logo';
+import { Logo3D } from '@/brand/Logo3D';
 import { BRAND } from '@/brand/logoGeometry';
 import { useTeachers } from '@/data/queries';
 import { ScriptText } from '@/features/experience/ScriptText';
@@ -34,7 +34,14 @@ export default function AboutPage() {
           </p>
         </Reveal>
         <Reveal delay={0.1} className="flex justify-center">
-          <Logo lockup="stacked" size={200} showTagline className="max-w-full [&_svg]:h-auto [&_svg]:max-h-[40svh]" />
+          <div className="flex flex-col items-center text-center">
+            <Logo3D fit={{ vh: 44, vw: 80, max: 360 }} />
+            <p className="mt-2 font-display text-3xl font-semibold">{BRAND.name}</p>
+            <p lang="sa" className="deva text-lg text-accent">
+              {BRAND.nameDeva}
+            </p>
+            <p className="mt-1 text-sm italic text-muted-foreground">{BRAND.tagline}</p>
+          </div>
         </Reveal>
       </div>
 

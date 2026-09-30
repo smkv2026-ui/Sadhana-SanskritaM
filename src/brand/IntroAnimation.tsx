@@ -5,7 +5,7 @@ import { usePreferences } from '@/features/experience/preferences';
 import { playChime } from '@/lib/sound';
 import { readStorage, STORAGE_KEYS, writeStorage } from '@/lib/storage';
 import { clamp } from '@/lib/utils';
-import { LogoMark } from './Logo';
+import { Logo3D } from './Logo3D';
 import { BRAND } from './logoGeometry';
 
 export const REPLAY_INTRO_EVENT = 'ss:replay-intro';
@@ -170,7 +170,7 @@ export function IntroAnimation({ onVisibilityChange }: { onVisibilityChange?: (v
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(60% 50% at 50% 45%, rgba(42,50,112,0.85) 0%, rgba(11,16,38,1) 70%), radial-gradient(30% 25% at 50% 42%, rgba(241,198,110,0.18), transparent 70%)',
+                'radial-gradient(60% 50% at 50% 45%, rgba(26,47,102,0.9) 0%, rgba(10,22,51,1) 72%), radial-gradient(34% 28% at 50% 40%, rgba(241,198,110,0.22), transparent 70%)',
             }}
           />
           {!reducedMotion && (
@@ -197,14 +197,7 @@ export function IntroAnimation({ onVisibilityChange }: { onVisibilityChange?: (v
 
           <div className="relative flex flex-col items-center px-6 text-center">
             <motion.div ref={markRef} animate={controls} style={{ originX: 0.5, originY: 0.5 }}>
-              <LogoMark
-                key={run}
-                variant="full-dark"
-                animated={!reducedMotion}
-                size={reducedMotion ? 200 : 240}
-                className="h-[min(42svh,260px)] w-auto"
-                decorative
-              />
+              <Logo3D key={run} tone="dark" animated={!reducedMotion} fit={{ vh: 46, vw: 78, max: 320 }} decorative />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 12 }}

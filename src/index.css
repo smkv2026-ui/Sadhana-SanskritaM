@@ -35,31 +35,33 @@
     color-scheme: light;
   }
 
+  /* Dusk: deep sapphire blue with a golden hue. */
   .dark {
-    --background: 230 55% 7%;
-    --foreground: 42 60% 95%;
-    --card: 230 45% 11%;
-    --card-foreground: 42 60% 95%;
-    --popover: 230 45% 11%;
-    --popover-foreground: 42 60% 95%;
-    --primary: 40 80% 66%;
-    --primary-foreground: 230 55% 8%;
-    --secondary: 230 35% 17%;
-    --secondary-foreground: 42 60% 95%;
-    --muted: 230 30% 16%;
-    --muted-foreground: 230 18% 72%;
-    --accent: 39 67% 58%;
-    --accent-foreground: 230 55% 8%;
-    --destructive: 0 65% 55%;
+    --background: 222 62% 10%;
+    --foreground: 42 58% 92%;
+    --card: 221 52% 15%;
+    --card-foreground: 42 58% 92%;
+    --popover: 222 55% 13%;
+    --popover-foreground: 42 58% 92%;
+    --primary: 42 80% 62%;
+    --primary-foreground: 222 65% 10%;
+    --secondary: 221 45% 19%;
+    --secondary-foreground: 42 58% 92%;
+    --muted: 221 42% 18%;
+    --muted-foreground: 40 26% 74%;
+    --accent: 41 82% 60%;
+    --accent-foreground: 222 65% 10%;
+    --destructive: 0 70% 58%;
     --destructive-foreground: 0 0% 100%;
-    --success: 152 50% 45%;
-    --success-foreground: 230 55% 8%;
-    --border: 230 25% 22%;
-    --input: 230 25% 26%;
-    --ring: 39 67% 58%;
-    --glow: 187 75% 68%;
+    --success: 152 55% 48%;
+    --success-foreground: 222 65% 10%;
+    --border: 40 38% 27%;
+    --input: 40 34% 31%;
+    --ring: 42 88% 62%;
+    --glow: 42 92% 60%;
     color-scheme: dark;
   }
+
 
   * {
     @apply border-border;
@@ -93,6 +95,31 @@
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  /* Premium dusk backdrop: gold dawn-light above a sapphire night. */
+  .dark body {
+    background-color: hsl(222 62% 10%);
+    background-image:
+      radial-gradient(1100px 520px at 50% -140px, hsl(42 90% 55% / 0.16), transparent 70%),
+      radial-gradient(900px 600px at 100% 30%, hsl(214 80% 40% / 0.14), transparent 70%),
+      radial-gradient(800px 600px at 0% 80%, hsl(230 70% 35% / 0.18), transparent 70%),
+      linear-gradient(180deg, hsl(221 60% 13%), hsl(224 64% 8%));
+    background-attachment: fixed;
+  }
+
+  .dark h1 {
+    background-image: linear-gradient(180deg, hsl(42 70% 95%), hsl(40 70% 78%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .dark h1 .text-gradient-gold {
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  body {
     font-size: 1.0625rem;
     line-height: 1.65;
   }
@@ -125,6 +152,14 @@
   }
   .glass {
     @apply border border-border/60 bg-card/70 backdrop-blur-md;
+  }
+  /* Sapphire cards with a gold hairline highlight in dusk mode. */
+  .dark .bg-card,
+  .dark .glass {
+    background-image: linear-gradient(180deg, hsl(221 50% 18% / 0.92), hsl(223 56% 13% / 0.92));
+    box-shadow:
+      inset 0 1px 0 hsl(42 80% 70% / 0.12),
+      0 18px 40px -24px hsl(224 80% 4% / 0.9);
   }
   .section {
     @apply py-20 sm:py-28;
