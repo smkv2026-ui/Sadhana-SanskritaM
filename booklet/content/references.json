@@ -1,0 +1,384 @@
+[
+ {
+  "id": "hepper1994",
+  "group": "science",
+  "text": "Hepper PG, Shahidullah BS. Development of fetal hearing. Arch Dis Child Fetal Neonatal Ed 1994;71(2):F81–F87.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/7979483/"
+ },
+ {
+  "id": "decasper1980",
+  "group": "science",
+  "text": "DeCasper AJ, Fifer WP. Of human bonding: newborns prefer their mothers’ voices. Science 1980;208:1174–1176."
+ },
+ {
+  "id": "decasper1986",
+  "group": "science",
+  "text": "DeCasper AJ, Spence MJ. Prenatal maternal speech influences newborns’ perception of speech sounds. Infant Behav Dev 1986;9:133–150."
+ },
+ {
+  "id": "kisilevsky2003",
+  "group": "science",
+  "text": "Kisilevsky BS et al. Effects of experience on fetal voice recognition. Psychol Sci 2003;14(3):220–224.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/12741744/"
+ },
+ {
+  "id": "partanen2013",
+  "group": "science",
+  "text": "Partanen E et al. Learning-induced neural plasticity of speech processing before birth. PNAS 2013;110(37):15145–15150.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/23980148/"
+ },
+ {
+  "id": "partanen2013m",
+  "group": "science",
+  "text": "Partanen E et al. Prenatal music exposure induces long-term neural effects. PLoS One 2013;8(10):e78946. [needs verification]"
+ },
+ {
+  "id": "moon2013",
+  "group": "science",
+  "text": "Moon C, Lagercrantz H, Kuhl PK. Language experienced in utero affects vowel perception after birth. Acta Paediatr 2013;102(2):156–160. [needs verification]"
+ },
+ {
+  "id": "marx2015",
+  "group": "science",
+  "text": "Marx V, Nagy E. Fetal behavioural responses to maternal voice and touch. PLoS One 2015;10(6):e0129118.",
+  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4460088/"
+ },
+ {
+  "id": "mennella2001",
+  "group": "science",
+  "text": "Mennella JA, Jagnow CP, Beauchamp GK. Prenatal and postnatal flavor learning by human infants. Pediatrics 2001;107(6):e88."
+ },
+ {
+  "id": "glover2014",
+  "group": "science",
+  "text": "Glover V. Maternal depression, anxiety and stress during pregnancy and child outcome; what needs to be done. Best Pract Res Clin Obstet Gynaecol 2014;28(1):25–35."
+ },
+ {
+  "id": "vandenbergh2020",
+  "group": "science",
+  "text": "Van den Bergh BRH et al. Prenatal developmental origins of behavior and mental health: the influence of maternal stress in pregnancy. Neurosci Biobehav Rev 2020;117:26–64."
+ },
+ {
+  "id": "heazell2018",
+  "group": "science",
+  "text": "Heazell A et al. Association between maternal sleep practices and late stillbirth – findings from a stillbirth case-control study (MiNESS). BJOG 2018;125:254–262."
+ },
+ {
+  "id": "cronin2019",
+  "group": "science",
+  "text": "Cronin RS et al. An individual participant data meta-analysis of maternal going-to-sleep position, interactions with fetal vulnerability, and the risk of late stillbirth. EClinicalMedicine 2019;10:49–57."
+ },
+ {
+  "id": "rcog57",
+  "group": "guideline",
+  "text": "Royal College of Obstetricians and Gynaecologists. Reduced Fetal Movements. Green-top Guideline No. 57, 2011."
+ },
+ {
+  "id": "who2016",
+  "group": "guideline",
+  "text": "World Health Organization. WHO recommendations on antenatal care for a positive pregnancy experience. Geneva: WHO, 2016."
+ },
+ {
+  "id": "who2020pa",
+  "group": "guideline",
+  "text": "Bull FC et al. World Health Organization 2020 guidelines on physical activity and sedentary behaviour. Br J Sports Med 2020;54:1451–1462."
+ },
+ {
+  "id": "acog804",
+  "group": "guideline",
+  "text": "ACOG Committee Opinion No. 804: Physical Activity and Exercise During Pregnancy and the Postpartum Period. Obstet Gynecol 2020;135:e178–e188."
+ },
+ {
+  "id": "acog462",
+  "group": "guideline",
+  "text": "ACOG Committee Opinion No. 462: Moderate caffeine consumption during pregnancy. Obstet Gynecol 2010;116:467–468.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/20664420/"
+ },
+ {
+  "id": "mottola2018",
+  "group": "guideline",
+  "text": "Mottola MF et al. 2019 Canadian guideline for physical activity throughout pregnancy. Br J Sports Med 2018;52:1339–1346."
+ },
+ {
+  "id": "mcp2018",
+  "group": "guideline",
+  "text": "Ministry of Health & Family Welfare, Govt. of India. Mother and Child Protection Card (revised), 2018.",
+  "url": "https://nhm.gov.in/New_Updates_2018/NHM_Components/Immunization/Guildelines_for_immunization/MCP_Card_English_version.pdf"
+ },
+ {
+  "id": "icmr2020",
+  "group": "guideline",
+  "text": "ICMR–National Institute of Nutrition. Nutrient Requirements for Indians (RDA & EAR). Hyderabad, 2020."
+ },
+ {
+  "id": "icmr2024",
+  "group": "guideline",
+  "text": "ICMR–National Institute of Nutrition. Dietary Guidelines for Indians. Hyderabad, 2024.",
+  "url": "https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI24thJune2024fin.pdf"
+ },
+ {
+  "id": "fda2021",
+  "group": "guideline",
+  "text": "US FDA/EPA. Advice about Eating Fish: for those who might become or are pregnant or breastfeeding, and children. 2017, updated 2021."
+ },
+ {
+  "id": "who5keys",
+  "group": "guideline",
+  "text": "World Health Organization. Five Keys to Safer Food. Geneva: WHO, 2006; FSSAI consumer food-safety guidance."
+ },
+ {
+  "id": "pcpndt1994",
+  "group": "law",
+  "text": "Pre-Conception and Pre-Natal Diagnostic Techniques (Prohibition of Sex Selection) Act, 1994 (amended 2003), Government of India."
+ },
+ {
+  "id": "mrc1991",
+  "group": "science",
+  "text": "MRC Vitamin Study Research Group. Prevention of neural tube defects: results of the Medical Research Council Vitamin Study. Lancet 1991;338:131–137."
+ },
+ {
+  "id": "caudill2018",
+  "group": "science",
+  "text": "Caudill MA et al. Maternal choline supplementation during the third trimester of pregnancy improves infant information processing speed: a randomized, double-blind, controlled feeding study. FASEB J 2018;32(4):2172–2180."
+ },
+ {
+  "id": "middleton2018",
+  "group": "science",
+  "text": "Middleton P et al. Omega-3 fatty acid addition during pregnancy. Cochrane Database Syst Rev 2018;11:CD003402."
+ },
+ {
+  "id": "woodley2020",
+  "group": "science",
+  "text": "Woodley SJ et al. Pelvic floor muscle training for preventing and treating urinary and faecal incontinence in antenatal and postnatal women. Cochrane Database Syst Rev 2020;5:CD007471."
+ },
+ {
+  "id": "corrigan2022",
+  "group": "science",
+  "text": "Corrigan L et al. The characteristics and effectiveness of pregnancy yoga interventions: a systematic review and meta-analysis. BMC Pregnancy Childbirth 2022;22:250.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/35337282/"
+ },
+ {
+  "id": "polis2015",
+  "group": "science",
+  "text": "Polis RL et al. Yoga in pregnancy: an examination of maternal and fetal responses to 26 yoga postures. Obstet Gynecol 2015;126(6):1237–1241.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/26551176/"
+ },
+ {
+  "id": "satyapriya2009",
+  "group": "science",
+  "text": "Satyapriya M, Nagendra HR, Nagarathna R, Padmalatha V. Effect of integrated yoga on stress and heart rate variability in pregnant women. Int J Gynaecol Obstet 2009;104(3):218–222."
+ },
+ {
+  "id": "rakhshani2012",
+  "group": "science",
+  "text": "Rakhshani A et al. The effects of yoga in prevention of pregnancy complications in high-risk pregnancies: a randomized controlled trial. Prev Med 2012;55(4):333–340."
+ },
+ {
+  "id": "dhillon2017",
+  "group": "science",
+  "text": "Dhillon A, Sparkes E, Duarte RV. Mindfulness-based interventions during pregnancy: a systematic review and meta-analysis. Mindfulness 2017;8:1421–1437."
+ },
+ {
+  "id": "corbijn2017",
+  "group": "science",
+  "text": "Corbijn van Willenswaard K et al. Music interventions to reduce stress and anxiety in pregnancy: a systematic review and meta-analysis. BMC Psychiatry 2017;17:271."
+ },
+ {
+  "id": "lin2019",
+  "group": "science",
+  "text": "Lin C-J et al. Music interventions for anxiety in pregnant women: a systematic review and meta-analysis of randomized controlled trials. J Clin Med 2019;8(11):1884."
+ },
+ {
+  "id": "persico2017",
+  "group": "science",
+  "text": "Persico G et al. Maternal singing of lullabies during pregnancy and after birth: effects on mother–infant bonding and on newborns’ behaviour. Women Birth 2017;30(4):e214–e220. [needs verification]"
+ },
+ {
+  "id": "curry2005",
+  "group": "science",
+  "text": "Curry NA, Kasser T. Can coloring mandalas reduce anxiety? Art Therapy 2005;22(2):81–85. [needs verification]"
+ },
+ {
+  "id": "frattaroli2006",
+  "group": "science",
+  "text": "Frattaroli J. Experimental disclosure and its moderators: a meta-analysis. Psychol Bull 2006;132(6):823–865."
+ },
+ {
+  "id": "davis2016",
+  "group": "science",
+  "text": "Davis DE et al. Thankful for the little things: a meta-analysis of gratitude interventions. J Couns Psychol 2016;63(1):20–31. [needs verification]"
+ },
+ {
+  "id": "hofmann2011",
+  "group": "science",
+  "text": "Hofmann SG, Grossman P, Hinton DE. Loving-kindness and compassion meditation: potential for psychological interventions. Clin Psychol Rev 2011;31(7):1126–1132."
+ },
+ {
+  "id": "field2010",
+  "group": "science",
+  "text": "Field T. Pregnancy and labor massage. Expert Rev Obstet Gynecol 2010;5(2):177–181. [needs verification]"
+ },
+ {
+  "id": "alhusen2008",
+  "group": "science",
+  "text": "Alhusen JL. A literature update on maternal-fetal attachment. J Obstet Gynecol Neonatal Nurs 2008;37(3):315–328."
+ },
+ {
+  "id": "zaccaro2018",
+  "group": "science",
+  "text": "Zaccaro A et al. How breath-control can change your life: a systematic review on psycho-physiological correlates of slow breathing. Front Hum Neurosci 2018;12:353."
+ },
+ {
+  "id": "kalyani2011",
+  "group": "science",
+  "text": "Kalyani BG et al. Neurohemodynamic correlates of ‘OM’ chanting: a pilot functional magnetic resonance imaging study. Int J Yoga 2011;4(1):3–6."
+ },
+ {
+  "id": "kuppusamy2018",
+  "group": "science",
+  "text": "Kuppusamy M et al. Effects of Bhramari Pranayama on health – a systematic review. J Tradit Complement Med 2018;8(1):11–16."
+ },
+ {
+  "id": "weitzberg2002",
+  "group": "science",
+  "text": "Weitzberg E, Lundberg JON. Humming greatly increases nasal nitric oxide. Am J Respir Crit Care Med 2002;166(2):144–145.",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/12119224/"
+ },
+ {
+  "id": "bernardi2001",
+  "group": "science",
+  "text": "Bernardi L et al. Effect of rosary prayer and yoga mantras on autonomic cardiovascular rhythms: comparative study. BMJ 2001;323:1446–1449."
+ },
+ {
+  "id": "lynch2018",
+  "group": "science",
+  "text": "Lynch J et al. Mantra meditation for mental health in the general population: a systematic review. Eur J Integr Med 2018;23:101–108."
+ },
+ {
+  "id": "alvarez2022",
+  "group": "science",
+  "text": "Álvarez-Pérez Y et al. Effectiveness of mantra-based meditation on mental health: a systematic review and meta-analysis. Int J Environ Res Public Health 2022;19(6):3380."
+ },
+ {
+  "id": "pradhan2012",
+  "group": "science",
+  "text": "Pradhan B, Derle SG. Comparison of effect of Gayatri Mantra and poem chanting on digit letter substitution task. Int J Yoga 2012;5(2):150–153. [needs verification]"
+ },
+ {
+  "id": "saper2008",
+  "group": "science",
+  "text": "Saper RB et al. Lead, mercury, and arsenic in US- and Indian-manufactured Ayurvedic medicines sold via the Internet. JAMA 2008;300(8):915–923."
+ },
+ {
+  "id": "charaka",
+  "group": "classical",
+  "text": "Caraka Saṃhitā, Śārīrasthāna ch. 4 (Mahatī Garbhāvakrānti) and ch. 8 (Jātisūtrīya), incl. 8/32 (māsānumāsika paricaryā). Standard Chaukhambha editions; Charak Samhita New Edition (carakasamhitaonline.com). [verse numbers need verification]"
+ },
+ {
+  "id": "sushruta",
+  "group": "classical",
+  "text": "Suśruta Saṃhitā, Śārīrasthāna ch. 3 (Garbhāvakrānti, 3/30–31) and ch. 10 (Garbhiṇī Vyākaraṇa, 10/3–4). [verse numbers need verification]"
+ },
+ {
+  "id": "ashtanga",
+  "group": "classical",
+  "text": "Vāgbhaṭa. Aṣṭāṅga Hṛdaya, Śārīrasthāna ch. 1; Aṣṭāṅga Saṅgraha, Śārīrasthāna ch. 3. [needs verification]"
+ },
+ {
+  "id": "kashyapa",
+  "group": "classical",
+  "text": "Kāśyapa Saṃhitā (Vṛddha Jīvakīya Tantra), ed. Hemaraj Sharma, 1938; Khilasthāna. [chapter refs need verification]"
+ },
+ {
+  "id": "garbhaup",
+  "group": "classical",
+  "text": "Garbha Upaniṣad (Muktikā canon no. 17)."
+ },
+ {
+  "id": "ashvalayana",
+  "group": "classical",
+  "text": "Āśvalāyana Gṛhya Sūtra 1.13–1.14; Pāraskara Gṛhya Sūtra 1.14–1.15. Trans. H. Oldenberg, The Gṛhya-Sūtras, Sacred Books of the East vols 29–30 (1886, 1892).",
+  "url": "https://sacred-texts.com/hin/sbe29/"
+ },
+ {
+  "id": "pandey1969",
+  "group": "classical",
+  "text": "Pandey RB. Hindu Saṃskāras: Socio-religious Study of the Hindu Sacraments. Delhi: Motilal Banarsidass, 1969."
+ },
+ {
+  "id": "yogasutra",
+  "group": "classical",
+  "text": "Patañjali, Yoga Sūtra 1.2, 1.12, 1.27, 1.33, 2.33, 2.46. Trans. & comm. E.F. Bryant, North Point Press, 2009."
+ },
+ {
+  "id": "gita",
+  "group": "classical",
+  "text": "Bhagavad Gītā 2.48, 6.35 (Critical Edition, BORI)."
+ },
+ {
+  "id": "taittiriya",
+  "group": "classical",
+  "text": "Taittirīya Upaniṣad 2.1–2.5 (Brahmānanda Vallī); Bṛhadāraṇyaka Upaniṣad 1.3.28, 5.1.1; Amṛtabindu Upaniṣad 2."
+ },
+ {
+  "id": "rigveda",
+  "group": "classical",
+  "text": "Ṛgveda 3.62.10 (Gāyatrī); Vājasaneyi Saṃhitā 36.17 (Śānti)."
+ },
+ {
+  "id": "markandeya",
+  "group": "classical",
+  "text": "Mārkaṇḍeya Purāṇa ch. 25 (Madālasā); Madālasā Upadeśa (traditional compilation). [needs verification]"
+ },
+ {
+  "id": "bhagavata",
+  "group": "classical",
+  "text": "Bhāgavata Purāṇa 7.7 (Prahlāda); Mahābhārata, Āraṇyaka Parva (Aṣṭāvakra)."
+ },
+ {
+  "id": "satcakra",
+  "group": "classical",
+  "text": "Pūrṇānanda. Ṣaṭ-cakra-nirūpaṇa (1577). Trans. Arthur Avalon (Sir John Woodroffe), The Serpent Power, 1919."
+ },
+ {
+  "id": "yogavasistha",
+  "group": "classical",
+  "text": "Venkatesananda S. The Concise Yoga Vāsiṣṭha. Albany: SUNY Press, 1984."
+ },
+ {
+  "id": "saundarya",
+  "group": "classical",
+  "text": "Saundaryalaharī (attributed to Śaṅkara), v. 11 — description of the Śrī Cakra. [verse number needs verification]"
+ },
+ {
+  "id": "kulaichev",
+  "group": "classical",
+  "text": "Kulaichev AP. Śrīyantra and its mathematical properties. Indian J Hist Sci 1984;19(3):279–292. [needs verification]"
+ },
+ {
+  "id": "siromoney",
+  "group": "classical",
+  "text": "Siromoney G, Siromoney R, Krithivasan K. Array grammars and kolam. Comput Graph Image Process 1974;3:63–82. [needs verification]"
+ },
+ {
+  "id": "nia2024",
+  "group": "india",
+  "text": "National Institute of Ayurveda (Ministry of AYUSH). Certificate Course in Garbhasaṃskāra — course brochure, 2024.",
+  "url": "https://nia.nic.in/pdf/Garbhsanskar_Course_Brochure_23sep24.pdf"
+ },
+ {
+  "id": "ccryn",
+  "group": "india",
+  "text": "CCRYN (Ministry of AYUSH). Mother and Child Care through Yoga and Naturopathy (booklet); and Ministry clarification, June 2017 (reported in Medical Dialogues, Asia Times)."
+ },
+ {
+  "id": "critique2017",
+  "group": "india",
+  "text": "Reports on Arogya Bharati ‘Garbh Vigyan Sanskar / Uttam Santati’ claims, 2017 (The Week; Alt News; Newslaundry)."
+ },
+ {
+  "id": "critique2023",
+  "group": "india",
+  "text": "Reports on the Samvardhini Nyas ‘Garbha Sanskar’ campaign, March 2023 (Deccan Herald; The Tribune; WION)."
+ }
+]

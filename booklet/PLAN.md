@@ -1,7 +1,7 @@
 # Garbha Gyan: Build Plan
 
 *Working title: **Garbha Gyan: A 40-Week Journey of Mind, Body & Spirit** (configurable).*
-*Status: plan for approval. Research is in [`research/`](research/).*
+*Status: built (see README.md and QA-report.md). Research is in [`research/`](research/).*
 
 ---
 
@@ -209,7 +209,7 @@ conversion (Ghostscript or the printer's RIP), and colours are chosen to stay in
 
 ---
 
-## 6. Decisions requested (defaults in **bold**, used if you just say "go")
+## 6. Decisions (the defaults in **bold** were applied when the build was requested)
 
 1. **Page budget**: **88 pages, one page per week** (weeks 1–4 combined). Alternative: a true two-page spread per week,
    which is about 130 pages and too thick for saddle-stitch.

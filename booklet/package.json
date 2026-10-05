@@ -1,0 +1,14 @@
+{
+  "name": "garbha-gyan-booklet",
+  "private": true,
+  "type": "module",
+  "description": "Print-ready 40-week pregnancy activity booklet (Garbha Gyan) generated from data",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "build:all": "node src/build.mjs --all",
+    "qa": "node src/qa.mjs"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}

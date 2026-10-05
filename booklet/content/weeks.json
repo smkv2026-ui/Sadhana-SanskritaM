@@ -1,0 +1,1336 @@
+[
+ {
+  "w": "1–4",
+  "tri": 1,
+  "name": [
+   "Saṅkalpa",
+   "सङ्कल्प",
+   "Intention"
+  ],
+  "size": [
+   "poppy seed",
+   "seed",
+   0.1,
+   null
+  ],
+  "baby": "Pregnancy is counted from your last period, so conception happens around the end of week 2. By week 4 a tiny ball of cells has nestled into the womb and is forming the layers that will become every organ.",
+  "note": "Most people don’t know they are pregnant yet. Whenever you begin this book is the right time.",
+  "mind": [
+   "M05",
+   "Make a calm playlist for the months ahead."
+  ],
+  "body": [
+   "B01",
+   "Learn belly breathing — your anchor for all 40 weeks."
+  ],
+  "heart": [
+   "H01",
+   "What did you feel when you first found out?"
+  ],
+  "spirit": [
+   "S08",
+   "Begin the five-layer check-in (page 13)."
+  ],
+  "nourish": "folate-palak",
+  "partner": "Book the first antenatal appointment together.",
+  "calm": "Hand on belly. Whisper: ‘Welcome.’"
+ },
+ {
+  "w": 5,
+  "tri": 1,
+  "name": [
+   "Bīja",
+   "बीज",
+   "The seed"
+  ],
+  "size": [
+   "sesame seed",
+   "seed",
+   0.2,
+   null
+  ],
+  "baby": "The neural tube — the beginning of the brain and spinal cord — is forming and will close by the end of week 6. The first heart cells are gathering.",
+  "note": "This is why folic acid matters so much now: it greatly lowers the risk of neural-tube problems.",
+  "mind": [
+   "M08",
+   "Asato mā — ‘lead me from darkness to light’ (page 20)."
+  ],
+  "body": [
+   "B01",
+   "Three slow breaths whenever nausea rises."
+  ],
+  "heart": [
+   "H03",
+   "What worry is on your mind? What wish is hiding inside it?"
+  ],
+  "spirit": [
+   "S06",
+   "Notice 3 sounds around you."
+  ],
+  "nourish": "ginger-nausea",
+  "partner": "Take over one daily chore so she can rest.",
+  "calm": "Breathe in ‘I am’, breathe out ‘here’."
+ },
+ {
+  "w": 6,
+  "tri": 1,
+  "name": [
+   "Hṛdaya",
+   "हृदय",
+   "Heart"
+  ],
+  "size": [
+   "masoor lentil",
+   "seed",
+   0.4,
+   null
+  ],
+  "baby": "A tiny heart begins to beat around now and may be seen on an early scan. The neural tube is closing.",
+  "note": "Suśruta wrote that the heart ‘becomes manifest’ in the 4th month; science now sees the first beats far earlier.",
+  "mind": [
+   "M06",
+   "Three soft Oṃs, morning and night."
+  ],
+  "body": [
+   "B07",
+   "Release your neck and shoulders after screen time."
+  ],
+  "heart": [
+   "H02",
+   "Three good things from this week:"
+  ],
+  "spirit": [
+   "S05",
+   "Try Jñāna mudrā (page 15)."
+  ],
+  "nourish": "safety-milk",
+  "partner": "Keep water and a dry snack within her reach, always.",
+  "calm": "Feel your own heartbeat for one minute."
+ },
+ {
+  "w": 7,
+  "tri": 1,
+  "name": [
+   "Prāṇa",
+   "प्राण",
+   "Breath of life"
+  ],
+  "size": [
+   "jamun",
+   "berry",
+   1.0,
+   null
+  ],
+  "baby": "Arm and leg buds are lengthening and the brain is growing quickly. Your baby is now about the size of a jamun.",
+  "note": "Tiredness and nausea are common now. Rest is real work for two.",
+  "mind": [
+   "M02",
+   "Tell baby one thing you love about your home."
+  ],
+  "body": [
+   "B03",
+   "Five rounds of gentle humming before sleep."
+  ],
+  "heart": [
+   "H01",
+   "What kind of parent do you hope to be?"
+  ],
+  "spirit": [
+   "S09",
+   "Imagine one lotus petal opening."
+  ],
+  "nourish": "fluids-buttermilk",
+  "partner": "Read the warning signs on page 8 together.",
+  "calm": "Long, slow out-breath — three times."
+ },
+ {
+  "w": 8,
+  "tri": 1,
+  "name": [
+   "Sparśa",
+   "स्पर्श",
+   "Touch"
+  ],
+  "size": [
+   "rajma bean",
+   "bean",
+   1.6,
+   null
+  ],
+  "baby": "Fingers are beginning to form. Around now the skin around the mouth starts to respond to touch — the first of the senses to wake.",
+  "note": "Touch is the earliest sense to develop; hearing and sight follow much later.",
+  "mind": [
+   "M12",
+   "Read this week’s wisdom line slowly, twice."
+  ],
+  "body": [
+   "B06",
+   "Begin pelvic-floor squeezes — 3 times a day."
+  ],
+  "heart": [
+   "H09",
+   "Who can you share both joy and worry with this week?"
+  ],
+  "spirit": [
+   "S01",
+   "Colour the small mandala below."
+  ],
+  "nourish": "caffeine",
+  "partner": "Ask: what smell or food is bothering you? Then remove it.",
+  "calm": "Rest your hands together and feel their warmth.",
+  "wisdom": "ys1.2"
+ },
+ {
+  "w": 9,
+  "tri": 1,
+  "name": [
+   "Śānti",
+   "शान्ति",
+   "Peace"
+  ],
+  "size": [
+   "grape",
+   "berry",
+   2.3,
+   null
+  ],
+  "baby": "All the main organs have begun to form. Baby makes tiny movements — far too small for you to feel yet.",
+  "note": "Feeling up and down is normal. If low mood lasts most days for two weeks, tell your doctor.",
+  "mind": [
+   "M08",
+   "Saha nāvavatu — ‘may we two be protected together’ (page 20)."
+  ],
+  "body": [
+   "B12",
+   "A 10-minute side-lying rest after lunch."
+  ],
+  "heart": [
+   "H08",
+   "What would you like to tell baby today?"
+  ],
+  "spirit": [
+   "S04",
+   "Try the simple kolam on page 18."
+  ],
+  "nourish": "iodine-salt",
+  "partner": "Plan a slow evening walk together.",
+  "calm": "Say ‘śānti’ silently on each out-breath."
+ },
+ {
+  "w": 10,
+  "tri": 1,
+  "name": [
+   "Mūla",
+   "मूल",
+   "Root"
+  ],
+  "size": [
+   "ber (jujube)",
+   "berry",
+   3.1,
+   null
+  ],
+  "baby": "Baby is now called a fetus. The vital organs are in place and will spend the coming months growing and maturing.",
+  "note": "First-trimester tiredness is caused by real changes in your body. Resting is productive.",
+  "mind": [
+   "M05",
+   "Ten minutes of music with your feet up."
+  ],
+  "body": [
+   "B05",
+   "A 10–20 minute walk on most days."
+  ],
+  "heart": [
+   "H01",
+   "What would you like to tell your baby about your family’s roots?"
+  ],
+  "spirit": [
+   "S07",
+   "Root (Mūlādhāra) check-in: what makes you feel safe?"
+  ],
+  "nourish": "protein-sprouts",
+  "partner": "Take charge of dinner twice this week.",
+  "calm": "Feel your feet on the floor. You are held."
+ },
+ {
+  "w": 11,
+  "tri": 1,
+  "name": [
+   "Svāda",
+   "स्वाद",
+   "Taste"
+  ],
+  "size": [
+   "anjeer (fig)",
+   "round",
+   4.1,
+   7
+  ],
+  "baby": "Taste buds are forming, and baby has begun swallowing small amounts of amniotic fluid.",
+  "note": "Flavours from your food later reach the amniotic fluid — a first ‘taste’ of home.",
+  "mind": [
+   "M02",
+   "Describe your favourite meal to baby."
+  ],
+  "body": [
+   "B13",
+   "Ankle circles while you sit."
+  ],
+  "heart": [
+   "H05",
+   "How has support felt this week? What would help more?"
+  ],
+  "spirit": [
+   "S10",
+   "Kind wishes for yourself and baby."
+  ],
+  "nourish": "tastes-home",
+  "partner": "Make her comfort meal — the pregnancy-safe version.",
+  "calm": "Taste one sip of water slowly."
+ },
+ {
+  "w": 12,
+  "tri": 1,
+  "name": [
+   "Jala",
+   "जल",
+   "Water"
+  ],
+  "size": [
+   "lime (nimbu)",
+   "round",
+   5.4,
+   14
+  ],
+  "baby": "Baby can open and close the fingers and curl the toes. The first-trimester screening scan often happens around 11–14 weeks.",
+  "note": "Write your questions for the scan on page 77 so you don’t forget them.",
+  "mind": [
+   "M13",
+   "A sound bath of water sounds — rain, river, waves."
+  ],
+  "body": [
+   "B08",
+   "Gentle cat–cow to ease the back."
+  ],
+  "heart": [
+   "H03",
+   "What are you hoping to hear at the scan?"
+  ],
+  "spirit": [
+   "S06",
+   "One calm minute before the scan."
+  ],
+  "nourish": "iron-ragi",
+  "partner": "Come to the scan, and ask your own questions too.",
+  "calm": "Imagine a still pond. Breathe."
+ },
+ {
+  "w": 13,
+  "tri": 1,
+  "name": [
+   "Pallava",
+   "पल्लव",
+   "New leaf"
+  ],
+  "size": [
+   "pea pod",
+   "long",
+   7.4,
+   23
+  ],
+  "baby": "The first trimester ends this week. Fingerprints are beginning to form and the vocal cords are developing.",
+  "note": "The risk of miscarriage falls considerably after the first trimester.",
+  "mind": [
+   "M12",
+   "Read this week’s wisdom line; keep it on a card."
+  ],
+  "body": [
+   "B07",
+   "Stretch your neck and shoulders, slowly."
+  ],
+  "heart": [
+   "H01",
+   "A letter to close the first trimester:"
+  ],
+  "spirit": [
+   "S05",
+   "Try Dhyāna mudrā (page 15)."
+  ],
+  "nourish": "calcium-curd",
+  "partner": "Celebrate the end of the first trimester with something she enjoys.",
+  "calm": "Thank your body for these 13 weeks.",
+  "wisdom": "ys1.12"
+ },
+ {
+  "w": 14,
+  "tri": 2,
+  "name": [
+   "Utsāha",
+   "उत्साह",
+   "Renewed energy"
+  ],
+  "size": [
+   "lemon",
+   "round",
+   8.7,
+   43
+  ],
+  "baby": "Baby moves arms and legs, and can squint and make faces. Many mothers feel more energy now.",
+  "note": "Use the energy for gentle activity — and keep resting when you need to.",
+  "mind": [
+   "M11",
+   "Read ‘The Monkey and the Crocodile’ (page 24)."
+  ],
+  "body": [
+   "B05",
+   "Build up to 20–30 minute walks."
+  ],
+  "heart": [
+   "H02",
+   "Three good things from this week:"
+  ],
+  "spirit": [
+   "S01",
+   "Colour the small mandala below."
+  ],
+  "nourish": "omega-fish",
+  "partner": "Plan a gentle outing together.",
+  "calm": "Smile, and feel the smile in your belly."
+ },
+ {
+  "w": 15,
+  "tri": 2,
+  "name": [
+   "Puṣṭi",
+   "पुष्टि",
+   "Nourishment"
+  ],
+  "size": [
+   "apple",
+   "round",
+   10.1,
+   70
+  ],
+  "baby": "Bones are hardening and the ears are moving into their final position.",
+  "note": "From around 19 weeks baby begins to respond to sound — start choosing your songs.",
+  "mind": [
+   "M10",
+   "Choose a lullaby in your mother tongue (pages 22–23)."
+  ],
+  "body": [
+   "B10",
+   "Mountain pose and side stretch."
+  ],
+  "heart": [
+   "H10",
+   "Picture baby’s face. What do you imagine?"
+  ],
+  "spirit": [
+   "S04",
+   "Draw a kolam with three loops."
+  ],
+  "nourish": "choline-egg",
+  "partner": "Find out about antenatal classes near you.",
+  "calm": "Breathe in nourishment, breathe out thanks."
+ },
+ {
+  "w": 16,
+  "tri": 2,
+  "name": [
+   "Spanda",
+   "स्पन्द",
+   "Flutter"
+  ],
+  "size": [
+   "chikoo",
+   "round",
+   11.6,
+   100
+  ],
+  "baby": "You may soon feel the first flutters — usually between 16 and 24 weeks, often later in a first pregnancy.",
+  "note": "Not feeling movement yet at 16 weeks is normal. Patterns become clearer after 24 weeks.",
+  "mind": [
+   "M03",
+   "Sing your chosen lullaby every evening."
+  ],
+  "body": [
+   "B08",
+   "Cat–cow, 6–8 slow rounds."
+  ],
+  "heart": [
+   "H08",
+   "Hands on belly: what do you feel?"
+  ],
+  "spirit": [
+   "S09",
+   "Lotus visualisation before sleep."
+  ],
+  "nourish": "b12-dairy",
+  "partner": "Rest a hand on the bump each evening — flutters come soon.",
+  "calm": "Notice the smallest sensation in your body."
+ },
+ {
+  "w": 17,
+  "tri": 2,
+  "name": [
+   "Smṛti",
+   "स्मृति",
+   "Memory"
+  ],
+  "size": [
+   "pomegranate",
+   "round",
+   13.0,
+   140
+  ],
+  "baby": "Fat begins to form under the skin and the umbilical cord grows stronger.",
+  "note": "Making memories now — photos, recordings, letters — becomes a gift for your child later.",
+  "mind": [
+   "M14",
+   "Say hello to baby three times today."
+  ],
+  "body": [
+   "B11",
+   "Wall pelvic tilts for the lower back."
+  ],
+  "heart": [
+   "H06",
+   "Record your first voice message. What did you say?"
+  ],
+  "spirit": [
+   "S07",
+   "Sacral (Svādhiṣṭhāna) check-in: what brings you joy?"
+  ],
+  "nourish": "fibre-poha",
+  "partner": "Record a voice message for baby (page 73).",
+  "calm": "Remember a happy childhood moment."
+ },
+ {
+  "w": 18,
+  "tri": 2,
+  "name": [
+   "Gīta",
+   "गीत",
+   "Song"
+  ],
+  "size": [
+   "sweet potato",
+   "long",
+   14.2,
+   190
+  ],
+  "baby": "The structures of the inner ear are developing fast. Very soon baby will begin to respond to sound.",
+  "note": "Low sounds — like voices and humming — pass through the womb most easily.",
+  "mind": [
+   "M03",
+   "Choose ONE family song to sing all pregnancy."
+  ],
+  "body": [
+   "B03",
+   "Humming bee breath, 5 rounds."
+  ],
+  "heart": [
+   "H04",
+   "How did baby’s other parent feel talking to the bump?"
+  ],
+  "spirit": [
+   "S06",
+   "Listen to silence for one minute."
+  ],
+  "nourish": "folate-palak",
+  "partner": "Choose the family lullaby together.",
+  "calm": "Hum one note until the breath is gently done."
+ },
+ {
+  "w": 19,
+  "tri": 2,
+  "name": [
+   "Śruti",
+   "श्रुति",
+   "Hearing"
+  ],
+  "size": [
+   "mango",
+   "round",
+   15.3,
+   240
+  ],
+  "baby": "In research, the first responses to sound appear at around 19 weeks — starting with low tones.",
+  "note": "Science-backed: babies hear in the womb and come to know familiar voices. It does not make a baby ‘smarter’ — it builds familiarity.",
+  "mind": [
+   "M02",
+   "Talk to baby every day from today."
+  ],
+  "body": [
+   "B02",
+   "Alternate-nostril breathing — never hold the breath."
+  ],
+  "heart": [
+   "H04",
+   "What did you tell baby today?"
+  ],
+  "spirit": [
+   "S02",
+   "Soft gaze at the Śrī Yantra (page 17)."
+  ],
+  "nourish": "iron-ragi",
+  "partner": "Talk to the bump for 5 minutes each evening.",
+  "calm": "Listen to your own breath."
+ },
+ {
+  "w": 20,
+  "tri": 2,
+  "name": [
+   "Madhya",
+   "मध्य",
+   "Halfway"
+  ],
+  "size": [
+   "banana",
+   "long",
+   25.6,
+   300
+  ],
+  "baby": "Halfway! A protective coating (vernix) covers the skin. The detailed anomaly scan usually happens at 18–22 weeks. (From now, length is measured head to heel.)",
+  "note": "Every pregnancy grows at its own pace; sizes here are averages.",
+  "mind": [
+   "M11",
+   "Read ‘The Hare in the Moon’ (page 24)."
+  ],
+  "body": [
+   "B05",
+   "A walk where you can still talk comfortably."
+  ],
+  "heart": [
+   "H01",
+   "A letter at the halfway point:"
+  ],
+  "spirit": [
+   "S03",
+   "Trace the Śrī Yantra (page 17)."
+  ],
+  "nourish": "protein-sprouts",
+  "partner": "Go with her to the anomaly scan.",
+  "calm": "Halfway. Breathe in what has been; breathe out what will be."
+ },
+ {
+  "w": 21,
+  "tri": 2,
+  "name": [
+   "Gati",
+   "गति",
+   "Movement"
+  ],
+  "size": [
+   "carrot",
+   "long",
+   26.7,
+   360
+  ],
+  "baby": "Movements grow stronger. You may notice times of day when baby is more active.",
+  "note": "Start noticing your baby’s own pattern — there is no ‘right’ number of kicks.",
+  "mind": [
+   "M14",
+   "Tell baby what you are doing as you do it."
+  ],
+  "body": [
+   "B15",
+   "Gentle warrior II with a chair nearby."
+  ],
+  "heart": [
+   "H02",
+   "Three good things from this week:"
+  ],
+  "spirit": [
+   "S01",
+   "Colour the small mandala below."
+  ],
+  "nourish": "fluids-buttermilk",
+  "partner": "Feel for kicks with your hand on the bump.",
+  "calm": "Wait for a kick. Breathe until it comes."
+ },
+ {
+  "w": 22,
+  "tri": 2,
+  "name": [
+   "Rūpa",
+   "रूप",
+   "Form"
+  ],
+  "size": [
+   "ridge gourd",
+   "long",
+   27.8,
+   430
+  ],
+  "baby": "Lips, eyelids and eyebrows are more distinct. Baby’s grip is getting stronger.",
+  "note": "Looks are shaped by genes, not by what you see or do — let go of any such worry.",
+  "mind": [
+   "M10",
+   "Ask an elder to teach you a lullaby."
+  ],
+  "body": [
+   "B09",
+   "Supported butterfly on a cushion."
+  ],
+  "heart": [
+   "H10",
+   "Imagine holding baby’s hand. What do you feel?"
+  ],
+  "spirit": [
+   "S05",
+   "Try Prāṇa mudrā (page 15)."
+  ],
+  "nourish": "b12-dairy",
+  "partner": "Start the family tree with the elders (page 74).",
+  "calm": "Open and close your hands slowly."
+ },
+ {
+  "w": 23,
+  "tri": 2,
+  "name": [
+   "Dhvani",
+   "ध्वनि",
+   "Sound"
+  ],
+  "size": [
+   "mooli (radish)",
+   "long",
+   28.9,
+   500
+  ],
+  "baby": "Hearing is maturing; loud sudden sounds may make baby startle or move.",
+  "note": "Keep music at a comfortable volume — never place headphones on the belly.",
+  "mind": [
+   "M05",
+   "Music with your feet up, 20 minutes."
+  ],
+  "body": [
+   "B12",
+   "Side-lying rest with pillows."
+  ],
+  "heart": [
+   "H06",
+   "Which sounds do you want baby to know?"
+  ],
+  "spirit": [
+   "S12",
+   "Look at the moon tonight."
+  ],
+  "nourish": "calcium-curd",
+  "partner": "Make a ‘calm sounds’ playlist with her (page 72).",
+  "calm": "Name 3 sounds you can hear right now."
+ },
+ {
+  "w": 24,
+  "tri": 2,
+  "name": [
+   "Jīvana",
+   "जीवन",
+   "Life"
+  ],
+  "size": [
+   "corn cob (bhutta)",
+   "long",
+   30.0,
+   600
+  ],
+  "baby": "The lungs are forming branches. The glucose (sugar) test is often done between 24 and 28 weeks.",
+  "note": "From now on, report any reduction in baby’s movements straight away.",
+  "mind": [
+   "M07",
+   "Gāyatrī — or a favourite poem (page 20)."
+  ],
+  "body": [
+   "B06",
+   "Pelvic-floor squeezes, 3 times a day."
+  ],
+  "heart": [
+   "H03",
+   "Worry to wish:"
+  ],
+  "spirit": [
+   "S10",
+   "Kind wishes for everyone in your family."
+  ],
+  "nourish": "omega-fish",
+  "partner": "Go with her for the sugar (GTT) test; bring a snack for afterwards.",
+  "calm": "Breathe in ‘life’, breathe out ‘love’."
+ },
+ {
+  "w": 25,
+  "tri": 2,
+  "name": [
+   "Kamala",
+   "कमल",
+   "Lotus"
+  ],
+  "size": [
+   "cauliflower",
+   "leafy",
+   34.6,
+   660
+  ],
+  "baby": "The hands are fully formed and baby responds to both touch and sound. Hair is growing.",
+  "note": "In a small study, babies moved more when their mothers stroked their belly.",
+  "mind": [
+   "M11",
+   "Read ‘Rāma and the Squirrel’ (page 25)."
+  ],
+  "body": [
+   "B14",
+   "Tree pose — always beside a wall."
+  ],
+  "heart": [
+   "H08",
+   "What did baby do when you touched your belly?"
+  ],
+  "spirit": [
+   "S09",
+   "Lotus visualisation, 5 minutes."
+  ],
+  "nourish": "tastes-home",
+  "partner": "Give a gentle hand or foot massage.",
+  "calm": "Picture a lotus rising clean from muddy water."
+ },
+ {
+  "w": 26,
+  "tri": 2,
+  "name": [
+   "Netra",
+   "नेत्र",
+   "Eyes"
+  ],
+  "size": [
+   "small cabbage",
+   "leafy",
+   35.6,
+   760
+  ],
+  "baby": "Around 26–28 weeks the eyes begin to open and blink. Baby may react to bright light through your belly.",
+  "note": "Sight is the last sense to mature — most of it develops after birth.",
+  "mind": [
+   "M03",
+   "Sing to baby before sleep."
+  ],
+  "body": [
+   "B18",
+   "Partner foot and hand massage."
+  ],
+  "heart": [
+   "H02",
+   "Three good things from this week:"
+  ],
+  "spirit": [
+   "S02",
+   "Soft gaze at the yantra (or a flower)."
+  ],
+  "nourish": "folate-palak",
+  "partner": "Massage her feet this week (BODY box).",
+  "calm": "Close your eyes; see soft golden light."
+ },
+ {
+  "w": 27,
+  "tri": 2,
+  "name": [
+   "Sandhi",
+   "सन्धि",
+   "Threshold"
+  ],
+  "size": [
+   "drumstick bunch",
+   "long",
+   36.6,
+   880
+  ],
+  "baby": "The second trimester ends. Baby has regular sleep–wake cycles and a very active brain.",
+  "note": "The third trimester begins next week — side sleeping and movement awareness become important.",
+  "mind": [
+   "M09",
+   "Madālasā’s lullaby (page 21)."
+  ],
+  "body": [
+   "B16",
+   "Open seated twist on a chair."
+  ],
+  "heart": [
+   "H01",
+   "A letter to close the second trimester:"
+  ],
+  "spirit": [
+   "S04",
+   "Draw a kolam for the threshold of your home."
+  ],
+  "nourish": "fibre-poha",
+  "partner": "Start planning the godh bharai / sīmantham (page 75).",
+  "calm": "Stand in a doorway. Breathe. Step through."
+ },
+ {
+  "w": 28,
+  "tri": 3,
+  "name": [
+   "Smaraṇa",
+   "स्मरण",
+   "Remembering"
+  ],
+  "size": [
+   "large brinjal",
+   "long",
+   37.6,
+   1000
+  ],
+  "baby": "Baby can open the eyes and respond to light. This week begins the third trimester.",
+  "note": "Science-backed: from now on, go to sleep on your side — it lowers the risk of stillbirth.",
+  "mind": [
+   "M04",
+   "Begin ‘same story, same song’ — every evening until birth."
+  ],
+  "body": [
+   "B12",
+   "Practise falling asleep on your side."
+  ],
+  "heart": [
+   "H05",
+   "What help would make the next 12 weeks easier?"
+  ],
+  "spirit": [
+   "S06",
+   "One calm minute at bedtime."
+  ],
+  "nourish": "iron-ragi",
+  "partner": "Set up pillows for side sleeping.",
+  "calm": "Turn to your side. Breathe. Rest."
+ },
+ {
+  "w": 29,
+  "tri": 3,
+  "name": [
+   "Mṛdu",
+   "मृदु",
+   "Gentleness"
+  ],
+  "size": [
+   "small pumpkin",
+   "melon",
+   38.6,
+   1150
+  ],
+  "baby": "Muscles and lungs are maturing. Kicks and stretches are strong and easy to feel.",
+  "note": "Know your baby’s pattern. If movements slow down or change, call your hospital at once — don’t wait.",
+  "mind": [
+   "M04",
+   "Your same story, same song."
+  ],
+  "body": [
+   "B11",
+   "Wall pelvic tilts for back ease."
+  ],
+  "heart": [
+   "H10",
+   "Imagine the first time baby hears your voice outside the womb."
+  ],
+  "spirit": [
+   "S01",
+   "Colour the sun mandala (page 56)."
+  ],
+  "nourish": "protein-sprouts",
+  "partner": "Learn the movement rule: if baby moves less, call the hospital now.",
+  "calm": "Be gentle with yourself today."
+ },
+ {
+  "w": 30,
+  "tri": 3,
+  "name": [
+   "Prakāśa",
+   "प्रकाश",
+   "Light"
+  ],
+  "size": [
+   "large cabbage",
+   "leafy",
+   39.9,
+   1300
+  ],
+  "baby": "The brain’s surface is folding into ridges as it grows quickly.",
+  "note": "Your nourishing food, sleep and calm all support this growth — there are no shortcuts or guarantees.",
+  "mind": [
+   "M10",
+   "Your mother-tongue lullaby."
+  ],
+  "body": [
+   "B03",
+   "Humming bee breath before sleep."
+  ],
+  "heart": [
+   "H04",
+   "What does baby’s other parent sing or say?"
+  ],
+  "spirit": [
+   "S03",
+   "Colour the Śrī Yantra petals."
+  ],
+  "nourish": "choline-egg",
+  "partner": "Prepare the documents folder for the hospital bag (page 78).",
+  "calm": "Picture morning light filling the room."
+ },
+ {
+  "w": 31,
+  "tri": 3,
+  "name": [
+   "Prema",
+   "प्रेम",
+   "Love"
+  ],
+  "size": [
+   "coconut",
+   "round",
+   41.1,
+   1500
+  ],
+  "baby": "All five senses are working. Baby turns the head and may hiccup — you may feel little rhythmic jumps.",
+  "note": "Hiccups are normal and harmless.",
+  "mind": [
+   "M04",
+   "Your same story, same song."
+  ],
+  "body": [
+   "B09",
+   "Supported butterfly."
+  ],
+  "heart": [
+   "H01",
+   "What is love teaching you right now?"
+  ],
+  "spirit": [
+   "S10",
+   "Kind wishes for baby."
+  ],
+  "nourish": "omega-fish",
+  "partner": "Write your own letter to baby.",
+  "calm": "Hand on heart, hand on belly."
+ },
+ {
+  "w": 32,
+  "tri": 3,
+  "name": [
+   "Dhairya",
+   "धैर्य",
+   "Courage"
+  ],
+  "size": [
+   "small jackfruit",
+   "melon",
+   42.4,
+   1700
+  ],
+  "baby": "Baby practises breathing movements and has toenails. Many babies settle head-down around now.",
+  "note": "Breathing practice now is for you — slow breaths are a skill that helps in labour.",
+  "mind": [
+   "M11",
+   "Read ‘Hanumān’s Leap’ (page 25)."
+  ],
+  "body": [
+   "B05",
+   "Shorter, slower walks."
+  ],
+  "heart": [
+   "H03",
+   "What gives you courage?"
+  ],
+  "spirit": [
+   "S05",
+   "Añjali mudrā with three breaths."
+  ],
+  "nourish": "calcium-curd",
+  "partner": "Visit the hospital: find parking and the labour ward.",
+  "calm": "Breathe in courage, breathe out fear."
+ },
+ {
+  "w": 33,
+  "tri": 3,
+  "name": [
+   "Sneha",
+   "स्नेह",
+   "Affection"
+  ],
+  "size": [
+   "bottle gourd (lauki)",
+   "long",
+   43.7,
+   1900
+  ],
+  "baby": "Bones are hardening (the skull stays soft for birth). Antibodies pass to baby from you.",
+  "note": "Your antibodies give baby some early protection after birth.",
+  "mind": [
+   "M03",
+   "Sing the family lullaby."
+  ],
+  "body": [
+   "B13",
+   "Ankle circles and calf stretch."
+  ],
+  "heart": [
+   "H07",
+   "Write one blessing from an elder:"
+  ],
+  "spirit": [
+   "S07",
+   "Heart (Anāhata) check-in: who do you feel close to?"
+  ],
+  "nourish": "fluids-buttermilk",
+  "partner": "Arrange support for the first weeks at home.",
+  "calm": "Think of someone who loves you."
+ },
+ {
+  "w": 34,
+  "tri": 3,
+  "name": [
+   "Āśīrvāda",
+   "आशीर्वाद",
+   "Blessing"
+  ],
+  "size": [
+   "muskmelon",
+   "melon",
+   45.0,
+   2100
+  ],
+  "baby": "The lungs are maturing and fat is giving baby a rounder look. Many families hold the godh bharai / sīmantham around now.",
+  "note": "Celebrations are about joy and support — no sex-prediction games or rituals.",
+  "mind": [
+   "M08",
+   "Pūrṇamadaḥ — ‘from fullness, fullness comes’ (page 21)."
+  ],
+  "body": [
+   "B12",
+   "Rest after the celebration."
+  ],
+  "heart": [
+   "H07",
+   "Blessings received:"
+  ],
+  "spirit": [
+   "S04",
+   "Draw a rangoli or kolam for the celebration."
+  ],
+  "nourish": "kheer-trad",
+  "partner": "Host the celebration so she only has to rest and enjoy.",
+  "calm": "Receive. You don’t have to do anything."
+ },
+ {
+  "w": 35,
+  "tri": 3,
+  "name": [
+   "Viśrānti",
+   "विश्रान्ति",
+   "Rest"
+  ],
+  "size": [
+   "ash gourd (petha)",
+   "melon",
+   46.2,
+   2400
+  ],
+  "baby": "The kidneys are fully developed. Most growth now is weight gain.",
+  "note": "Sleep may be harder now — rest whenever you can, on your side.",
+  "mind": [
+   "M13",
+   "A 20-minute sound bath."
+  ],
+  "body": [
+   "B17",
+   "Guided relaxation, side-lying."
+  ],
+  "heart": [
+   "H02",
+   "Three good things from this week:"
+  ],
+  "spirit": [
+   "S06",
+   "One calm minute after waking."
+  ],
+  "nourish": "dates-energy",
+  "partner": "Plan safe transport to hospital (and a car seat if you drive).",
+  "calm": "Let the bed hold all your weight."
+ },
+ {
+  "w": 36,
+  "tri": 3,
+  "name": [
+   "Prastuti",
+   "प्रस्तुति",
+   "Readiness"
+  ],
+  "size": [
+   "bunch of bananas",
+   "bunch",
+   47.4,
+   2600
+  ],
+  "baby": "Baby is getting ready. The head may ‘engage’ (drop) into the pelvis, making breathing a little easier.",
+  "note": "Pack the hospital bag this week (page 78).",
+  "mind": [
+   "M04",
+   "Your same story, same song."
+  ],
+  "body": [
+   "B11",
+   "Pelvic tilts for comfort."
+  ],
+  "heart": [
+   "H06",
+   "Record your lullaby for baby. Which song?"
+  ],
+  "spirit": [
+   "S05",
+   "Apāna mudrā — traditionally kept for these last weeks."
+  ],
+  "nourish": "mindful-meal",
+  "partner": "Practise the route to hospital — at night too.",
+  "calm": "Everything you need is already within you."
+ },
+ {
+  "w": 37,
+  "tri": 3,
+  "name": [
+   "Pūrṇatā",
+   "पूर्णता",
+   "Fullness"
+  ],
+  "size": [
+   "snake gourd",
+   "long",
+   48.6,
+   2900
+  ],
+  "baby": "Early term. Baby practises sucking and grasping and is ready for the outside world.",
+  "note": "Learn the newborn danger signs on page 80.",
+  "mind": [
+   "M10",
+   "Sing in your mother tongue."
+  ],
+  "body": [
+   "B01",
+   "Practise the long out-breath for labour."
+  ],
+  "heart": [
+   "H10",
+   "Imagine your first hour together."
+  ],
+  "spirit": [
+   "S09",
+   "Lotus visualisation."
+  ],
+  "nourish": "fluids-buttermilk",
+  "partner": "Learn the newborn danger signs on page 80.",
+  "calm": "Breathe out longer than you breathe in."
+ },
+ {
+  "w": 38,
+  "tri": 3,
+  "name": [
+   "Dhyāna",
+   "ध्यान",
+   "Stillness"
+  ],
+  "size": [
+   "medium pumpkin",
+   "melon",
+   49.8,
+   3100
+  ],
+  "baby": "The fine body hair (lanugo) is shedding. Baby is ready to meet you.",
+  "note": "Waiting is part of the journey. Most babies are born between 37 and 42 weeks.",
+  "mind": [
+   "M04",
+   "Your same story, same song."
+  ],
+  "body": [
+   "B12",
+   "Side-lying rest every afternoon."
+  ],
+  "heart": [
+   "H01",
+   "A letter for ‘almost there’:"
+  ],
+  "spirit": [
+   "S06",
+   "Sit in stillness for one minute."
+  ],
+  "nourish": "tastes-home",
+  "partner": "Cook and freeze two simple meals for after the birth.",
+  "calm": "Be still. Baby is near."
+ },
+ {
+  "w": 39,
+  "tri": 3,
+  "name": [
+   "Udaya",
+   "उदय",
+   "Dawn"
+  ],
+  "size": [
+   "small watermelon",
+   "melon",
+   50.7,
+   3300
+  ],
+  "baby": "Baby is fully ready. The brain is still growing fast — and will keep growing for years after birth.",
+  "note": "Keep watching baby’s movements right up to birth; they should not slow down.",
+  "mind": [
+   "M03",
+   "Sing to baby."
+  ],
+  "body": [
+   "B05",
+   "Short, easy walks."
+  ],
+  "heart": [
+   "H09",
+   "Who will you call first when baby arrives?"
+  ],
+  "spirit": [
+   "S12",
+   "Look at the moon — a new phase is coming."
+  ],
+  "nourish": "iron-ragi",
+  "partner": "Keep your phone charged and stay reachable.",
+  "calm": "Imagine the first light of dawn."
+ },
+ {
+  "w": 40,
+  "tri": 3,
+  "name": [
+   "Janma",
+   "जन्म",
+   "Birth"
+  ],
+  "size": [
+   "watermelon",
+   "melon",
+   51.2,
+   3400
+  ],
+  "baby": "Your due date. Only a few babies arrive exactly on the day — anywhere from 37 to 42 weeks is normal.",
+  "note": "If your pregnancy goes past the due date, your doctor will advise you on monitoring and next steps.",
+  "mind": [
+   "M04",
+   "Your story and song — one more time before you meet."
+  ],
+  "body": [
+   "B01",
+   "Slow belly breathing."
+  ],
+  "heart": [
+   "H01",
+   "Your final letter before you meet:"
+  ],
+  "spirit": [
+   "S10",
+   "Kind wishes for the birth and all who help."
+  ],
+  "nourish": "fluids-buttermilk",
+  "partner": "Hold her hand. You are both ready.",
+  "calm": "Welcome, little one."
+ }
+]

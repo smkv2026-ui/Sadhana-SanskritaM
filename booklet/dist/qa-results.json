@@ -1,0 +1,77 @@
+{
+ "art": {
+  "sriYantra": {
+   "maxResidual": 2.81827135475416e-16,
+   "equations": 22,
+   "unknowns": 27,
+   "faces": 76,
+   "triangles": 49
+  },
+  "mandalaSymmetryErrors": [],
+  "kolamLoops": [
+   1,
+   1,
+   1
+  ]
+ },
+ "colour": {
+  "qa": [],
+  "xrefErrors": [],
+  "fontsLoaded": [
+   "Corm",
+   "NS",
+   "NSerif",
+   "NSerifDeva",
+   "NSDeva",
+   "NSBeng",
+   "NSGujr",
+   "NSTaml",
+   "NSTelu",
+   "NSKnda",
+   "NSMlym",
+   "Sym2"
+  ],
+  "pageCount": 88,
+  "totalPlanned": 88
+ },
+ "bleed": {
+  "qa": [],
+  "xrefErrors": [],
+  "fontsLoaded": [
+   "Corm",
+   "NS",
+   "NSerif",
+   "NSerifDeva",
+   "NSDeva",
+   "NSBeng",
+   "NSGujr",
+   "NSTaml",
+   "NSTelu",
+   "NSKnda",
+   "NSMlym",
+   "Sym2"
+  ],
+  "pageCount": 88,
+  "totalPlanned": 88
+ },
+ "lowink": {
+  "qa": [],
+  "xrefErrors": [],
+  "fontsLoaded": [
+   "Corm",
+   "NS",
+   "NSerif",
+   "NSerifDeva",
+   "NSDeva",
+   "NSBeng",
+   "NSGujr",
+   "NSTaml",
+   "NSTelu",
+   "NSKnda",
+   "NSMlym",
+   "Sym2"
+  ],
+  "pageCount": 88,
+  "totalPlanned": 88
+ }
+}

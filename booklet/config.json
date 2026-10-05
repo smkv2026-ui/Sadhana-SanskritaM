@@ -1,0 +1,16 @@
+{
+  "title": "Garbha Gyan",
+  "titleDeva": "गर्भ ज्ञान",
+  "subtitle": "A 40-Week Journey of Mind, Body & Spirit",
+  "edition": "1.0 (draft for expert review)",
+  "mother_name": "",
+  "partner_name": "",
+  "baby_nickname": "",
+  "due_date": "",
+  "languages": ["sa", "hi", "mr", "gu", "ta", "te", "kn", "ml", "bn"],
+  "locale": "en",
+  "theme": "colour",
+  "spiritual": "full",
+  "size": "a4",
+  "bleed": false
+}
