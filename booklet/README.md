@@ -99,3 +99,33 @@ Edit `config.json`:
 Known limits:
 - The A5 edition is not built yet. The weekly layout is designed in two halves, so it can be split for A5.
 - Chromium rounds the no-bleed page to 594.96 × 841.92 pt, about 0.1 mm under A4. This has no visible effect.
+
+## Garbha Khel: the short, repeatable booklet (`mini/`)
+
+This is a 16-page A5 booklet of 12 engaging activities you can do again and again:
+- colouring a mandala
+- gazing at and tracing the Śrī Yantra
+- the kolam dot game
+- the kick-and-tap game
+- one lullaby every night
+- a story read with voices
+- painting your feelings
+- belly art
+- humming-bee breath
+- the name-that-raga game
+- a gratitude garland
+- a moonlight sway
+
+Each activity comes with music to play alongside, a spiritual touch (Devanāgarī, IAST and meaning), a "for baby / for you" note and a repeat tracker.
+
+```bash
+node mini/build.mjs   # → mini/dist/garbha-khel-A5.pdf, garbha-khel-A4-booklet.pdf, preview/
+```
+
+`garbha-khel-A4-booklet.pdf` is already imposed. Print it double-sided on A4 (flip on the short edge), fold the stack in half and staple: that makes the A5 booklet.
+
+Images are real artwork from openly licensed packages:
+- Microsoft Fluent Emoji 3D (MIT)
+- a Śrī Yantra rendered by the `sri-yantra` package (MIT)
+
+To use your own photos, drop files into `mini/images/` and reference them in `mini/content.json`.
