@@ -100,32 +100,44 @@ Known limits:
 - The A5 edition is not built yet. The weekly layout is designed in two halves, so it can be split for A5.
 - Chromium rounds the no-bleed page to 594.96 × 841.92 pt, about 0.1 mm under A4. This has no visible effect.
 
-## Garbha Khel: the short, repeatable booklet (`mini/`)
+## Garbha Khel: the activity book (`mini/`)
 
-This is a 16-page A5 booklet of 12 engaging activities you can do again and again:
-- colouring a mandala
-- gazing at and tracing the Śrī Yantra
-- the kolam dot game
-- the kick-and-tap game
-- one lullaby every night
-- a story read with voices
-- painting your feelings
-- belly art
-- humming-bee breath
-- the name-that-raga game
-- a gratitude garland
-- a moonlight sway
+This is a 24-page A5 book of things you do directly on paper. Each page carries a spiritual significance line and a music suggestion. Answers are on pages 22–23.
 
-Each activity comes with music to play alongside, a spiritual touch (Devanāgarī, IAST and meaning), a "for baby / for you" note and a repeat tracker.
+**Colouring**
+- Śrī Yantra (a real render)
+- Colour-by-number lotus
+- Lotus mandala
+
+**Puzzles**
+- Chakravyūha circular maze
+- Bee-to-lotus maze
+- Sacred-symbol sudoku (6×6) and Navagraha sudoku (9×9), each with a unique solution
+- Virtue word search
+- Sacred crossword (15 words)
+- Brain teasers, including the Kubera yantra magic square
+- Mantra fill-in, unscramble and meaning match
+
+**Drawing and tracing**
+- Dot-to-dot ॐ, traced from the real Noto Devanāgarī glyph
+- Tracing sacred words
+- Complete the rangoli (symmetry)
+- Kolam loop
+- Continue the pattern
+- Flower of Life with a coin or bangle
+
+**Observation and matching**
+- Spot 7 differences
+- Match the vāhana
 
 ```bash
 node mini/build.mjs   # → mini/dist/garbha-khel-A5.pdf, garbha-khel-A4-booklet.pdf, preview/
 ```
 
-`garbha-khel-A4-booklet.pdf` is already imposed. Print it double-sided on A4 (flip on the short edge), fold the stack in half and staple: that makes the A5 booklet.
+Puzzles are generated with fixed seeds in `mini/puzzles.mjs`, so every build is identical.
 
-Images are real artwork from openly licensed packages:
+To print the booklet, print `garbha-khel-A4-booklet.pdf` double-sided on A4 (flip on the short edge), then fold and staple.
+
+Images come from:
 - Microsoft Fluent Emoji 3D (MIT)
-- a Śrī Yantra rendered by the `sri-yantra` package (MIT)
-
-To use your own photos, drop files into `mini/images/` and reference them in `mini/content.json`.
+- the `sri-yantra` package (MIT)

@@ -94,9 +94,13 @@ const THEMES = {
   small: [['circle', 0.12], ['petals', 0.12, 0.4, 8], ['circle', 0.42], ['lotus', 0.42, 0.72, 12], ['circle', 0.73], ['scallop', 0.73, 0.82, 24], ['petals', 0.82, 1, 16]],
 };
 
-export function mandala(theme = 'lotus', { size = 400, colour = false, stroke = 0.0035, report } = {}) {
+export function mandala(theme = 'lotus', { size = 400, colour = false, stroke = 0.0035, report, labels = null, mods = null } = {}) {
+  // labels(ringIndex) → text placed in every motif of that ring (colour-by-number)
+  // mods: Map(elementIndex → 'remove' | 'recolor' | 'highlight') (spot-the-difference)
   const rings = THEMES[theme];
   let out = '';
+  let txt = '';
+  let el = 0;
   const allPts = [];
   rings.forEach(([type, r0, r1, n, phase = 0], i) => {
     if (type === 'circle') { out += `<circle r="${f(r0)}" class="mr"/>`; return; }
@@ -104,11 +108,22 @@ export function mandala(theme = 'lotus', { size = 400, colour = false, stroke = 
     const fill = colour ? ` style="fill:var(--m${i % 4})"` : '';
     for (let k = 0; k < n; k++) {
       const ang = ((k + phase) * 360) / n;
-      if (m.dot) {
-        const [x, y, r] = m.dot;
-        out += `<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" class="md" transform="rotate(${f(ang)})"${fill}/>`;
-      } else {
-        out += `<path d="${m.d}" class="mp" transform="rotate(${f(ang)})"${fill}/>`;
+      const mod = mods?.get(el++);
+      const st = mod === 'recolor' ? ' style="fill:#C9D9EE"' : mod === 'highlight' ? ' style="stroke:#d0021b;stroke-width:0.014;fill:rgba(208,2,27,0.25)"' : fill;
+      if (mod !== 'remove') {
+        if (m.dot) {
+          const [x, y, r] = m.dot;
+          out += `<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" class="md" transform="rotate(${f(ang)})"${st}/>`;
+        } else {
+          out += `<path d="${m.d}" class="mp" transform="rotate(${f(ang)})"${st}/>`;
+        }
+      }
+      const lab = labels?.(i, type);
+      if (lab != null && !m.dot) {
+        const a = (ang * Math.PI) / 180;
+        const mx = m.pts.reduce((s2, p) => s2 + p[0], 0) / m.pts.length, my = m.pts.reduce((s2, p) => s2 + p[1], 0) / m.pts.length;
+        const fs = Math.min(0.06, (r1 - r0) * 0.42);
+        txt += `<text x="${f(mx * Math.cos(a) - my * Math.sin(a))}" y="${f(mx * Math.sin(a) + my * Math.cos(a) + fs * 0.35)}" font-size="${f(fs)}" text-anchor="middle" class="mlab">${lab}</text>`;
       }
       for (const [x, y] of m.pts) { const a = (ang * Math.PI) / 180; allPts.push([x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a), n]); }
     }
@@ -117,8 +132,13 @@ export function mandala(theme = 'lotus', { size = 400, colour = false, stroke = 
   });
   if (report) report.push(...symmetryCheck(allPts, theme));
   const extra = theme === 'tree' ? treeOfLife() : '';
-  return `<svg class="mandala ${colour ? 'col' : 'line'}" viewBox="-1.02 -1.02 2.04 2.04" width="${size}" height="${size}" style="--sw:${stroke}"><g class="mg">${out}${extra}</g></svg>`;
+  return `<svg class="mandala ${colour ? 'col' : 'line'}" viewBox="-1.02 -1.02 2.04 2.04" width="${size}" height="${size}" style="--sw:${stroke}"><g class="mg">${out}${extra}</g>${txt}</svg>`;
 }
+
+export function mandalaElementCount(theme) {
+  return THEMES[theme].filter((r) => r[0] !== 'circle').reduce((s, r) => s + r[3], 0);
+}
+export function mandalaRings(theme) { return THEMES[theme].map((r) => r[0]); }
 
 function symmetryCheck(pts, theme) {
   // group by ring order n and confirm rotation by 360/n maps the set to itself
